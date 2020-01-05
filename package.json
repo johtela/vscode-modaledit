@@ -2,7 +2,7 @@
 	"name": "vscode-modaledit",
 	"displayName": "ModalEdit",
 	"description": "Configurable Modal Editing in VS Code",
-	"version": "1.0.0",
+	"version": "1.0.1",
 	"publisher": "johtela",
 	"engines": {
 		"vscode": "^1.41.0"
