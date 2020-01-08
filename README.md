@@ -1,4 +1,4 @@
-# DIY Normal Mode for VS Code
+# Vim-like Modal Editing in VS Code
 
 ModalEdit is a simple but powerful extension that adds configurable "normal"
 mode to VS Code. [Vim][2] made the concept of [modal editing][1] popular among

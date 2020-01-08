@@ -1,7 +1,7 @@
 {
 	"name": "vscode-modaledit",
 	"displayName": "ModalEdit",
-	"description": "Configurable Modal Editing in VS Code",
+	"description": "DIY Vim emulation",
 	"version": "1.0.1",
 	"publisher": "johtela",
 	"engines": {
