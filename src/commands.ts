@@ -2,9 +2,10 @@ import * as vscode from 'vscode'
 import * as actions from './actions'
 
 interface SearchArgs {
-    backwards?: boolean,
-    caseSensitive?: boolean,
+    backwards?: boolean
+    caseSensitive?: boolean
     acceptAfter?: number
+    selectTillMatch?: boolean
 }
 
 interface BookmarkArgs {
@@ -30,6 +31,7 @@ let searchStartPos: vscode.Position
 let searchBackwards = false
 let searchCaseSensitive = false
 let searchAcceptAfter = Number.POSITIVE_INFINITY
+let searchSelectTillMatch = false
 let bookmarks: Bookmark[] = []
 let quickSnippets: string[] = []
 
@@ -184,6 +186,7 @@ async function search(args: SearchArgs | string): Promise<void> {
         searchBackwards = args.backwards || false
         searchCaseSensitive = args.caseSensitive || false
         searchAcceptAfter = args.acceptAfter || Number.POSITIVE_INFINITY
+        searchSelectTillMatch = args.selectTillMatch || false
     }
     else if (args == "\n")
         await setSearching(false)
@@ -214,7 +217,8 @@ function highlightNextMatch(editor: vscode.TextEditor, startPos: vscode.Position
         {
             searchString = newSearchString
             let newPos = doc.positionAt(offs)
-            changeSelection(editor, newPos,
+            changeSelection(editor, 
+                searchSelectTillMatch ? searchStartPos : newPos,
                 newPos.with(undefined, newPos.character + searchString.length))
         }
     }

@@ -278,6 +278,7 @@ The command takes following arguments. All of them are optional.
 | `backwards`     | `boolean` | `false`     | Search backwards. Default is forwards
 | `caseSensitive` | `boolean` | `false`     | Search is case-sensitive. Default is case-insensitive
 | `acceptAfter`   | `number`  | `undefined` | Accept search automatically after _x_ characters has been entered. This helps implementing quick one or two character search operations.
+| `selectTillMatch` | `boolean` | `false`   | Select the range from current position till the match instead of just the match. Useful with `acceptAfter` to quickly extend selection till the specified character(s).
 
 #### `modaledit.cancelSearch`
 
