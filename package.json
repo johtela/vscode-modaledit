@@ -125,6 +125,11 @@
 					],
 					"default": "underline",
 					"description": "Shape of the cursor when incremental search is active."
+				},
+				"modaledit.startInNormalMode": {
+					"type": "boolean",
+					"default": true,
+					"description": "Is editor initially in normal mode?"
 				}
 			}
 		},

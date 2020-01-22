@@ -1,8 +1,8 @@
-# Vim-like Modal Editing in VS Code
+# Modal Editing in VS Code
 
 ModalEdit is a simple but powerful extension that adds configurable "normal"
 mode to VS Code. [Vim][2] made the concept of [modal editing][1] popular among
-many developers and IT professionals. ModalEdit is not a Vim emulation, though. 
+developers and IT professionals. ModalEdit is not a Vim emulation, though. 
 It does not define any default key mappings out-of-the-box. Instead, it 
 encourages you to create your own keyboard layout and customize the editor to 
 suit your preferences.
@@ -214,6 +214,12 @@ The possible values are:
 - `underline`
 - `underline-thin`
 
+### Start in Normal Mode
+
+If you want VS Code to be in insert mode when it starts, set the 
+`startInNormalMode` setting to `false`. By default, editor is in normal mode
+when you open it.
+
 ### Example Configurations
 
 You can find example key bindings [here][7]. These are my own settings. The 
@@ -374,6 +380,16 @@ to the command sequence.
 ### 1.0.0
 
 Initial release.
+
+### Version 1.1
+
+- Added `selectTillMatch` argument to `modalEdit.search` command.
+- Editor does not automatically revert back to normal mode when changing window.
+
+### Version 1.2
+
+- Added `startInNormalMode` setting, resolving issue 
+  [#1](https://github.com/johtela/vscode-modaledit/issues/1)
 
 
 ## Acknowledgements

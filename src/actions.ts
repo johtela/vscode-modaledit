@@ -31,6 +31,7 @@ type Cursor =
 let insertCursorStyle: vscode.TextEditorCursorStyle
 let normalCursorStyle: vscode.TextEditorCursorStyle
 let searchCursorStyle: vscode.TextEditorCursorStyle
+let startInNormalMode: boolean
 let rootKeymap: Keymap
 let keymap: Keymap
 let lastCommand: string
@@ -48,6 +49,10 @@ export function getSearchCursorType(): vscode.TextEditorCursorStyle {
     return searchCursorStyle
 }
 
+export function getStartInNormalMode(): boolean {
+    return startInNormalMode
+}
+
 export function updateFromConfig(): void {
     const config = vscode.workspace.getConfiguration("modaledit")
     const keybindings = config.get<object>("keybindings")
@@ -61,6 +66,7 @@ export function updateFromConfig(): void {
         config.get<Cursor>("normalCursorStyle", "block"))
     searchCursorStyle = toVSCursorStyle(
         config.get<Cursor>("searchCursorStyle", "underline"))
+    startInNormalMode = config.get<boolean>("startInNormalMode", true)
 }
 
 function isAction(x: any): x is Action {

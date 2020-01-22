@@ -30,7 +30,10 @@ export function activate(context: vscode.ExtensionContext) {
 			editors.forEach(commands.updateCursorAndStatusBar)),
 		vscode.window.onDidChangeTextEditorSelection(e =>
 			commands.updateStatusBar(e.textEditor)))
-	commands.enterNormal()
+	if (actions.getStartInNormalMode())
+		commands.enterNormal()
+	else
+		commands.enterInsert()
 }
 
 /** 
