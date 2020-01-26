@@ -6,6 +6,7 @@ interface SearchArgs {
     caseSensitive?: boolean
     acceptAfter?: number
     selectTillMatch?: boolean
+    typeAfterAccept?: string
 }
 
 interface BookmarkArgs {
@@ -21,6 +22,10 @@ interface QuickSnippetArgs {
     snippet: number
 }
 
+interface TypeNormalKeysArgs {
+    keys: string
+}
+
 let typeSubscription: vscode.Disposable | undefined
 let statusBarItem: vscode.StatusBarItem
 let normalMode = true
@@ -32,6 +37,8 @@ let searchBackwards = false
 let searchCaseSensitive = false
 let searchAcceptAfter = Number.POSITIVE_INFINITY
 let searchSelectTillMatch = false
+let searchTypeAfterAccept: string | undefined
+let searchReturnToNormal = true
 let bookmarks: Bookmark[] = []
 let quickSnippets: string[] = []
 
@@ -50,6 +57,7 @@ const goToBookmarkId = "modaledit.goToBookmark"
 const fillSnippetArgsId = "modaledit.fillSnippetArgs"
 const defineQuickSnippetId = "modaledit.defineQuickSnippet"
 const insertQuickSnippetId = "modaledit.insertQuickSnippet"
+const typeNormalKeysId = "modaledit.typeNormalKeys"
 
 export function register(context: vscode.ExtensionContext) {
     context.subscriptions.push(
@@ -69,6 +77,7 @@ export function register(context: vscode.ExtensionContext) {
         vscode.commands.registerCommand(fillSnippetArgsId, fillSnippetArgs),
         vscode.commands.registerCommand(defineQuickSnippetId, defineQuickSnippet),
         vscode.commands.registerCommand(insertQuickSnippetId, insertQuickSnippet),
+        vscode.commands.registerCommand(typeNormalKeysId, typeNormalKeys)
     )
 
     statusBarItem = vscode.window.createStatusBarItem(
@@ -163,6 +172,8 @@ async function setSearching(value: boolean) {
     await vscode.commands.executeCommand("setContext",
         "modaledit.searching", value)
     updateCursorAndStatusBar(vscode.window.activeTextEditor)
+    if (!(value || searchReturnToNormal))
+        enterInsert()
 }
 
 function changeSelection(editor: vscode.TextEditor, anchor: vscode.Position,
@@ -178,6 +189,8 @@ async function search(args: SearchArgs | string): Promise<void> {
     if (!args)
         args = {}
     if (typeof args == 'object') {
+        searchReturnToNormal = normalMode
+        actions.setLastCommand(searchId)
         if (!normalMode)
             enterNormal()
         setSearching(true)
@@ -187,14 +200,25 @@ async function search(args: SearchArgs | string): Promise<void> {
         searchCaseSensitive = args.caseSensitive || false
         searchAcceptAfter = args.acceptAfter || Number.POSITIVE_INFINITY
         searchSelectTillMatch = args.selectTillMatch || false
+        searchTypeAfterAccept = args.typeAfterAccept
     }
     else if (args == "\n")
-        await setSearching(false)
+        await acceptSearch()
     else {
         highlightNextMatch(editor, editor.selection.anchor, searchString + args)
         if (searchString.length >= searchAcceptAfter)
-           await setSearching(false)
+            await acceptSearch()
     }
+}
+
+async function acceptSearch() {
+    await setSearching(false)
+    await typeAfterMatch()
+}
+
+async function typeAfterMatch() {
+    if (searchTypeAfterAccept)
+        await typeNormalKeys({ keys: searchTypeAfterAccept })
 }
 
 function highlightNextMatch(editor: vscode.TextEditor, startPos: vscode.Position,
@@ -213,11 +237,10 @@ function highlightNextMatch(editor: vscode.TextEditor, startPos: vscode.Position
         let offs = searchBackwards ?
             docText.lastIndexOf(target, startOffs) :
             docText.indexOf(target, startOffs)
-        if (offs >= 0)
-        {
+        if (offs >= 0) {
             searchString = newSearchString
             let newPos = doc.positionAt(offs)
-            changeSelection(editor, 
+            changeSelection(editor,
                 searchSelectTillMatch ? searchStartPos : newPos,
                 newPos.with(undefined, newPos.character + searchString.length))
         }
@@ -249,6 +272,7 @@ async function nextMatch(): Promise<void> {
                 -searchString.length)
         else
             highlightNextMatch(editor, s.active, searchString)
+        await typeAfterMatch()
     }
 }
 
@@ -304,4 +328,9 @@ async function insertQuickSnippet(args?: QuickSnippetArgs): Promise<void> {
         await vscode.commands.executeCommand("editor.action.insertSnippet",
             { snippet })
     }
+}
+
+async function typeNormalKeys(args: TypeNormalKeysArgs): Promise<void> {
+    for (let i = 0; i < args.keys.length; i++)
+        await onType({ text: args.keys[i] })
 }

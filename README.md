@@ -285,6 +285,7 @@ The command takes following arguments. All of them are optional.
 | `caseSensitive` | `boolean` | `false`     | Search is case-sensitive. Default is case-insensitive
 | `acceptAfter`   | `number`  | `undefined` | Accept search automatically after _x_ characters has been entered. This helps implementing quick one or two character search operations.
 | `selectTillMatch` | `boolean` | `false`   | Select the range from current position till the match instead of just the match. Useful with `acceptAfter` to quickly extend selection till the specified character(s).
+| `typeAfterAccept` | `string`  | `undefined` | Allows to run normal mode commands through key bindings (see `modaledit.typeNormalKeys` command) after successful search. The argument can be used to enter insert mode, or clear selection after search, for example. The same command sequence is run also after `modaledit.nextMatch` and `modaledit.previousMatch` commands. I.e. the argument persists the same way as the search direction.
 
 #### `modaledit.cancelSearch`
 
@@ -375,6 +376,25 @@ to the command sequence.
 }
 ```
 
+### Invoking Key Bindings
+
+The new command `modaledit.typeNormalKeys` invokes commands through key 
+bindings. Calling this command with a key sequence has the same effect as 
+pressing the keys in normal mode. This allows you to treat key bindings as
+subroutines that can be called using this command.
+
+The command has one argument `keys` which contains the key sequence as string. 
+Assuming that keys `k` and `u` are bound to some commands, the following 
+example runs them both one after another.
+```js
+{
+    "command": "modaledit.typeNormalKeys",
+    "args": {
+        "keys": "ku"
+    }
+}
+```
+
 ## Release Notes
 
 ### 1.0.0
@@ -391,6 +411,18 @@ Initial release.
 - Added `startInNormalMode` setting, resolving issue 
   [#1](https://github.com/johtela/vscode-modaledit/issues/1)
 
+
+## Version 1.3
+
+- Incremental search now returns to insert mode, if it was invoked from there 
+  [#4](https://github.com/johtela/vscode-modaledit/issues/4)
+- Added new command `modaledit.typeNormalKeys` which can be used to "call"
+  key bindings. Also fixes issue 
+  [#3](https://github.com/johtela/vscode-modaledit/issues/3)
+- Added new argument `typeAfterAccept` to `modaledit.search` command. This 
+  invokes normal mode key bindings (using `modaledit.typeNormalKeys`) after
+  successful search. The argument can be used to enter insert mode, or clear 
+  selection after search, for example.
 
 ## Acknowledgements
 

@@ -53,6 +53,10 @@ export function getStartInNormalMode(): boolean {
     return startInNormalMode
 }
 
+export function setLastCommand(command: string) {
+    lastCommand = command
+}
+
 export function updateFromConfig(): void {
     const config = vscode.workspace.getConfiguration("modaledit")
     const keybindings = config.get<object>("keybindings")
