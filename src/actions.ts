@@ -1,24 +1,54 @@
+/**
+ * # Actions and Configuration
+ * 
+ * This module defines the data types used in the configuration file. It also
+ * includes function to execute commands defined in configuration. First we need
+ * to import VS Code definitions. 
+ */
 import * as vscode from 'vscode'
-import { type } from 'os'
-
+/**
+ * ## Action Definitions
+ * 
+ * The configuration consist of _actions_ that can take many forms. First of 
+ * all, an action can be a single command or sequence of commands (array).
+ */
 export type Action = ActionKinds | ActionKinds[]
-
+/**
+ * A singular action can be either a command name (string), a conditional 
+ * action, command with parameters, or a keymap (dictionary) which points to
+ * further actions.
+ */
 export type ActionKinds = string | Conditional | Command | Keymap
-
+/**
+ * A conditional action consist of condition (duh) and set of braches to take
+ * depending on the result of the condition.
+ */
 export interface Conditional {
     condition: string
     [branch: string]: Action
 }
-
+/**
+ * A command which requires arguments need to be defined using the `Command`
+ * interface. Arguments can be defined either as an object or string, which
+ * is evaluated on the fly.
+ */
 export interface Command {
     command: string
     args?: {} | string
 }
-
+/**
+ * A keymap is a dictionary of keys (characters) to actions. With keymaps you
+ * can define commands that require multiple keypresses.
+ */
 export interface Keymap {
     [key: string]: Action
 }
-
+/**
+ * ## Cursor Shapes
+ * 
+ * You can use various cursor shapes in different modes. The list of available
+ * shapes is defined below.
+ */
 type Cursor =
     | "block"
     | "block-outline"
@@ -27,14 +57,38 @@ type Cursor =
     | "underline"
     | "underline-thin"
     | undefined
-
+/**
+ * ## Configuration state
+ *
+ * The variables below contain the current cursor configuration.
+ */
 let insertCursorStyle: vscode.TextEditorCursorStyle
 let normalCursorStyle: vscode.TextEditorCursorStyle
 let searchCursorStyle: vscode.TextEditorCursorStyle
+/**
+ * Another thing you can set in config, is whether ModalEdit starts in normal
+ * mode. 
+ */
 let startInNormalMode: boolean
+/**
+ * The root of the action configuration is keymap. This defines what key 
+ * sequences will be run when keys are pressed in normal mode.
+ */
 let rootKeymap: Keymap
+/**
+ * The current active keymap is stored here. The active keymap changes when the
+ * user invokes a multi-key action sequence.
+ */
 let keymap: Keymap
+/**
+ * The last command run is also stored. This is needed to run commands which
+ * capture the keyboard.
+ */
 let lastCommand: string
+/**
+ * The key sequence that user has pressed is stored for error reporting 
+ * purposes.
+ */
 let keySequence: string[] = []
 
 export function getInsertCursorStyle(): vscode.TextEditorCursorStyle {

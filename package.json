@@ -15,6 +15,7 @@
 		"Keymaps",
 		"Other"
 	],
+	"homepage": "https://johtela.github.io/vscode-modaledit",
 	"activationEvents": [
 		"*"
 	],

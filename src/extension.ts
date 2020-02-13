@@ -1,4 +1,6 @@
 /**
+ * # Extension Entry Point
+ * 
  * The module 'vscode' contains the VS Code extensibility API. Import the module
  * and reference it with the alias vscode in your code below.
  */
@@ -13,29 +15,31 @@ import * as commands from './commands'
 export function activate(context: vscode.ExtensionContext) {
 
 	/**
-	 * Use the console to output diagnostic information (console.log) and
-	 * errors (console.error). This line of code will only be executed once 
-	 * when your extension is activated console.log('Congratulations, your 
-	 * extension "vscode-modaledit" is now active!')
-	 * 
-	 * The command has been defined in the package.json file. Now provide the 
-	 * implementation of the command with registerCommand. The commandId 
-	 * parameter must match the command field in package.json 
+	 * The commands are defined in the `package.json` file. We register them
+	 * with function defined in the `commands` module. 
 	 */
 	commands.register(context)
+	/**
+	 * Next we update the action definitions from the config file.
+	 */
 	actions.updateFromConfig()
+	/**
+	 * Then we subscribe to events we want to react to.
+	 */
 	context.subscriptions.push(
 		vscode.workspace.onDidChangeConfiguration(actions.updateFromConfig),
 		vscode.window.onDidChangeVisibleTextEditors(editors =>
 			editors.forEach(commands.updateCursorAndStatusBar)),
 		vscode.window.onDidChangeTextEditorSelection(e =>
 			commands.updateStatusBar(e.textEditor)))
+	/**
+	 * Last, we enter into normal or edit mode depending on the settings.
+	 */
 	if (actions.getStartInNormalMode())
 		commands.enterNormal()
 	else
 		commands.enterInsert()
 }
-
 /** 
  * This method is called when your extension is deactivated
  */
