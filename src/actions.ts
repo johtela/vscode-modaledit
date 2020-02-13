@@ -20,7 +20,7 @@ export type Action = ActionKinds | ActionKinds[]
  */
 export type ActionKinds = string | Conditional | Command | Keymap
 /**
- * A conditional action consist of condition (duh) and set of braches to take
+ * A conditional action consist of condition (duh) and set of branches to take
  * depending on the result of the condition.
  */
 export interface Conditional {

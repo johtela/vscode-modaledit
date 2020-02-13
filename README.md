@@ -397,7 +397,7 @@ example runs them both one after another.
 
 ## Release Notes
 
-### 1.0.0
+### Version 1.0
 
 Initial release.
 

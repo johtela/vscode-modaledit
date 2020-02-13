@@ -7,5 +7,6 @@ src/**
 **/*tsconfig.json
 **/*.map
 **/*.ts
+**/*.html
 **/*.less
 webpack.config.js
