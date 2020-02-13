@@ -1,0 +1,611 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>ModalEdit - Home</title>
+    <link rel="icon" type="image/icon" href="images/favicon.png" />
+    <link rel="stylesheet" href="css/main.css" />
+    
+    
+</head>
+<body>
+    
+    <div class="navbar">
+        <div class="navmenu">
+            
+    <a class="title enabled" href="index.html">
+        
+        <span>ModalEdit</span>
+    </a>
+    <a class="enabled" href="https://marketplace.visualstudio.com/items?itemName=johtela.vscode-modaledit">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512"><path d="M288 288h-32v-64h32v64zm288-128v192H288v32H160v-32H0V160h576zm-416 32H32v128h64v-96h32v96h32V192zm160 0H192v160h64v-32h64V192zm224 0H352v128h64v-96h32v96h32v-96h32v96h32V192z"/></svg>
+        <span>Download</span>
+    </a>
+    <a class="enabled" href="https://github.com/johtela/vscode-modaledit">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 496 512"><path d="M165.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6zm-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3zm44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9zM244.8 8C106.1 8 0 113.3 0 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C428.2 457.8 496 362.9 496 252 496 113.3 383.5 8 244.8 8zM97.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1zm-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7zm32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1zm-11.4-14.7c-1.6 1-1.6 3.6 0 5.9 1.6 2.3 4.3 3.3 5.6 2.3 1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2z"/></svg>
+        <span>GitHub</span>
+    </a>
+    <a class="enabled" href="license.html">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 384 512"><path d="M224 136V0H24C10.7 0 0 10.7 0 24v464c0 13.3 10.7 24 24 24h336c13.3 0 24-10.7 24-24V160H248c-13.2 0-24-10.8-24-24zM64 72c0-4.42 3.58-8 8-8h80c4.42 0 8 3.58 8 8v16c0 4.42-3.58 8-8 8H72c-4.42 0-8-3.58-8-8V72zm0 64c0-4.42 3.58-8 8-8h80c4.42 0 8 3.58 8 8v16c0 4.42-3.58 8-8 8H72c-4.42 0-8-3.58-8-8v-16zm192.81 248H304c8.84 0 16 7.16 16 16s-7.16 16-16 16h-47.19c-16.45 0-31.27-9.14-38.64-23.86-2.95-5.92-8.09-6.52-10.17-6.52s-7.22.59-10.02 6.19l-7.67 15.34a15.986 15.986 0 0 1-14.31 8.84c-.38 0-.75-.02-1.14-.05-6.45-.45-12-4.75-14.03-10.89L144 354.59l-10.61 31.88c-5.89 17.66-22.38 29.53-41 29.53H80c-8.84 0-16-7.16-16-16s7.16-16 16-16h12.39c4.83 0 9.11-3.08 10.64-7.66l18.19-54.64c3.3-9.81 12.44-16.41 22.78-16.41s19.48 6.59 22.77 16.41l13.88 41.64c19.77-16.19 54.05-9.7 66 14.16 2.02 4.06 5.96 6.5 10.16 6.5zM377 105L279.1 7c-4.5-4.5-10.6-7-17-7H256v128h128v-6.1c0-6.3-2.5-12.4-7-16.9z"/></svg>
+        <span>License</span>
+    </a>
+    <a  >
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path d="M223.7 239l136-136c9.4-9.4 24.6-9.4 33.9 0l22.6 22.6c9.4 9.4 9.4 24.6 0 33.9L319.9 256l96.4 96.4c9.4 9.4 9.4 24.6 0 33.9L393.7 409c-9.4 9.4-24.6 9.4-33.9 0l-136-136c-9.5-9.4-9.5-24.6-.1-34zm-192 34l136 136c9.4 9.4 24.6 9.4 33.9 0l22.6-22.6c9.4-9.4 9.4-24.6 0-33.9L127.9 256l96.4-96.4c9.4-9.4 9.4-24.6 0-33.9L201.7 103c-9.4-9.4-24.6-9.4-33.9 0l-136 136c-9.5 9.4-9.5 24.6-.1 34z"/></svg>
+        <span>Previous:</span>
+    </a>
+    <a class="enabled" href="src/extension.html">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path d="M224.3 273l-136 136c-9.4 9.4-24.6 9.4-33.9 0l-22.6-22.6c-9.4-9.4-9.4-24.6 0-33.9l96.4-96.4-96.4-96.4c-9.4-9.4-9.4-24.6 0-33.9L54.3 103c9.4-9.4 24.6-9.4 33.9 0l136 136c9.5 9.4 9.5 24.6.1 34zm192-34l-136-136c-9.4-9.4-24.6-9.4-33.9 0l-22.6 22.6c-9.4 9.4-9.4 24.6 0 33.9l96.4 96.4-96.4 96.4c-9.4 9.4-9.4 24.6 0 33.9l22.6 22.6c9.4 9.4 24.6 9.4 33.9 0l136-136c9.4-9.2 9.4-24.4 0-33.8z"/></svg>
+        <span>Next: Extension</span>
+    </a>
+        </div>
+        
+    <a class="hamburger">
+        <div class="bar1"></div>
+        <div class="bar2"></div>
+        <div class="bar3"></div>
+    </a>
+    </div>
+    
+    <div class="layout">
+        <div class="sidepane collapsible">
+            
+    <div class="tocmenu">
+        <h3>Table of Contents</h3>
+        
+    <ul>
+        
+    <li>
+        
+        <a href="README.html" class="highlight">Home</a>
+        
+    </li>
+    <li>
+        <button class="accordion">
+        Implementation
+        </button>
+            
+    <ul>
+        
+    <li>
+        
+        <a href="src/extension.html">Extension</a>
+        
+    </li>
+    <li>
+        
+        <a href="src/actions.html">Actions</a>
+        
+    </li>
+    <li>
+        
+        <a href="src/commands.html">Commands</a>
+        
+    </li>
+    </ul>
+    </li>
+    <li>
+        
+        <a href="CHANGELOG.html">Changelog</a>
+        
+    </li>
+    <li>
+        
+        <a href="LICENSE.html">License</a>
+        
+    </li>
+    </ul>
+    </div>
+            
+    <div class="footer">
+        Copyright © 2020 Tommi Johtela
+        <div class="ad">
+            Created with <a href="https://github.com/johtela/litscript">LiTScript</a>
+        </div>
+    </div>
+
+        </div>
+        <div class="sideicon collapsible">
+            
+    <a class="hamburger">
+        <div class="bar1"></div>
+        <div class="bar2"></div>
+        <div class="bar3"></div>
+    </a>
+        </div>
+        <div class="scrollingarea closepopups">
+            
+    <div class="contentarea">
+        <h1 id="modal-editing-in-vs-code">Modal Editing in VS Code</h1>
+<p>ModalEdit is a simple but powerful extension that adds configurable &quot;normal&quot;
+mode to VS Code. <a href="https://www.vim.org/">Vim</a> made the concept of <a href="https://unix.stackexchange.com/questions/57705/modeless-vs-modal-editors">modal editing</a> popular among
+developers and IT professionals. ModalEdit is not a Vim emulation, though.
+It does not define any default key mappings out-of-the-box. Instead, it
+encourages you to create your own keyboard layout and customize the editor to
+suit your preferences.</p>
+<p>As in Vim, the goal of the extension is to save your keystrokes and make editing
+as fast as possible. Unlike most Vim emulators, ModalEdit leverages the
+built-in features of VS Code. It uses commands provided by VS Code and other
+extensions. You can build complex operations by arranging commands into
+sequences. You can even define conditional commands that do different things
+based on editor state. Also, you can map these commands to arbitrarily long
+keyboard sequences.</p>
+<h2 id="getting-started">Getting Started</h2>
+<p>When extension is installed text documents will open in normal mode. The
+current mode is shown in the status bar. You can switch between modes by
+clicking the pane in the status bar.</p>
+<p><img src="images/status-bar.gif" alt="Status bar"></p>
+<p>In normal mode keys don't output characters but invoke commands. You can
+specify these commands in the <code>settings.json</code> file. To edit your user-level
+settings file, open command palette with <code>Ctrl+Shift+P</code> and look up command
+<strong>Preferences: Open Settings (JSON)</strong>. If you want the configuration to be
+project specific, edit the <code>settings.json</code> that is located in the <code>.vscode</code>
+directory under your project directory.</p>
+<p>To define the key mappings used in normal mode, add a property named
+<code>modaledit.keybindings</code>. You should define at least one binding that will switch
+the editor to the <em>insert mode</em>, which is the same as VS Code's default mode.</p>
+
+<pre class="syntaxhighlight"><code><span class="string">"modaledit.keybindings"</span>: {
+    <span class="string">"i"</span>: <span class="string">"modaledit.enterInsert"</span>
+}
+</code></pre>
+<p>When you save the <code>settings.json</code> file, keybindings take effect immediately.</p>
+<p>ModalEdit adds a regular VS Code keyboard shortcut for <code>Esc</code> to return back to
+normal mode. If you wish, you can remap this command to another key by
+pressing <code>Ctrl+K Ctrl+S</code>.</p>
+<h3 id="selections">Selections</h3>
+<p>ModalEdit does not have a separate selection/visual mode as Vim has. It is
+possible to select text both in normal mode and insert mode. The <code>[S]</code> text in
+the status bar indicates when there is text selected.</p>
+<p><img src="images/selected-text.png" alt="Selection active"></p>
+<p>ModalEdit defines a new command <code>modaledit.toggleSelection</code> which allows
+you to start selecting text in normal mode without holding down the shift key.
+This imitates Vim's visual mode.</p>
+<h2 id="configuration">Configuration</h2>
+<p>You can define the normal mode commands in four different ways. It is also
+possible to combine them freely.</p>
+<h3 id="single-command">Single Command</h3>
+<p>The simplest way is to map a key to a single command. This has the format:</p>
+
+<pre class="syntaxhighlight"><code><span class="string">"&lt;key&gt;"</span>: <span class="string">"&lt;command&gt;"</span>
+</code></pre>
+<p>The <code>&lt;key&gt;</code> needs to be a single character and <code>&lt;command&gt;</code> any valid VS Code
+command. You can see the list of all of the available commands by opening
+global settings with command <strong>Preferences: Open Default Keyboard Shortcuts (JSON)</strong>.</p>
+<p>The example in the previous section maps the <code>i</code> key to the
+<code>modaledit.enterInsert</code> command.</p>
+<h3 id="commands-with-arguments">Commands with Arguments</h3>
+<p>Some <a href="https://code.visualstudio.com/api/references/commands#commands">commands</a> take arguments. For example <code>cursorMove</code> which allows you
+to specify which direction and how much cursor moves. These commands can be
+executed by defining an object with prefined properties:</p>
+
+<pre class="syntaxhighlight"><code><span class="string">"&lt;key&gt;"</span>:  {
+    <span class="string">"command"</span>: <span class="string">"&lt;command&gt;"</span>,
+    <span class="string">"args"</span>: { ... } | <span class="string">"{ ... }"</span>
+}
+</code></pre>
+<p>The <code>&lt;command&gt;</code> is again a valid VS Code command. The <code>args</code> property contains
+whatever arguments the command takes. It can be specified as a JSON object
+or as a string. If the value of the <code>args</code> property is a string, ModalEdit
+treats it as a JavaScript expression. It evaluates the expression and passes the
+result to the command. The following variables can be used inside expression
+strings:</p>
+<table>
+<thead>
+<tr>
+<th>Variable</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>__file</code></td>
+<td><code>string</code></td>
+<td>The file name of the document that is edited.</td>
+</tr>
+<tr>
+<td><code>__line</code></td>
+<td><code>number</code></td>
+<td>The line number where the cursor is currently on.</td>
+</tr>
+<tr>
+<td><code>__col</code></td>
+<td><code>number</code></td>
+<td>The column number where the cursor is currently on.</td>
+</tr>
+<tr>
+<td><code>__char</code></td>
+<td><code>string</code></td>
+<td>The character under the cursor.</td>
+</tr>
+<tr>
+<td><code>__selecting</code></td>
+<td><code>boolean</code></td>
+<td>Flag that indicates whether selection is active.</td>
+</tr>
+</tbody>
+</table>
+<p>Below is an example that maps key <code>o</code> to a command that moves the cursor to the
+end of line. It also selects the jumped range, if we have selection active.</p>
+
+<pre class="syntaxhighlight"><code><span class="string">"o"</span>: {
+    <span class="string">"command"</span>: <span class="string">"cursorMove"</span>,
+    <span class="string">"args"</span>: <span class="string">"{ to: 'wrappedLineEnd', select: __selecting }"</span>
+},
+</code></pre>
+<h3 id="sequence-of-commands">Sequence of Commands</h3>
+<p>To construct more complex operations consisting of multiple steps, you can
+define command sequences. Commands in a sequence will be run one after another.
+A sequence is defined as an array.</p>
+
+<pre class="syntaxhighlight"><code><span class="string">"&lt;key&gt;"</span>: [ &lt;command1&gt;, &lt;command2&gt;, ... ]
+</code></pre>
+<p>In above, <code>&lt;command&gt;</code> can assume any of the supported forms: single command,
+one with arguments, or conditional command (see below).</p>
+<p>The next example maps the <code>f</code> key to a command sequence that first deletes the
+selected text and then switch to insert mode. It corresponds to the <code>c</code> command
+in Vim.</p>
+
+<pre class="syntaxhighlight"><code><span class="string">"f"</span>: [
+    <span class="string">"deleteRight"</span>,
+    <span class="string">"modaledit.enterInsert"</span>
+],
+</code></pre>
+<h3 id="conditional-commands">Conditional Commands</h3>
+<p>For even more complex scenarios, you can define commands that run different
+commands depending on a specified condition. The most common use case for this
+is to run a different command when selection is active. The format of a
+conditional commands is:</p>
+
+<pre class="syntaxhighlight"><code><span class="string">"&lt;key&gt;"</span>:  {
+    <span class="string">"condition"</span>: <span class="string">"&lt;condition&gt;"</span>,
+    <span class="string">"&lt;result1&gt;"</span>: &lt;command1&gt;,
+    "&lt;result2&gt;": &lt;command2&gt;,
+    ...
+}
+</code></pre>
+<p>Here <code>&lt;condition&gt;</code> can be any valid JavaScript expression. You can use
+variables listed in the &quot;Commands with Arguments&quot; section in the expression. If
+the expression evaluates to <code>&lt;result1&gt;</code>, <code>&lt;command1&gt;</code> will be executed, if to
+<code>&lt;result2&gt;</code>, <code>&lt;command2&gt;</code> will be run, and so forth. If none of the defined
+properties match the expression result, nothing is done. Commands can be of any
+kind: a single command, sequence, or command with arguments.</p>
+<p>Below is an example that moves cursor one word forward with <code>w</code> key. We use
+the <code>__selecting</code> variable to determine if a selection is active. If so, we
+extend the selection using <code>cursorWordStartRightSelect</code> command, otherwise we
+just jump to next word with <code>cursorWordStartRight</code>.</p>
+
+<pre class="syntaxhighlight"><code><span class="string">"w"</span>: {
+    <span class="string">"condition"</span>: <span class="string">"__selecting"</span>,
+    <span class="string">"true"</span>: <span class="string">"cursorWordStartRightSelect"</span>,
+    <span class="string">"false"</span>: <span class="string">"cursorWordStartRight"</span>
+},
+</code></pre>
+<h3 id="binding-key-sequences">Binding Key Sequences</h3>
+<p>When you want to define a multi-key sequence, nest the key bindings. You can
+define a two key command using the following format.</p>
+
+<pre class="syntaxhighlight"><code><span class="string">"&lt;key1&gt;"</span>: {
+    <span class="string">"&lt;key2&gt;"</span>: <span class="xml"><span class="tag">&lt;<span class="name">command</span>&gt;</span>
+},
+</span>
+</code></pre>
+<p>Again, the <code>&lt;command&gt;</code> can be in any of the forms described above. To invoke
+the command you first press <code>&lt;key1&gt;</code> in normal mode followed by <code>&lt;key2&gt;</code>.</p>
+<p>The example below defines two commands that are bound to key sequences <code>g - f</code>
+(search forwards) and <code>g - b</code> (search backwards).</p>
+
+<pre class="syntaxhighlight"><code><span class="string">"g"</span>: {
+    <span class="string">"f"</span>: {
+        <span class="string">"command"</span>: <span class="string">"modaledit.search"</span>,
+        <span class="string">"args"</span>: {}
+    },
+    <span class="string">"b"</span>: {
+        <span class="string">"command"</span>: <span class="string">"modaledit.search"</span>,
+        <span class="string">"args"</span>: {
+            <span class="string">"backwards"</span>: <span class="literal">true</span>
+        }
+    }
+}
+</code></pre>
+<h3 id="changing-cursors">Changing Cursors</h3>
+<p>You can set the cursor shape shown in each mode by changing the following
+settings.</p>
+<table>
+<thead>
+<tr>
+<th>Setting</th>
+<th>Default</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>insertCursorStyle</code></td>
+<td><code>line</code></td>
+<td>Cursor shown in insert mode.</td>
+</tr>
+<tr>
+<td><code>normalCursorStyle</code></td>
+<td><code>block</code></td>
+<td>Cursor shown in normal mode.</td>
+</tr>
+<tr>
+<td><code>searchCursorStyle</code></td>
+<td><code>underline</code></td>
+<td>Cursor shown when incremental search is on.</td>
+</tr>
+</tbody>
+</table>
+<p>The possible values are:</p>
+<ul>
+<li><code>block</code></li>
+<li><code>block-outline</code></li>
+<li><code>line</code></li>
+<li><code>line-thin</code></li>
+<li><code>underline</code></li>
+<li><code>underline-thin</code></li>
+</ul>
+<h3 id="start-in-normal-mode">Start in Normal Mode</h3>
+<p>If you want VS Code to be in insert mode when it starts, set the
+<code>startInNormalMode</code> setting to <code>false</code>. By default, editor is in normal mode
+when you open it.</p>
+<h3 id="example-configurations">Example Configurations</h3>
+<p>You can find example key bindings <a href="https://gist.github.com/johtela/b63232747fdd465748fedb9ca6422c84">here</a>. These are my own settings. The
+cheat sheet for my keyboard layout is shown below. I have created it in
+<a href="http://www.keyboard-layout-editor.com/">http://www.keyboard-layout-editor.com/</a>. Please note that my keyboard layout
+is Finnish, so the non-alphanumeric keys might be in strange places.</p>
+<p><img src="images/keyboard-layout.png" alt="My keyboard layout"></p>
+<p>As you can see, I haven't followed Vim conventions but rather tailored the
+keyboard layout according to my own preferences. I encourage you to do the same.</p>
+<p>In general, you should not try to convert VS Code into a Vim clone. The editing
+philosophies of Vim and VS Code are quite dissimilar. Targets of Vim operations
+are defined with special range commands, whereas VS Code's commands operate on
+selected text. For example, to delete a word in Vim, you first press <code>d</code> to
+delete and then <code>w</code> for word. In VS Code you first select the word (with <code>W</code> or
+<code>e</code> key in my configuration) then you delete the selection with <code>d</code> key.</p>
+<p>To better understand the difference, check out <a href="https://kakoune.org/why-kakoune/why-kakoune.html">Kakoune editor's documentation</a>.
+ModalEdit extends VS Code with normal mode editing, so you have more or less
+the same capabilities as in Kakoune.</p>
+<h2 id="additional-vs-code-commands">Additional VS Code Commands</h2>
+<p>ModalEdit adds few useful commands to VS Code's repertoire. They help you
+create more Vim-like workflow for searching and navigation.</p>
+<h3 id="switching-between-modes">Switching between Modes</h3>
+<p>Use the following commands to change the current editor mode. None of the
+commands require any arguments.</p>
+<table>
+<thead>
+<tr>
+<th>Command</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>modaledit.toggle</code></td>
+<td>Toggles between modes</td>
+</tr>
+<tr>
+<td><code>modaledit.enterNormal</code></td>
+<td>Switches to normal mode</td>
+</tr>
+<tr>
+<td><code>modaledit.enterInsert</code></td>
+<td>Switches to insert mode</td>
+</tr>
+<tr>
+<td><code>modaledit.toggleSelection</code></td>
+<td>Toggles selection mode on or off. Selection mode is implicitly on whenever editor has text selected</td>
+</tr>
+<tr>
+<td><code>modaledit.cancelSelection</code></td>
+<td>Cancel selection mode and clear selection.</td>
+</tr>
+</tbody>
+</table>
+<h3 id="incremental-search">Incremental Search</h3>
+<p>The standard search functionality in VS Code is quite clunky as it opens a
+dialog which takes you out of the editor. To achieve more fluid searching
+experience ModalEdit provides incremental search commands that mimic Vim's
+corresponding operations.</p>
+<h4 id="code-modaledit-search-code"><code>modaledit.search</code></h4>
+<p>Starts incremental search. The cursor is changed to indicate that editor is in
+search mode. Normal mode commands are suppressed while incremental search is
+active. Just type the search string directly without leaving the editor. You
+can see the searched string in the status bar as well as the search parameters.</p>
+<p><img src="images/searching.gif" alt="Searching"></p>
+<p>The command takes following arguments. All of them are optional.</p>
+<table>
+<thead>
+<tr>
+<th>Argument</th>
+<th>Type</th>
+<th>Default</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>backwards</code></td>
+<td><code>boolean</code></td>
+<td><code>false</code></td>
+<td>Search backwards. Default is forwards</td>
+</tr>
+<tr>
+<td><code>caseSensitive</code></td>
+<td><code>boolean</code></td>
+<td><code>false</code></td>
+<td>Search is case-sensitive. Default is case-insensitive</td>
+</tr>
+<tr>
+<td><code>acceptAfter</code></td>
+<td><code>number</code></td>
+<td><code>undefined</code></td>
+<td>Accept search automatically after <em>x</em> characters has been entered. This helps implementing quick one or two character search operations.</td>
+</tr>
+<tr>
+<td><code>selectTillMatch</code></td>
+<td><code>boolean</code></td>
+<td><code>false</code></td>
+<td>Select the range from current position till the match instead of just the match. Useful with <code>acceptAfter</code> to quickly extend selection till the specified character(s).</td>
+</tr>
+<tr>
+<td><code>typeAfterAccept</code></td>
+<td><code>string</code></td>
+<td><code>undefined</code></td>
+<td>Allows to run normal mode commands through key bindings (see <code>modaledit.typeNormalKeys</code> command) after successful search. The argument can be used to enter insert mode, or clear selection after search, for example. The same command sequence is run also after <code>modaledit.nextMatch</code> and <code>modaledit.previousMatch</code> commands. I.e. the argument persists the same way as the search direction.</td>
+</tr>
+</tbody>
+</table>
+<h4 id="code-modaledit-cancel-search-code"><code>modaledit.cancelSearch</code></h4>
+<p>Cancels the incremental search, returns the cursor to the starting position,
+and switches back to normal mode.</p>
+<h4 id="code-modaledit-delete-char-from-search-code"><code>modaledit.deleteCharFromSearch</code></h4>
+<p>Deletes the last character of the search string. By default the backspace key
+is bound to this command when ModalEdit is active and in search mode.</p>
+<h4 id="code-modaledit-next-match-code"><code>modaledit.nextMatch</code></h4>
+<p>Moves to the next match and selectes it. Which way to search depends on the
+search direction.</p>
+<h4 id="code-modaledit-previous-match-code"><code>modaledit.previousMatch</code></h4>
+<p>Moves to the previous match and selectes it. Which way to search depends on the
+search direction.</p>
+<h3 id="bookmarks">Bookmarks</h3>
+<p>To quickly jump inside documents ModalEdit provides two bookmark commands:</p>
+<ul>
+<li><code>modaledit.defineBookmark</code> stores the current position in a bookmark, and</li>
+<li><code>modaledit.goToBookmark</code> jumps to the given bookmark.</li>
+</ul>
+<p>Both commands take one argument which contains the bookmark index. It can be any
+number, so you can define unlimited number of bookmarks. If the argument is
+omitted, default value <code>0</code> is assumed.</p>
+
+<pre class="syntaxhighlight"><code>{
+    <span class="string">"command"</span>: <span class="string">"modaledit.defineBookmark"</span>,
+    <span class="string">"args"</span>: {
+        <span class="string">"bookmark"</span>: <span class="number">0</span>
+    }
+}
+</code></pre>
+<h3 id="quick-snippets">Quick Snippets</h3>
+<p>Snippets come in handy when you need to insert boilerplate text. However, the
+problem with snippets is that very seldom one bothers to create a new one. If a
+snippet is used only a couple of times in a specific situation, the effort of
+defining it nullifies the advantage.</p>
+<p>With ModalEdit, you can create snippets quickly by selecting a region of text
+and invoking command <code>modaledit.defineQuickSnippet</code>. You can assign the snippet
+to a register by specifying its index as an argument.</p>
+
+<pre class="syntaxhighlight"><code>{
+    <span class="string">"command"</span>: <span class="string">"modaledit.defineQuickSnippet"</span>,
+    <span class="string">"args"</span>: {
+        <span class="string">"snippet"</span>: <span class="number">1</span>
+    }
+}
+</code></pre>
+<p>Use the <code>modaledit.insertQuickSnippet</code> command to insert the defined snippet at
+the cursor position. It takes the same argument as <code>modaledit.defineQuickSnippet</code>.</p>
+<p>A snippet can have arguments or placeholders which you can fill in after
+inserting it. These are written as <code>$1</code>, <code>$2</code>, ... inside the snippet. You can
+quickly define the arguments with the <code>modaledit.fillSnippetArgs</code> command. First
+multi-select all the arguments (by pressing <code>Alt</code> while selecting with a mouse),
+then run the command. After that, select the snippet itself and run the
+<code>modaledit.defineQuickSnippet</code> command.</p>
+<p>In the following example key sequence <code>q - a</code> fills snippet arguments,
+<code>q - w - 1</code> defines snippet in register 1, and <code>q - 1</code> inserts it.</p>
+<p><img src="images/quick-snippet.gif" alt="Quick snippet"></p>
+<p>It is usually a good idea to run <code>editor.action.formatDocument</code> after inserting
+a snippet to clean up whitespace. You can do this automatically adding it
+to the command sequence.</p>
+
+<pre class="syntaxhighlight"><code><span class="string">"q"</span>: {
+    <span class="string">"1"</span>: [
+        {
+            <span class="string">"command"</span>: <span class="string">"modaledit.insertQuickSnippet"</span>,
+            <span class="string">"args"</span>: {
+                <span class="string">"snippet"</span>: <span class="number">1</span>
+            }
+        },
+        <span class="string">"editor.action.formatDocument"</span>
+    ],
+}
+</code></pre>
+<h3 id="invoking-key-bindings">Invoking Key Bindings</h3>
+<p>The new command <code>modaledit.typeNormalKeys</code> invokes commands through key
+bindings. Calling this command with a key sequence has the same effect as
+pressing the keys in normal mode. This allows you to treat key bindings as
+subroutines that can be called using this command.</p>
+<p>The command has one argument <code>keys</code> which contains the key sequence as string.
+Assuming that keys <code>k</code> and <code>u</code> are bound to some commands, the following
+example runs them both one after another.</p>
+
+<pre class="syntaxhighlight"><code>{
+    <span class="string">"command"</span>: <span class="string">"modaledit.typeNormalKeys"</span>,
+    <span class="string">"args"</span>: {
+        <span class="string">"keys"</span>: <span class="string">"ku"</span>
+    }
+}
+</code></pre>
+<h2 id="release-notes">Release Notes</h2>
+<h3 id="1-0-0">1.0.0</h3>
+<p>Initial release.</p>
+<h3 id="version-1-1">Version 1.1</h3>
+<ul>
+<li>Added <code>selectTillMatch</code> argument to <code>modalEdit.search</code> command.</li>
+<li>Editor does not automatically revert back to normal mode when changing window.</li>
+</ul>
+<h3 id="version-1-2">Version 1.2</h3>
+<ul>
+<li>Added <code>startInNormalMode</code> setting, resolving issue
+<a href="https://github.com/johtela/vscode-modaledit/issues/1">#1</a></li>
+</ul>
+<h2 id="version-1-3">Version 1.3</h2>
+<ul>
+<li>Incremental search now returns to insert mode, if it was invoked from there
+<a href="https://github.com/johtela/vscode-modaledit/issues/4">#4</a></li>
+<li>Added new command <code>modaledit.typeNormalKeys</code> which can be used to &quot;call&quot;
+key bindings. Also fixes issue
+<a href="https://github.com/johtela/vscode-modaledit/issues/3">#3</a></li>
+<li>Added new argument <code>typeAfterAccept</code> to <code>modaledit.search</code> command. This
+invokes normal mode key bindings (using <code>modaledit.typeNormalKeys</code>) after
+successful search. The argument can be used to enter insert mode, or clear
+selection after search, for example.</li>
+</ul>
+<h2 id="acknowledgements">Acknowledgements</h2>
+<p>I was using the <a href="https://marketplace.visualstudio.com/items?itemName=jpotterm.simple-vim">Simple Vim</a> extension for a long time, but was never fully
+happy with it. It shares the idea of being a simple extension reusing VS Code's
+functionality, but it is sorely lacking in configurability. If you don't like
+its default key mappings, you are out of luck.</p>
+<p>Then I found extension called <a href="https://marketplace.visualstudio.com/items?itemName=bmalehorn.vimspired">Vimspired</a> which has a really great idea for
+implementing modal editing: just add a section in the <code>settings.json</code> which
+contains the keymap for normal mode. This allows you to mimic Vim behavior, if
+you wish to do so, or take a completely different approach. For example, don't
+use <code>h</code>, <code>j</code>, <code>k</code>, <code>l</code> keys to move the cursor but <code>w</code>, <code>a</code>, <code>s</code>, <code>d</code> keys
+instead.</p>
+<p>I really like Vimspired, but still wanted to change some of its core behavior
+and add many additional features. I didn't want to harass the author with
+extensive pull requests, so I decided to implement my own take of the theme. I
+shameleslly copied the core parts of Vimspired and then changed them beyond
+recognition. Anyway, credit goes to <a href="https://marketplace.visualstudio.com/publishers/bmalehorn">Brian Malehorn</a> for coming up with the
+great idea and helping me jump start my project.</p>
+
+        
+    </div>
+            <div class="stickypane">
+                
+    <div class="pagemenu">
+        <h3>On This Page</h3>
+            <ul class="pagetree">
+                
+            </ul>
+    </div>
+                
+            </div>
+        </div>
+    </div>
+    <script src="js/main.js"></script>
+    
+</body>
+</html>

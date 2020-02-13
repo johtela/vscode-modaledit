@@ -90,7 +90,11 @@ let lastCommand: string
  * purposes.
  */
 let keySequence: string[] = []
-
+/**
+ * ## Configuration Accessors
+ * 
+ * The following functions return the current configuration settings.
+ */
 export function getInsertCursorStyle(): vscode.TextEditorCursorStyle {
     return insertCursorStyle
 }
@@ -106,11 +110,19 @@ export function getSearchCursorType(): vscode.TextEditorCursorStyle {
 export function getStartInNormalMode(): boolean {
     return startInNormalMode
 }
-
+/**
+ * You can also set the last command from outside the module.
+ */
 export function setLastCommand(command: string) {
     lastCommand = command
 }
-
+/**
+ * ## Update Configuration from settings.json
+ * 
+ * Whenever the user saves either global `settings.json` or the one located
+ * in the `.vsode` directory VS Code calls this function that updates the
+ * current configuration.
+ */
 export function updateFromConfig(): void {
     const config = vscode.workspace.getConfiguration("modaledit")
     const keybindings = config.get<object>("keybindings")
@@ -126,40 +138,10 @@ export function updateFromConfig(): void {
         config.get<Cursor>("searchCursorStyle", "underline"))
     startInNormalMode = config.get<boolean>("startInNormalMode", true)
 }
-
-function isAction(x: any): x is Action {
-    return isString(x) || isConditional(x) || isCommand(x) || isKeymap(x) ||
-        isActionSequence(x)
-}
-
-function isString(x: any): x is string {
-    return x && typeof x === "string"
-}
-
-function isObject(x: any): boolean {
-    return x && typeof x === "object"
-}
-
-function isActionSequence(x: any): x is ActionKinds[] {
-    return Array.isArray(x) && x.every(isAction)
-}
-
-function isConditional(x: any): x is Conditional {
-    return isObject(x) && isString(x.condition) &&
-        Object.keys(x).every(key => 
-            key === "condition" || isAction(x[key]))
-}
-
-function isCommand(x: any): x is Command {
-    return isObject(x) && isString(x.command) &&
-        (!x.args || isObject(x.args) || isString(x.args))
-}
-
-function isKeymap(x: any): x is Keymap {
-    return isObject(x) && !isConditional(x) && !isCommand(x) &&
-        Object.values(x).every(isAction)
-}
-
+/**
+ * The helper function below converts cursor styles specified in configuration 
+ * to enumeration members used by VS Code.
+ */
 function toVSCursorStyle(cursor: Cursor): vscode.TextEditorCursorStyle {
     switch (cursor) {
         case "line": return vscode.TextEditorCursorStyle.Line
@@ -171,7 +153,65 @@ function toVSCursorStyle(cursor: Cursor): vscode.TextEditorCursorStyle {
         default: return vscode.TextEditorCursorStyle.Line
     }
 }
-
+/**
+ * ## Type Predicates
+ * 
+ * Since JavaScript does not have dynamic type information we need to write
+ * functions that check which type of action we get from the configuration. 
+ * First we define a high-level type predicate that checks if a value is
+ * an action.
+ */
+function isAction(x: any): x is Action {
+    return isString(x) || isConditional(x) || isCommand(x) || isKeymap(x) ||
+        isActionSequence(x)
+}
+/**
+ * This one checks whether a value is a string.
+ */
+function isString(x: any): x is string {
+    return x && typeof x === "string"
+}
+/**
+ * This one identifies an object.
+ */
+function isObject(x: any): boolean {
+    return x && typeof x === "object"
+}
+/**
+ * This checks if a value is an array of actions.
+ */
+function isActionSequence(x: any): x is ActionKinds[] {
+    return Array.isArray(x) && x.every(isAction)
+}
+/**
+ * This recognizes a conditional action.
+ */
+function isConditional(x: any): x is Conditional {
+    return isObject(x) && isString(x.condition) &&
+        Object.keys(x).every(key => 
+            key === "condition" || isAction(x[key]))
+}
+/**
+ * This asserts that a value is a command object.
+ */
+function isCommand(x: any): x is Command {
+    return isObject(x) && isString(x.command) &&
+        (!x.args || isObject(x.args) || isString(x.args))
+}
+/**
+ * And finally this one checks if a value is a keymap.
+ */
+function isKeymap(x: any): x is Keymap {
+    return isObject(x) && !isConditional(x) && !isCommand(x) &&
+        Object.values(x).every(isAction)
+}
+/**
+ * ## Executing Commands
+ * 
+ * In the end all keybindings will invoke one or more VS Code commands. The
+ * following function runs a command whose name and arguments are given as
+ * parameters.
+ */
 async function executeVSCommand(command: string, ...rest: any[]): Promise<void> {
     try {
         await vscode.commands.executeCommand(command, ...rest)
@@ -182,7 +222,10 @@ async function executeVSCommand(command: string, ...rest: any[]): Promise<void> 
     }
     keySequence = []
 }
-
+/**
+ * `evalString` function evaluates JavaScript expressions. Before doing so, it
+ * defines some variables that can be used in the evaluated text.
+ */
 function evalString(str: string, selecting: boolean): any {
     let __selecting = selecting
     let __file = undefined
@@ -205,7 +248,11 @@ function evalString(str: string, selecting: boolean): any {
         vscode.window.showErrorMessage("Evaluation error: " + error.message)
     }
 }
-
+/**
+ * We need the evaluation function when executing conditional command. The
+ * condition is evaluated and if a key is found that matches the result, it is
+ * executed.
+ */
 async function executeConditional(cond: Conditional, selecting: boolean): 
     Promise<void> {
     let res = evalString(cond.condition, selecting)
@@ -213,7 +260,10 @@ async function executeConditional(cond: Conditional, selecting: boolean):
     if (branch && isAction(cond[branch]))
         await execute(cond[branch], selecting)
 }
-
+/**
+ * Command arguments can be given as strings which will be evaluated to get
+ * the actual arguments. 
+ */
 async function executeCommand(action: Command, selecting: boolean) {
     if (action.args) {
         if (typeof action.args === 'string')
@@ -225,7 +275,12 @@ async function executeCommand(action: Command, selecting: boolean) {
     else
         await executeVSCommand(action.command)
 }
-
+/**
+ * ## Executing Actions
+ * 
+ * Before running any commands, we need to identify which type of action we got.
+ * Depending on the type we use different function to execute the command.
+ */
 async function execute(action: Action, selecting: boolean): Promise<void> {
     keymap = rootKeymap
     if (isString(action))
@@ -240,7 +295,17 @@ async function execute(action: Action, selecting: boolean): Promise<void> {
     else if (isKeymap(action))
         keymap = action
 }
-
+/**
+ * ## Key Press Handler
+ * 
+ * Now that the plumbing of actions is implemented, it is straightforward to
+ * map the pressed key to an action. The special case occurs when a command
+ * captures the keyboard. Then we rerun the previous command and give the key 
+ * to it as an argument.
+ * 
+ * Otherwise we just check if the current keymap contains binding for the key
+ * pressed, and execute the action. If not, we present an error to the user.
+ */
 export async function handleKey(key: string, selecting: boolean,
     capture: boolean) {
     keySequence.push(key)

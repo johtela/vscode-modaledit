@@ -1,0 +1,37 @@
+[
+    {
+        "page": "Home",
+        "file": "README.html",
+        "desc": ""
+    },
+    {
+        "page": "Implementation",
+        "subs": [
+            {
+                "page": "Extension",
+                "file": "src/extension.html",
+                "desc": ""
+            },
+            {
+                "page": "Actions",
+                "file": "src/actions.html",
+                "desc": ""
+            },
+            {
+                "page": "Commands",
+                "file": "src/commands.html",
+                "desc": ""
+            }
+        ]
+    },
+    {
+        "page": "Changelog",
+        "file": "CHANGELOG.html",
+        "desc": ""
+    },
+    {
+        "page": "License",
+        "file": "LICENSE.html",
+        "desc": ""
+    }
+]

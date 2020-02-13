@@ -1,0 +1,12 @@
+{
+    "updateToc": true,
+    "frontMatter": {
+        "projectName": "ModalEdit",
+        "repository": "https://github.com/johtela/vscode-modaledit",
+        "download": "https://marketplace.visualstudio.com/items?itemName=johtela.vscode-modaledit",
+        "footer": "Copyright © 2020 Tommi Johtela",
+        "userTheme": "./user-theme.less",
+        "syntaxHighlight": "coding-horror",
+        "footerLocation": "toc-menu"
+    }
+}

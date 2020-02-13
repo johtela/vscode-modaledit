@@ -1,9 +1,29 @@
 {
     "files.exclude": {
-        "out": false 
+        "out": false
     },
     "search.exclude": {
-        "out": true 
+        "out": true
     },
-    "typescript.tsc.autoDetect": "off"
+    "typescript.tsc.autoDetect": "off",
+    "json.schemas": [
+        {
+            "fileMatch": [
+                "/litsconfig.json"
+            ],
+            "url": "../../../AppData/Roaming/npm/node_modules/litscript/schemas/litsconfig-schema.json"
+        },
+        {
+            "fileMatch": [
+                "/toc.json"
+            ],
+            "url": "../../../AppData/Roaming/npm/node_modules/litscript/schemas/toc-schema.json"
+        },
+        {
+            "fileMatch": [
+                "/dependencies.json"
+            ],
+            "url": "../../../AppData/Roaming/npm/node_modules/litscript/schemas/dependency-graph-schema.json"
+        }
+    ]
 }

@@ -1,0 +1,26 @@
+{
+    "src/actions": {
+        "url": "src/actions.html",
+        "dependencies": [
+            "vscode"
+        ]
+    },
+    "vscode": {
+        "dependencies": []
+    },
+    "src/commands": {
+        "url": "src/commands.html",
+        "dependencies": [
+            "vscode",
+            "src/actions"
+        ]
+    },
+    "src/extension": {
+        "url": "src/extension.html",
+        "dependencies": [
+            "vscode",
+            "src/actions",
+            "src/commands"
+        ]
+    }
+}
