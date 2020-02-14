@@ -2,8 +2,8 @@
  * # Actions and Configuration
  * 
  * This module defines the data types used in the configuration file. It also
- * includes function to execute commands defined in configuration. First we need
- * to import VS Code definitions. 
+ * includes functions to execute commands defined in configuration. First we 
+ * need to import VS Code definitions. 
  */
 import * as vscode from 'vscode'
 /**
