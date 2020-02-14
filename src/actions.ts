@@ -58,7 +58,7 @@ type Cursor =
     | "underline-thin"
     | undefined
 /**
- * ## Configuration state
+ * ## Configuration State
  *
  * The variables below contain the current cursor configuration.
  */

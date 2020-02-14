@@ -5,6 +5,11 @@
         "desc": ""
     },
     {
+        "page": "Tutorial",
+        "file": ".vscode/settings.html",
+        "desc": ""
+    },
+    {
         "page": "Implementation",
         "subs": [
             {

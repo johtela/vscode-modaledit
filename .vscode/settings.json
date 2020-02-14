@@ -1,3 +1,50 @@
+/**
+# Build Your Own Vim Emulation for VS Code
+
+![Shark](../images/sharks.png =256x206)
+[Vim][] is the white shark of text editors. It has survived among modern IDEs 
+because of its unique philosophy. It uses [modal editing][] which is almost an
+opposite approach to how other editors work. You start in "normal" mode where
+you can navigate and edit text, but not insert it. When you want to enter text, 
+you switch to "insert" mode where you can type new text, but cannot do anything 
+else. So, you end up bouncing between modes as you edit your text file.
+
+This might sound difficult, and granted, the learning curve is steep. But after 
+you are accustomed to this way of working, it is very difficult to go back. If
+you are used to modal editing, having to use arrow keys to move cursor, for
+example, feels uncomfortable. The proof of this is that nearly all popular
+text editors have some kind of add-in that provides Vim emulation. VS Code has
+several of them.
+
+So, why write yet another extension that provides Vim emulation? Well, the
+problem is that VS Code is not Vim, and trying to mimick it closely will result 
+in unsatisfying user experience. Not all features of Vim map naturally to 
+features of VS Code. Most extension are trying to transform VS Code into 
+something it is not designed to be.
+
+Instead of copying Vim functionality as closely as possible we can utilize VS 
+Code's existing features and just add the concept of modal editing to the mix. 
+Turns out implementing modal editing is extremely simple. We basically provide 
+pair of commands that switch between normal mode and insert mode.
+
+To complete the Vim experience we need to be able to bind key sequences pressed
+in normal mode to VS Code's commands. This we can do by defining the key 
+bindings in the VS Codes standard configuration file `settings.json`. We provide 
+a way to bind any key to any command, or sequence of commands. We can even 
+provide conditional commands, that run do different things based on editor 
+state. This is basically the feature set that [ModalEdit][] provides. Refer to 
+the [README][ModalEdit] page for the details of the configuration options.
+
+With these capabilities we can start building our Vim emulation. We don't need
+to use Vim's standard key bindings, if we don't want to. You can map any key
+(sequence) to any command. But to keep things familiar, we'll follow Vim's
+conventions for now to demonstrate that you can implement its functionality
+reasonably closely.
+
+> This document is actually a literate `settings.json` file, and the web page
+> you are reading is generated from it using [LiTScript][]. See its 
+> [home page][LiTScript], if you want to learn more about that. 
+*/
 {
     "files.exclude": {
         "out": false
@@ -6,24 +53,10 @@
         "out": true
     },
     "typescript.tsc.autoDetect": "off",
-    "json.schemas": [
-        {
-            "fileMatch": [
-                "/litsconfig.json"
-            ],
-            "url": "../../../AppData/Roaming/npm/node_modules/litscript/schemas/litsconfig-schema.json"
-        },
-        {
-            "fileMatch": [
-                "/toc.json"
-            ],
-            "url": "../../../AppData/Roaming/npm/node_modules/litscript/schemas/toc-schema.json"
-        },
-        {
-            "fileMatch": [
-                "/dependencies.json"
-            ],
-            "url": "../../../AppData/Roaming/npm/node_modules/litscript/schemas/dependency-graph-schema.json"
-        }
-    ]
 }
+/**
+[Vim]: https://www.vim.org/
+[ModalEdit]: ../README.html
+[modal editing]: https://unix.stackexchange.com/questions/57705/modeless-vs-modal-editors
+[LiTScript]: https://johtela.github.io/litscript/
+*/

@@ -1,4 +1,5 @@
 {
+    "files": [ "*.md", ".vscode/settings.json" ],
     "updateToc": true,
     "frontMatter": {
         "projectName": "ModalEdit",
