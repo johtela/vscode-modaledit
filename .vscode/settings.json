@@ -65,7 +65,7 @@ in the current cursor position, you press `i`.
 */
         "i": "modaledit.enterInsert",
 /**
-To insert text at the beginning of line, you press `I`. For this operatio, we
+To insert text at the beginning of line, you press `I`. For this operation, we
 need a command sequence.
 */
         "I": [
