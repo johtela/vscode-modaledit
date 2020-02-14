@@ -125,23 +125,23 @@
     <div class="contentarea">
         <h1 id="build-your-own-vim-emulation-for-vs-code">Build Your Own Vim Emulation for VS Code</h1>
 <p><img src="../images/sharks.png" alt="Shark" width="256" height="206">
-<a href="https://www.vim.org/">Vim</a> is the white shark of text editors. It has survived among modern IDEs
-because of its unique philosophy. It uses <a href="https://unix.stackexchange.com/questions/57705/modeless-vs-modal-editors">modal editing</a> which is almost an
-opposite approach to how other editors work. You start in &quot;normal&quot; mode where
+<a href="https://www.vim.org/">Vim</a> is the great white shark of text editors. It has survived among modern
+IDEs because of its unique philosophy. It uses <a href="https://unix.stackexchange.com/questions/57705/modeless-vs-modal-editors">modal editing</a> which is almost
+an opposite approach to how other editors work. You start in &quot;normal&quot; mode where
 you can navigate and edit text, but not insert it. When you want to enter text,
 you switch to &quot;insert&quot; mode where you can type new text, but cannot do anything
 else. So, you end up bouncing between modes as you edit your text file.</p>
 <p>This might sound difficult, and granted, the learning curve is steep. But after
 you are accustomed to this way of working, it is very difficult to go back. If
-you are used to modal editing, having to use arrow keys to move cursor, for
-example, feels uncomfortable. The proof of this is that nearly all popular
+you are used to modal editing, for example having to use arrow keys to move
+cursor, feels uncomfortable. The proof of this is that nearly all popular
 text editors have some kind of add-in that provides Vim emulation. VS Code has
 several of them.</p>
 <p>So, why write yet another extension that provides Vim emulation? Well, the
-problem is that VS Code is not Vim, and trying to mimick it closely will result
-in unsatisfying user experience. Not all features of Vim map naturally to
-features of VS Code. Most extension are trying to transform VS Code into
-something it is not designed to be.</p>
+problem is that most emulators try to make VS Code behave exactly like Vim which
+it obviously can't do. Trying to mimick Vim's functionality too closely
+results in unsatisfying user experience as it has a lot of features that do not
+map naturally to features of VS Code.</p>
 <p>Instead of copying Vim functionality as closely as possible we can utilize VS
 Code's existing features and just add the concept of modal editing to the mix.
 Turns out implementing modal editing is extremely simple. We basically provide
@@ -150,28 +150,89 @@ pair of commands that switch between normal mode and insert mode.</p>
 in normal mode to VS Code's commands. This we can do by defining the key
 bindings in the VS Codes standard configuration file <code>settings.json</code>. We provide
 a way to bind any key to any command, or sequence of commands. We can even
-provide conditional commands, that run do different things based on editor
-state. This is basically the feature set that <a href="../README.html">ModalEdit</a> provides. Refer to
-the <a href="../README.html">README</a> page for the details of the configuration options.</p>
+provide conditional commands that do different things based on editor state.
+This is the core feature set that <a href="../README.html">ModalEdit</a> provides. Refer to the
+<a href="../README.html">README</a> page for the details of the configuration options.</p>
 <p>With these capabilities we can start building our Vim emulation. We don't need
 to use Vim's standard key bindings, if we don't want to. You can map any key
 (sequence) to any command. But to keep things familiar, we'll follow Vim's
 conventions for now to demonstrate that you can implement its functionality
 reasonably closely.</p>
 <blockquote>
-<p>This document is actually a literate <code>settings.json</code> file, and the web page
-you are reading is generated from it using <a href="https://johtela.github.io/litscript/">LiTScript</a>. See its
-<a href="https://johtela.github.io/litscript/">home page</a>, if you want to learn more about that.</p>
+<p>This document is actually a literate <code>settings.json</code> file which is super handy
+as I can test the key bindings right away while writing this document. Saving
+the file makes ModalEdit apply the bindings. The web page you are reading is
+generated from the file using LiTScript. See <a href="https://johtela.github.io/litscript/">LiTScript home page</a>,
+if you want to learn more about that.</p>
 </blockquote>
+<p>So, let's start configuring our Vim emulator by adding the ModalEdit's
+configuration block for key binding.</p>
 
 <pre class="syntaxhighlight"><code>{
-    <span class="attr">"files.exclude"</span>: {
-        <span class="attr">"out"</span>: <span class="literal">false</span>
+    <span class="attr">"modaledit.keybindings"</span>: {
+</code></pre>
+<h2 id="switching-between-modes">Switching Between Modes</h2>
+<p>First things first: we need to be able to enter the normal mode somehow. The
+<code>Esc</code> key is mapped to the <code>modaledit.enterNormal</code> command by default, so we
+dont't need to do anything about that. If you like, you can map other keys to
+this command using VS Code's standard keymappings pressing <code>Ctrl+K Ctrl+S</code>.</p>
+<p>There are multiple ways to enter insert mode, though. If you want to insert text
+in the current cursor position, you press <code>i</code>.</p>
+
+<pre class="syntaxhighlight"><code>        "i": "modaledit.enterInsert",
+</code></pre>
+<p>To insert text at the beginning of line, you press <code>I</code>. For this operatio, we
+need a command sequence.</p>
+
+<pre class="syntaxhighlight"><code>        "I": [
+            "cursorHome",
+            "modaledit.enterInsert"
+        ],
+</code></pre>
+<p><em>Appending</em> text works analogously. <code>a</code> appends text after current character
+and <code>A</code> at the end of the line. There is a special case, though. If cursor is
+already at the last character of the line, it should not move. This is why we
+use a conditional command to move the cursor only, if the current character
+is not <code>0</code>, which it is at the end of the line.</p>
+
+<pre class="syntaxhighlight"><code>        "a": [
+            {
+                "condition": "__char == 0",
+                "false": "cursorRight"
+            },
+            "modaledit.enterInsert"
+        ],
+        "A": [
+            "cursorEnd",
+            "modaledit.enterInsert"
+        ],
+</code></pre>
+<p>The third way to enter insert mode is to <em>open</em> a line. This means creating an
+empty line, and putting the cursor on it. There are two variants of this command
+as well: <code>o</code> opens a new line below the current line whereas <code>O</code> opens it on the
+current line.</p>
+
+<pre class="syntaxhighlight"><code>        "o": [
+            "editor.action.insertLineAfter",
+            "modaledit.enterInsert"
+        ],
+        "O": [
+            "editor.action.insertLineBefore",
+            "modaledit.enterInsert"
+        ],
     },
-    <span class="attr">"search.exclude"</span>: {
-        <span class="attr">"out"</span>: <span class="literal">true</span>
+</code></pre>
+<p>Now we can test the commands we just created.</p>
+<p><img src="../images/mode-switching.gif" alt="mode switching"></p>
+<h2 id="cursor-movement">Cursor Movement</h2>
+
+<pre class="syntaxhighlight"><code>    "files.exclude": {
+        "out": false
     },
-    <span class="attr">"typescript.tsc.autoDetect"</span>: <span class="string">"off"</span>,
+    "search.exclude": {
+        "out": true
+    },
+    "typescript.tsc.autoDetect": "off",
 }
 </code></pre>
 
