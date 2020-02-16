@@ -197,8 +197,8 @@ or as a string. If the value of the <code>args</code> property is a string, Moda
 treats it as a JavaScript expression. It evaluates the expression and passes the
 result to the command. The following variables can be used inside expression
 strings:</p>
-<table>
-<thead>
+<div style="overflow: auto">
+<table><thead>
 <tr>
 <th>Variable</th>
 <th>Type</th>
@@ -233,7 +233,7 @@ strings:</p>
 </tr>
 </tbody>
 </table>
-<p>Below is an example that maps key <code>o</code> to a command that moves the cursor to the
+</div><p>Below is an example that maps key <code>o</code> to a command that moves the cursor to the
 end of line. It also selects the jumped range, if we have selection active.</p>
 
 <pre class="syntaxhighlight"><code><span class="string">"o"</span>: {
@@ -319,8 +319,8 @@ the command you first press <code>&lt;key1&gt;</code> in normal mode followed by
 <h3 id="changing-cursors">Changing Cursors</h3>
 <p>You can set the cursor shape shown in each mode by changing the following
 settings.</p>
-<table>
-<thead>
+<div style="overflow: auto">
+<table><thead>
 <tr>
 <th>Setting</th>
 <th>Default</th>
@@ -345,7 +345,7 @@ settings.</p>
 </tr>
 </tbody>
 </table>
-<p>The possible values are:</p>
+</div><p>The possible values are:</p>
 <ul>
 <li><code>block</code></li>
 <li><code>block-outline</code></li>
@@ -381,8 +381,8 @@ create more Vim-like workflow for searching and navigation.</p>
 <h3 id="switching-between-modes">Switching between Modes</h3>
 <p>Use the following commands to change the current editor mode. None of the
 commands require any arguments.</p>
-<table>
-<thead>
+<div style="overflow: auto">
+<table><thead>
 <tr>
 <th>Command</th>
 <th>Description</th>
@@ -411,7 +411,7 @@ commands require any arguments.</p>
 </tr>
 </tbody>
 </table>
-<h3 id="incremental-search">Incremental Search</h3>
+</div><h3 id="incremental-search">Incremental Search</h3>
 <p>The standard search functionality in VS Code is quite clunky as it opens a
 dialog which takes you out of the editor. To achieve more fluid searching
 experience ModalEdit provides incremental search commands that mimic Vim's
@@ -423,8 +423,8 @@ active. Just type the search string directly without leaving the editor. You
 can see the searched string in the status bar as well as the search parameters.</p>
 <p><img src="images/searching.gif" alt="Searching"></p>
 <p>The command takes following arguments. All of them are optional.</p>
-<table>
-<thead>
+<div style="overflow: auto">
+<table><thead>
 <tr>
 <th>Argument</th>
 <th>Type</th>
@@ -465,7 +465,7 @@ can see the searched string in the status bar as well as the search parameters.<
 </tr>
 </tbody>
 </table>
-<h4 id="code-modaledit-cancel-search-code"><code>modaledit.cancelSearch</code></h4>
+</div><h4 id="code-modaledit-cancel-search-code"><code>modaledit.cancelSearch</code></h4>
 <p>Cancels the incremental search, returns the cursor to the starting position,
 and switches back to normal mode.</p>
 <h4 id="code-modaledit-delete-char-from-search-code"><code>modaledit.deleteCharFromSearch</code></h4>
