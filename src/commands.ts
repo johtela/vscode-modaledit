@@ -270,11 +270,14 @@ async function nextMatch(): Promise<void> {
         let s = editor.selection
         if (searchBackwards)
             highlightNextMatch(editor, s.active, searchString,
-                -searchString.length - 1)
+                (searchSelectTillMatch && s.active.isBefore(searchStartPos)) ||
+                    s.isEmpty ? -1 : 
+                    -searchString.length - 1)
         else
             highlightNextMatch(editor, s.active, searchString,
                 searchSelectTillMatch && s.active.isBefore(searchStartPos) ?
-                    searchString.length : 0)
+                    searchString.length : 
+                    s.isEmpty ? 1 : 0)
         await typeAfterMatch()
     }
 }
