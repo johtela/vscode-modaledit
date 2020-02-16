@@ -240,9 +240,10 @@ function highlightNextMatch(editor: vscode.TextEditor, startPos: vscode.Position
         if (offs >= 0) {
             searchString = newSearchString
             let newPos = doc.positionAt(offs)
-            changeSelection(editor,
-                searchSelectTillMatch ? searchStartPos : newPos,
-                newPos.with(undefined, newPos.character + searchString.length))
+            let start = searchSelectTillMatch ? searchStartPos : newPos
+            changeSelection(editor, start,
+                newPos.with(undefined, newPos.character + 
+                    (newPos.isBefore(start) ? 0 : searchString.length)))
         }
     }
 }
@@ -268,10 +269,12 @@ async function nextMatch(): Promise<void> {
     if (editor && searchString) {
         let s = editor.selection
         if (searchBackwards)
-            highlightNextMatch(editor, s.anchor, searchString,
-                -searchString.length)
+            highlightNextMatch(editor, s.active, searchString,
+                -searchString.length - 1)
         else
-            highlightNextMatch(editor, s.active, searchString)
+            highlightNextMatch(editor, s.active, searchString,
+                searchSelectTillMatch && s.active.isBefore(searchStartPos) ?
+                    searchString.length : 0)
         await typeAfterMatch()
     }
 }

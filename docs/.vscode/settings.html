@@ -132,41 +132,41 @@ you can navigate and edit text, but not insert it. When you want to enter text,
 you switch to &quot;insert&quot; mode where you can type new text, but cannot do anything
 else. So, you end up bouncing between modes as you edit your text file.</p>
 <p>This might sound difficult, and granted, the learning curve is steep. But after
-you are accustomed to this way of working, it is very difficult to go back. If
-you are used to modal editing, for example having to use arrow keys to move
-cursor, feels uncomfortable. The proof of this is that nearly all popular
-text editors have some kind of add-in that provides Vim emulation. VS Code has
-several of them.</p>
+you are accustomed to this way of working, it is very difficult to go back. For
+example, having to use arrow keys to move cursor feels uncomfortable. The proof
+of this is that nearly all popular text editors have some kind of add-in that
+provides Vim emulation. VS Code has several of them.</p>
 <p>So, why write yet another extension that provides Vim emulation? Well, the
 problem is that most emulators try to make VS Code behave exactly like Vim which
-it obviously can't do. Trying to mimick Vim's functionality too closely
-results in unsatisfying user experience as it has a lot of features that do not
-map naturally to features of VS Code.</p>
-<p>Instead of copying Vim functionality as closely as possible we can utilize VS
-Code's existing features and just add the concept of modal editing to the mix.
-Turns out implementing modal editing is extremely simple. We basically provide
-pair of commands that switch between normal mode and insert mode.</p>
-<p>To complete the Vim experience we need to be able to bind key sequences pressed
+quickly becomes an exercise in futility. Trying to mimick Vim's functionality
+too closely results in disjointed user experience as it has a lot of features
+that do not have counterparts in VS Code.</p>
+<p><a href="../README.html">ModalEdit's</a> approach is to utilize VS Code's existing features and
+just add the concept of modal editing to the mix. Turns out implementing modal
+editing is extremely simple. We basically provide pair of commands that switch
+between normal mode and insert mode.</p>
+<p>To complete the feature set, we need to be able to bind key sequences pressed
 in normal mode to VS Code's commands. This we can do by defining the key
 bindings in the VS Codes standard configuration file <code>settings.json</code>. We provide
 a way to bind any key to any command, or sequence of commands. We can even
 provide conditional commands that do different things based on editor state.
-This is the core feature set that <a href="../README.html">ModalEdit</a> provides. Refer to the
-<a href="../README.html">README</a> page for the details of the configuration options.</p>
+Refer to the <a href="../README.html">README</a> page for the details of the configuration
+options.</p>
 <p>With these capabilities we can start building our Vim emulation. We don't need
 to use Vim's standard key bindings, if we don't want to. You can map any key
 (sequence) to any command. But to keep things familiar, we'll follow Vim's
-conventions for now to demonstrate that you can implement its functionality
-reasonably closely.</p>
+conventions to demonstrate how you can implement its functionality.</p>
 <blockquote>
-<p>This document is actually a literate <code>settings.json</code> file which is super handy
-as I can test the key bindings right away while writing this document. Saving
-the file makes ModalEdit apply the bindings. The web page you are reading is
-generated from the file using LiTScript. See <a href="https://johtela.github.io/litscript/">LiTScript home page</a>,
-if you want to learn more about that.</p>
+<p>This document is actually a <a href="../../.vscode/settings.json">literate <code>settings.json</code> file</a>. That
+is, the actual configuration file that contains documentation in comments.
+The upshot of this is that I can test the key bindings right away while
+writing this document.  Saving the file makes ModalEdit apply the bindings.
+The web page you are reading is generated from the file using LiTScript. See
+<a href="https://johtela.github.io/litscript/">LiTScript home page</a>, if you want to learn more about that.</p>
 </blockquote>
 <p>So, let's start configuring our Vim emulator by adding the ModalEdit's
-configuration block for key binding.</p>
+configuration block for key bindings. We'll use the <a href="https://vim.rtorr.com/">Vim Cheat Sheet</a> as our
+specification telling what to implement.</p>
 
 <pre class="syntaxhighlight"><code>{
     <span class="attr">"modaledit.keybindings"</span>: {
@@ -176,24 +176,29 @@ configuration block for key binding.</p>
 <code>Esc</code> key is mapped to the <code>modaledit.enterNormal</code> command by default, so we
 dont't need to do anything about that. If you like, you can map other keys to
 this command using VS Code's standard keymappings pressing <code>Ctrl+K Ctrl+S</code>.</p>
-<p>There are multiple ways to enter insert mode, though. If you want to insert text
-in the current cursor position, you press <code>i</code>.</p>
+<h3 id="insert-text">Insert Text</h3>
+<p>There are multiple ways to enter insert mode. If you want to insert text in the
+current cursor position, you press <code>i</code>.</p>
 
 <pre class="syntaxhighlight"><code>        "i": "modaledit.enterInsert",
 </code></pre>
 <p>To insert text at the beginning of line, you press <code>I</code>. For this operation, we
-need a command sequence.</p>
+need a command sequence, i.e. an array of commands.</p>
 
 <pre class="syntaxhighlight"><code>        "I": [
             "cursorHome",
             "modaledit.enterInsert"
         ],
 </code></pre>
-<p><em>Appending</em> text works analogously. <code>a</code> appends text after current character
+<h3 id="append-text">Append Text</h3>
+<p><em>Appending</em> text works analogously; <code>a</code> appends text after current character
 and <code>A</code> at the end of the line. There is a special case, though. If cursor is
 already at the last character of the line, it should not move. This is why we
 use a conditional command to move the cursor only, if the current character
-is not <code>0</code>, which it is at the end of the line.</p>
+is not <code>0</code>, which it is at the end of the line. A conditional command is an
+object that contains the <code>condition</code> property. The value of the property is a
+JS expression, which ModalEdit evaluates. It selects the command based on the
+result. In this case, the result <code>false</code> will execute <code>cursorRight</code> command.</p>
 
 <pre class="syntaxhighlight"><code>        "a": [
             {
@@ -207,6 +212,7 @@ is not <code>0</code>, which it is at the end of the line.</p>
             "modaledit.enterInsert"
         ],
 </code></pre>
+<h3 id="open-a-new-line">Open a New Line</h3>
 <p>The third way to enter insert mode is to <em>open</em> a line. This means creating an
 empty line, and putting the cursor on it. There are two variants of this command
 as well: <code>o</code> opens a new line below the current line whereas <code>O</code> opens it on the
@@ -220,13 +226,245 @@ current line.</p>
             "editor.action.insertLineBefore",
             "modaledit.enterInsert"
         ],
-    },
 </code></pre>
 <p>Now we can test the commands we just created.</p>
 <p><img src="../images/mode-switching.gif" alt="mode switching"></p>
 <h2 id="cursor-movement">Cursor Movement</h2>
+<p>The next task in hand is to add commands for moving the cursor. As all Vim users
+know, instead of arrow keys, we move the cursor with <code>h</code>, <code>j</code>, <code>k</code>, and <code>l</code>
+keys. Before implementing these, let's talk a bit about text selection.</p>
+<h3 id="selecting-text">Selecting Text</h3>
+<p>In Vim, there is a separate &quot;visual&quot; mode that you activate when you want to
+select text. Visual mode can be characterwise or linewise. VS Code has no
+simillar concept. By contrast, to select text you move the cursor with <code>Shift</code>
+key depressed.</p>
+<p>ModalEdit bridges this gap by providing the special command
+<code>modaledit.toggleSelection</code> which toggles selection mode on and off. Selection
+mode is not really a mode in the same sense as normal and insert mode are; you
+can select text both in normal mode and insert mode. Rather it is an additional
+flag that you can set when you want to select text as you move the cursor.</p>
+<p>Selection mode is also implicitly on whenever there is text selected. If you
+select text with mouse, for example, the selection mode is turned on (Vim
+behaves like this too). To turn off the selection mode, call
+<code>modaledit.toggleSelection</code> again.</p>
+<p>The end result is that selection mode works <em>almost</em> like visual mode in Vim,
+the main difference being that selection mode is not automatically turned off
+when you enter insert mode.</p>
+<p>So, let's add a binding to toggle selection mode on or off. We use the familiar
+<code>v</code> key for this.</p>
 
-<pre class="syntaxhighlight"><code>    "files.exclude": {
+<pre class="syntaxhighlight"><code>        "v": "modaledit.toggleSelection",
+</code></pre>
+<p>Now we can add commands for cursor movement. These commands use the generic
+<a href="https://code.visualstudio.com/api/references/commands"><code>cursorMove</code> command</a> which takes arguments. The arguments we use
+are partly constant and partly dynamic. Therefore, we use ModalEdit's feature
+which allows us to define parameters as a JS expression. The <code>__selecting</code> flag
+in the expression indicates whether selection mode is on. The same effect could
+be achieved also with a conditional command, but this way is a bit simpler.</p>
+
+<pre class="syntaxhighlight"><code>        "h": {
+            "command": "cursorMove",
+            "args": "{ to: 'left', select: __selecting }"
+        },
+        "j": {
+            "command": "cursorMove",
+            "args": "{ to: 'down', select: __selecting }"
+        },
+        "k": {
+            "command": "cursorMove",
+            "args": "{ to: 'up', select: __selecting }"
+        },
+        "l": {
+            "command": "cursorMove",
+            "args": "{ to: 'right', select: __selecting }"
+        },
+</code></pre>
+<p>We can also simulate linewise visual mode using VS Code's <code>expandLineSelection</code>
+command. Note that we don't need to call <code>modaledit.toggleSelection</code> this time
+as selection mode is turned on automatically.</p>
+
+<pre class="syntaxhighlight"><code>        "V": "expandLineSelection",
+</code></pre>
+<h3 id="moving-inside-screen">Moving Inside Screen</h3>
+<p>To move cursor quickly to the top, middle, or bottom of the screen we use keys
+<code>H</code>, <code>M</code>, and <code>L</code>. Again, we need to use the <a href="https://code.visualstudio.com/api/references/commands"><code>cursorMove</code> command</a>.</p>
+
+<pre class="syntaxhighlight"><code>        "H": {
+            "command": "cursorMove",
+            "args": "{ to: 'viewPortTop', select: __selecting }"
+        },
+        "M": {
+            "command": "cursorMove",
+            "args": "{ to: 'viewPortCenter', select: __selecting }"
+        },
+        "L": {
+            "command": "cursorMove",
+            "args": "{ to: 'viewPortBottom', select: __selecting }"
+        },
+</code></pre>
+<h3 id="jumping-to-previous-next-word">Jumping to Previous/Next Word</h3>
+<p>Other commonly used navigation commands in Vim include <code>w</code> and <code>b</code> which move
+the cursor to the start of the next and previous word. For these we need to use
+conditional commands because <code>cursorMove</code> command falls short for this use case.</p>
+
+<pre class="syntaxhighlight"><code>        "w":  {
+            "condition": "__selecting",
+            "true": "cursorWordStartRightSelect",
+            "false": "cursorWordStartRight"
+        },
+        "b": {
+            "condition": "__selecting",
+            "true": "cursorWordStartLeftSelect",
+            "false": "cursorWordStartLeft"
+        },
+</code></pre>
+<p><code>e</code> jumps to the end of the next word.</p>
+
+<pre class="syntaxhighlight"><code>        "e": {
+            "condition": "__selecting",
+            "true": "cursorWordEndRightSelect", 
+            "false": "cursorWordEndRight"
+        },
+</code></pre>
+<blockquote>
+<p><strong>Note</strong>: We omit variants of these commands <code>W</code>, <code>B</code>, and <code>E</code> which skip the
+punctuation characters. There are no built-in commands in VS Code that work
+exactly like those in Vim. This is one of the subtle differences between the
+editors.</p>
+</blockquote>
+<h3 id="jumping-to-start-end-of-line">Jumping to Start/End of Line</h3>
+<p>In the similar vein, we'll throw in commands for jumping to the beginning <code>0</code>,
+to the first non-blank character <code>^</code>, and to the end of line <code>$</code>.</p>
+
+<pre class="syntaxhighlight"><code>        "0": {
+            "command": "cursorMove",
+            "args": "{ to: 'wrappedLineStart', select: __selecting }"
+        },
+        "^": {
+            "command": "cursorMove",
+            "args": "{ to: 'wrappedLineFirstNonWhitespaceCharacter', select: __selecting }"
+        },
+        "$": {
+            "command": "cursorMove",
+            "args": "{ to: 'wrappedLineEnd', select: __selecting }"
+        },
+</code></pre>
+<p>A lesser known variant of above commands is <code>g_</code> that jumps to the last
+non-blank character of the line. Since it is a two key sequence we need to
+open a block for all commands beginning with <code>g</code>.</p>
+
+<pre class="syntaxhighlight"><code>        "g": {
+            "_": {
+                "command": "cursorMove",
+                "args": "{ to: 'wrappedLineLastNonWhitespaceCharacter', select: __selecting }"
+            },
+</code></pre>
+<h3 id="jumping-to-start-end-of-document">Jumping to Start/End of Document</h3>
+<p>Another command beginning with <code>g</code> is <code>gg</code> which jumps to the beginning of the
+file.</p>
+
+<pre class="syntaxhighlight"><code>            "g": {
+                "condition": "__selecting",
+                "true": "cursorTopSelect", 
+                "false": "cursorTop"
+            },
+        },
+</code></pre>
+<p>The opposite of that is <code>G</code> wich jumps to the end of file.</p>
+
+<pre class="syntaxhighlight"><code>        "G": {
+            "condition": "__selecting",
+            "true": "cursorBottomSelect", 
+            "false": "cursorBottom"
+        },
+</code></pre>
+<h3 id="jump-to-character">Jump to Character</h3>
+<p>We have the basic movement commands covered, so let's move on to more
+sophisticated ones. Seasoned Vim users avoid hitting movement commands
+repeatedly by using <code>f</code> and <code>F</code> keys which move directly to a given character.
+VS Code provides no built-in command for this, but ModalEdit includes an
+incremental search command which can be customized to this purpose.</p>
+
+<pre class="syntaxhighlight"><code>        "f": {
+            "condition": "__selecting",
+            "true": {
+                "command": "modaledit.search",
+                "args": { 
+                    "caseSensitive": true, 
+                    "acceptAfter": 1, 
+                    "selectTillMatch": true, 
+                }
+            },
+            "false": {
+                "command": "modaledit.search",
+                "args": { 
+                    "caseSensitive": true, 
+                    "acceptAfter": 1, 
+                    "typeAfterAccept": "h" 
+                }
+            }, 
+        },
+</code></pre>
+<p>The command is a bit involved, so let's explain what each argument does.</p>
+<ul>
+<li><code>caseSensitive</code> sets the search mode to case sensitive (as in Vim).</li>
+<li><code>acceptAfter</code> ends the incremental search as soon as first entered character
+is found. Normally the user needs to press <code>Enter</code> to accept the search or
+<code>Esc</code> to cancel it.</li>
+<li><code>selectTillMatch</code> argument controls whether selection is extended until the
+searched character. This depends on whether we have selection mode on or not.</li>
+<li><code>typeAfterAccept</code> argument allows you to run other commands (using their key
+bindings) after the search is done. By default, <code>modalEdit.search</code> command
+selects the found character(s). With <code>h</code> command we move the cursor over the
+searched character.</li>
+</ul>
+<p>Now we can implement the other variants of the command: <code>F</code> searches for the
+previous character, and <code>t</code> and <code>T</code> commands move the cursor before and after
+the searched character respectively. The new <code>backwards</code> parameter switches the
+search direction.</p>
+
+<pre class="syntaxhighlight"><code>        "F": {
+            "condition": "__selecting",
+            "true": {
+                "command": "modaledit.search",
+                "args": { 
+                    "caseSensitive": true, 
+                    "acceptAfter": 1, 
+                    "selectTillMatch": true, 
+                    "typeAfterAccept": "h",
+                    "backwards": true,
+                }
+            },
+            "false": {
+                "command": "modaledit.search",
+                "args": { 
+                    "caseSensitive": true, 
+                    "acceptAfter": 1, 
+                    "typeAfterAccept": "h", 
+                    "backwards": true
+                }
+            }, 
+        },
+        "t": {
+            "command": "modaledit.search",
+            "args": "{ caseSensitive: true, acceptAfter: 1, selectTillMatch: __selecting, typeAfterAccept: 'hh' }"
+        },
+        "T": {
+            "command": "modaledit.search",
+            "args": "{ caseSensitive: true, backwards: true, acceptAfter: 1, selectTillMatch: __selecting, typeAfterAccept: 'v' }"
+        },
+</code></pre>
+<p>With <code>;</code> and <code>,</code> keys you can repeat the previous <code>f</code>, <code>F</code>, <code>t</code>, or <code>T</code> command
+either forwards or backwards.</p>
+
+<pre class="syntaxhighlight"><code>        ";": [ "cursorRight", "modaledit.nextMatch" ],
+        ",": "modaledit.previousMatch"
+</code></pre>
+<!--
+
+```json
+    },
+    "files.exclude": {
         "out": false
     },
     "search.exclude": {
@@ -234,7 +472,10 @@ current line.</p>
     },
     "typescript.tsc.autoDetect": "off",
 }
-</code></pre>
+
+```
+
+-->
 
         
     </div>

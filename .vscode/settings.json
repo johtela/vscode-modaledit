@@ -10,45 +10,45 @@ you switch to "insert" mode where you can type new text, but cannot do anything
 else. So, you end up bouncing between modes as you edit your text file.
 
 This might sound difficult, and granted, the learning curve is steep. But after 
-you are accustomed to this way of working, it is very difficult to go back. If
-you are used to modal editing, for example having to use arrow keys to move 
-cursor, feels uncomfortable. The proof of this is that nearly all popular
-text editors have some kind of add-in that provides Vim emulation. VS Code has
-several of them.
+you are accustomed to this way of working, it is very difficult to go back. For 
+example, having to use arrow keys to move cursor feels uncomfortable. The proof 
+of this is that nearly all popular text editors have some kind of add-in that 
+provides Vim emulation. VS Code has several of them.
 
 So, why write yet another extension that provides Vim emulation? Well, the
 problem is that most emulators try to make VS Code behave exactly like Vim which
-it obviously can't do. Trying to mimick Vim's functionality too closely 
-results in unsatisfying user experience as it has a lot of features that do not 
-map naturally to features of VS Code. 
+quickly becomes an exercise in futility. Trying to mimick Vim's functionality 
+too closely results in disjointed user experience as it has a lot of features 
+that do not have counterparts in VS Code. 
 
-Instead of copying Vim functionality as closely as possible we can utilize VS 
-Code's existing features and just add the concept of modal editing to the mix. 
-Turns out implementing modal editing is extremely simple. We basically provide 
-pair of commands that switch between normal mode and insert mode.
+[ModalEdit's][ModalEdit] approach is to utilize VS Code's existing features and 
+just add the concept of modal editing to the mix. Turns out implementing modal 
+editing is extremely simple. We basically provide pair of commands that switch 
+between normal mode and insert mode.
 
-To complete the Vim experience we need to be able to bind key sequences pressed
+To complete the feature set, we need to be able to bind key sequences pressed
 in normal mode to VS Code's commands. This we can do by defining the key 
 bindings in the VS Codes standard configuration file `settings.json`. We provide 
 a way to bind any key to any command, or sequence of commands. We can even 
 provide conditional commands that do different things based on editor state. 
-This is the core feature set that [ModalEdit][] provides. Refer to the 
-[README][ModalEdit] page for the details of the configuration options.
+Refer to the [README][ModalEdit] page for the details of the configuration 
+options.
 
 With these capabilities we can start building our Vim emulation. We don't need
 to use Vim's standard key bindings, if we don't want to. You can map any key
 (sequence) to any command. But to keep things familiar, we'll follow Vim's
-conventions for now to demonstrate that you can implement its functionality
-reasonably closely.
+conventions to demonstrate how you can implement its functionality.
 
-> This document is actually a literate `settings.json` file which is super handy
-> as I can test the key bindings right away while writing this document. Saving
-> the file makes ModalEdit apply the bindings. The web page you are reading is 
-> generated from the file using LiTScript. See [LiTScript home page][LiTScript], 
-> if you want to learn more about that. 
+> This document is actually a [literate `settings.json` file][settings]. That 
+> is, the actual configuration file that contains documentation in comments. 
+> The upshot of this is that I can test the key bindings right away while 
+> writing this document.  Saving the file makes ModalEdit apply the bindings. 
+> The web page you are reading is generated from the file using LiTScript. See 
+> [LiTScript home page][LiTScript], if you want to learn more about that. 
 
 So, let's start configuring our Vim emulator by adding the ModalEdit's 
-configuration block for key binding.
+configuration block for key bindings. We'll use the [Vim Cheat Sheet][] as our
+specification telling what to implement.
 */
 {
     "modaledit.keybindings": {
@@ -60,24 +60,31 @@ First things first: we need to be able to enter the normal mode somehow. The
 dont't need to do anything about that. If you like, you can map other keys to
 this command using VS Code's standard keymappings pressing `Ctrl+K Ctrl+S`.
 
-There are multiple ways to enter insert mode, though. If you want to insert text
-in the current cursor position, you press `i`.
+### Insert Text
+
+There are multiple ways to enter insert mode. If you want to insert text in the 
+current cursor position, you press `i`.
 */
         "i": "modaledit.enterInsert",
 /**
 To insert text at the beginning of line, you press `I`. For this operation, we
-need a command sequence.
+need a command sequence, i.e. an array of commands.
 */
         "I": [
             "cursorHome",
             "modaledit.enterInsert"
         ],
 /**
-_Appending_ text works analogously. `a` appends text after current character
+### Append Text
+
+_Appending_ text works analogously; `a` appends text after current character
 and `A` at the end of the line. There is a special case, though. If cursor is 
 already at the last character of the line, it should not move. This is why we
 use a conditional command to move the cursor only, if the current character
-is not `0`, which it is at the end of the line.
+is not `0`, which it is at the end of the line. A conditional command is an
+object that contains the `condition` property. The value of the property is a
+JS expression, which ModalEdit evaluates. It selects the command based on the
+result. In this case, the result `false` will execute `cursorRight` command.
 */
         "a": [
             {
@@ -91,6 +98,8 @@ is not `0`, which it is at the end of the line.
             "modaledit.enterInsert"
         ],
 /**
+### Open a New Line
+
 The third way to enter insert mode is to _open_ a line. This means creating an
 empty line, and putting the cursor on it. There are two variants of this command 
 as well: `o` opens a new line below the current line whereas `O` opens it on the 
@@ -104,14 +113,257 @@ current line.
             "editor.action.insertLineBefore",
             "modaledit.enterInsert"
         ],
-    },
 /**
 Now we can test the commands we just created.
 
 ![mode switching](../images/mode-switching.gif)
 
 ## Cursor Movement
+
+The next task in hand is to add commands for moving the cursor. As all Vim users
+know, instead of arrow keys, we move the cursor with `h`, `j`, `k`, and `l`
+keys. Before implementing these, let's talk a bit about text selection.
+
+### Selecting Text
+
+In Vim, there is a separate "visual" mode that you activate when you want to 
+select text. Visual mode can be characterwise or linewise. VS Code has no
+simillar concept. By contrast, to select text you move the cursor with `Shift` 
+key depressed.
+
+ModalEdit bridges this gap by providing the special command 
+`modaledit.toggleSelection` which toggles selection mode on and off. Selection
+mode is not really a mode in the same sense as normal and insert mode are; you 
+can select text both in normal mode and insert mode. Rather it is an additional
+flag that you can set when you want to select text as you move the cursor.
+
+Selection mode is also implicitly on whenever there is text selected. If you
+select text with mouse, for example, the selection mode is turned on (Vim 
+behaves like this too). To turn off the selection mode, call 
+`modaledit.toggleSelection` again.
+
+The end result is that selection mode works _almost_ like visual mode in Vim,
+the main difference being that selection mode is not automatically turned off
+when you enter insert mode.
+
+So, let's add a binding to toggle selection mode on or off. We use the familiar 
+`v` key for this. 
 */
+        "v": "modaledit.toggleSelection",
+/**
+Now we can add commands for cursor movement. These commands use the generic 
+[`cursorMove` command][commands] which takes arguments. The arguments we use
+are partly constant and partly dynamic. Therefore, we use ModalEdit's feature 
+which allows us to define parameters as a JS expression. The `__selecting` flag 
+in the expression indicates whether selection mode is on. The same effect could
+be achieved also with a conditional command, but this way is a bit simpler.
+*/
+        "h": {
+            "command": "cursorMove",
+            "args": "{ to: 'left', select: __selecting }"
+        },
+        "j": {
+            "command": "cursorMove",
+            "args": "{ to: 'down', select: __selecting }"
+        },
+        "k": {
+            "command": "cursorMove",
+            "args": "{ to: 'up', select: __selecting }"
+        },
+        "l": {
+            "command": "cursorMove",
+            "args": "{ to: 'right', select: __selecting }"
+        },
+/**
+We can also simulate linewise visual mode using VS Code's `expandLineSelection`
+command. Note that we don't need to call `modaledit.toggleSelection` this time
+as selection mode is turned on automatically.
+*/
+        "V": "expandLineSelection",
+/**
+### Moving Inside Screen
+
+To move cursor quickly to the top, middle, or bottom of the screen we use keys
+`H`, `M`, and `L`. Again, we need to use the [`cursorMove` command][commands]. 
+*/
+        "H": {
+            "command": "cursorMove",
+            "args": "{ to: 'viewPortTop', select: __selecting }"
+        },
+        "M": {
+            "command": "cursorMove",
+            "args": "{ to: 'viewPortCenter', select: __selecting }"
+        },
+        "L": {
+            "command": "cursorMove",
+            "args": "{ to: 'viewPortBottom', select: __selecting }"
+        },
+/**
+
+### Jumping to Previous/Next Word
+
+Other commonly used navigation commands in Vim include `w` and `b` which move 
+the cursor to the start of the next and previous word. For these we need to use
+conditional commands because `cursorMove` command falls short for this use case.
+*/
+        "w":  {
+            "condition": "__selecting",
+            "true": "cursorWordStartRightSelect",
+            "false": "cursorWordStartRight"
+        },
+        "b": {
+            "condition": "__selecting",
+            "true": "cursorWordStartLeftSelect",
+            "false": "cursorWordStartLeft"
+        },
+/**
+`e` jumps to the end of the next word.
+*/
+        "e": {
+            "condition": "__selecting",
+            "true": "cursorWordEndRightSelect", 
+            "false": "cursorWordEndRight"
+        },
+/**
+> **Note**: We omit variants of these commands `W`, `B`, and `E` which skip the 
+> punctuation characters. There are no built-in commands in VS Code that work
+> exactly like those in Vim. This is one of the subtle differences between the 
+> editors.
+
+### Jumping to Start/End of Line
+
+In the similar vein, we'll throw in commands for jumping to the beginning `0`, 
+to the first non-blank character `^`, and to the end of line `$`.
+*/
+        "0": {
+            "command": "cursorMove",
+            "args": "{ to: 'wrappedLineStart', select: __selecting }"
+        },
+        "^": {
+            "command": "cursorMove",
+            "args": "{ to: 'wrappedLineFirstNonWhitespaceCharacter', select: __selecting }"
+        },
+        "$": {
+            "command": "cursorMove",
+            "args": "{ to: 'wrappedLineEnd', select: __selecting }"
+        },
+/**
+A lesser known variant of above commands is `g_` that jumps to the last 
+non-blank character of the line. Since it is a two key sequence we need to 
+open a block for all commands beginning with `g`.
+*/
+        "g": {
+            "_": {
+                "command": "cursorMove",
+                "args": "{ to: 'wrappedLineLastNonWhitespaceCharacter', select: __selecting }"
+            },
+/**
+### Jumping to Start/End of Document
+
+Another command beginning with `g` is `gg` which jumps to the beginning of the
+file.
+*/
+            "g": {
+                "condition": "__selecting",
+                "true": "cursorTopSelect", 
+                "false": "cursorTop"
+            },
+        },
+/**
+The opposite of that is `G` wich jumps to the end of file.
+*/
+        "G": {
+            "condition": "__selecting",
+            "true": "cursorBottomSelect", 
+            "false": "cursorBottom"
+        },
+/**
+### Jump to Character
+
+We have the basic movement commands covered, so let's move on to more 
+sophisticated ones. Seasoned Vim users avoid hitting movement commands
+repeatedly by using `f` and `F` keys which move directly to a given character.
+VS Code provides no built-in command for this, but ModalEdit includes an 
+incremental search command which can be customized to this purpose.
+*/
+        "f": {
+            "condition": "__selecting",
+            "true": {
+                "command": "modaledit.search",
+                "args": { 
+                    "caseSensitive": true, 
+                    "acceptAfter": 1, 
+                    "selectTillMatch": true, 
+                }
+            },
+            "false": {
+                "command": "modaledit.search",
+                "args": { 
+                    "caseSensitive": true, 
+                    "acceptAfter": 1, 
+                    "typeAfterAccept": "h" 
+                }
+            }, 
+        },
+/**
+The command is a bit involved, so let's explain what each argument does.
+
+- `caseSensitive` sets the search mode to case sensitive (as in Vim).
+- `acceptAfter` ends the incremental search as soon as first entered character
+  is found. Normally the user needs to press `Enter` to accept the search or
+  `Esc` to cancel it.
+- `selectTillMatch` argument controls whether selection is extended until the
+  searched character. This depends on whether we have selection mode on or not.
+- `typeAfterAccept` argument allows you to run other commands (using their key
+  bindings) after the search is done. By default, `modalEdit.search` command 
+  selects the found character(s). With `h` command we move the cursor over the
+  searched character.
+  
+Now we can implement the other variants of the command: `F` searches for the
+previous character, and `t` and `T` commands move the cursor before and after 
+the searched character respectively. The new `backwards` parameter switches the
+search direction.
+*/
+        "F": {
+            "condition": "__selecting",
+            "true": {
+                "command": "modaledit.search",
+                "args": { 
+                    "caseSensitive": true, 
+                    "acceptAfter": 1, 
+                    "selectTillMatch": true, 
+                    "typeAfterAccept": "h",
+                    "backwards": true,
+                }
+            },
+            "false": {
+                "command": "modaledit.search",
+                "args": { 
+                    "caseSensitive": true, 
+                    "acceptAfter": 1, 
+                    "typeAfterAccept": "h", 
+                    "backwards": true
+                }
+            }, 
+        },
+        "t": {
+            "command": "modaledit.search",
+            "args": "{ caseSensitive: true, acceptAfter: 1, selectTillMatch: __selecting, typeAfterAccept: 'hh' }"
+        },
+        "T": {
+            "command": "modaledit.search",
+            "args": "{ caseSensitive: true, backwards: true, acceptAfter: 1, selectTillMatch: __selecting, typeAfterAccept: 'v' }"
+        },
+/**
+With `;` and `,` keys you can repeat the previous `f`, `F`, `t`, or `T` command
+either forwards or backwards.
+*/
+        ";": [ "cursorRight", "modaledit.nextMatch" ],
+        ",": "modaledit.previousMatch"
+/**
+<!--
+*/
+    },
     "files.exclude": {
         "out": false
     },
@@ -121,8 +373,13 @@ Now we can test the commands we just created.
     "typescript.tsc.autoDetect": "off",
 }
 /**
+-->
+
 [Vim]: https://www.vim.org/
 [ModalEdit]: ../README.html
 [modal editing]: https://unix.stackexchange.com/questions/57705/modeless-vs-modal-editors
+[settings]: ../../.vscode/settings.json
 [LiTScript]: https://johtela.github.io/litscript/
+[commands]: https://code.visualstudio.com/api/references/commands
+[Vim Cheat Sheet]: https://vim.rtorr.com/
 */
