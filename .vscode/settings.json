@@ -28,7 +28,7 @@ between normal mode and insert mode.
 
 To complete the feature set, we need to be able to bind key sequences pressed
 in normal mode to VS Code's commands. This we can do by defining the key 
-bindings in the VS Codes standard configuration file `settings.json`. We provide 
+bindings in the VS Code's standard configuration file `settings.json`. We provide 
 a way to bind any key to any command, or sequence of commands. We can even 
 provide conditional commands that do different things based on editor state. 
 Refer to the [README][ModalEdit] page for the details of the configuration 
@@ -629,13 +629,13 @@ command, if you need regex support.
 
 We have built far from complete but nevertheless usable Vim emulation which
 you can tweak in various ways to make it better. The point of this exercise was
-to show that you can significantly enhance VS Codes editing experience using 
+to show that you can significantly enhance VS Code's editing experience using 
 just a simple extension and built-in commands.
 
 When writing ModalEdit my goal was not to provide a new Vim emulation. In fact, 
 I don't use Vim-style key bindings myself. I find the countless keyboard 
 combinations in Vim superfuous and inconsistent. I doubt that anybody knows, let 
-alone _uses_ all of the commands available. Using Vim is like working in a 
+alone _uses_ all the available commands. Using Vim is like working in a 
 workshop where you have shelves full of bench planes but the only tool you 
 really need is your trusty No 4 Stanley.
 
