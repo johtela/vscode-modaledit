@@ -400,7 +400,7 @@ incremental search command which can be customized to this purpose.</p>
                 "args": { 
                     "caseSensitive": true, 
                     "acceptAfter": 1, 
-                    "typeAfterAccept": "h" 
+                    "typeAfterAccept": "h", 
                 }
             }, 
         },
@@ -418,10 +418,8 @@ bindings) after the search is done. By default, <code>modalEdit.search</code> co
 selects the found character(s). With <code>h</code> command we move the cursor over the
 searched character.</li>
 </ul>
-<p>Now we can implement the other variants of the command: <code>F</code> searches for the
-previous character, and <code>t</code> and <code>T</code> commands move the cursor before and after
-the searched character respectively. The new <code>backwards</code> parameter switches the
-search direction.</p>
+<p>Now we can implement the opposite <code>F</code> command which searches for the previous
+character. The <code>backwards</code> parameter switches the search direction.</p>
 
 <pre class="syntaxhighlight"><code>        "F": {
             "condition": "__selecting",
@@ -431,7 +429,6 @@ search direction.</p>
                     "caseSensitive": true, 
                     "acceptAfter": 1, 
                     "selectTillMatch": true, 
-                    "typeAfterAccept": "h",
                     "backwards": true,
                 }
             },
@@ -445,20 +442,80 @@ search direction.</p>
                 }
             }, 
         },
-        "t": {
-            "command": "modaledit.search",
-            "args": "{ caseSensitive: true, acceptAfter: 1, selectTillMatch: __selecting, typeAfterAccept: 'hh' }"
-        },
-        "T": {
-            "command": "modaledit.search",
-            "args": "{ caseSensitive: true, backwards: true, acceptAfter: 1, selectTillMatch: __selecting, typeAfterAccept: 'v' }"
+</code></pre>
+<p>With <code>;</code> and <code>,</code> keys you can repeat the previous <code>f</code> or <code>F</code> commands either
+forwards or backwards.</p>
+
+<pre class="syntaxhighlight"><code>        ";": "modaledit.nextMatch",
+        ",": "modaledit.previousMatch",
+</code></pre>
+<blockquote>
+<p>We omitted few useful jump commands, like <code>t</code>, <code>T</code>, <code>{</code>, and <code>}</code> as there are
+no corresponding commands in available in VS Code. You can always look for
+other <a href="https://marketplace.visualstudio.com/">extensions</a> that provide similar functionality.</p>
+</blockquote>
+<h3 id="center-cursor-on-screen">Center Cursor on Screen</h3>
+<p>The last movement command we add is <code>zz</code> that scrolls the screen so that cursor
+is at the center. Again, the ability to use JS expression in arguments comes in
+handy. We use the <code>__line</code> parameter to get the line where the cursor is.</p>
+
+<pre class="syntaxhighlight"><code>        "z": {
+            "z": {
+                "command": "revealLine",
+                "args": "{ lineNumber: __line, at: 'center' }"
+            }
         },
 </code></pre>
-<p>With <code>;</code> and <code>,</code> keys you can repeat the previous <code>f</code>, <code>F</code>, <code>t</code>, or <code>T</code> command
-either forwards or backwards.</p>
+<p>Let's test some of the movement commands. We should be able to navigate now
+without using arrow keys or <code>Home</code> and <code>End</code> keys.</p>
+<p><img src="../images/cursor-movement.gif" alt="Navigation"></p>
+<p>We skipped commands that move cursor up and down on page at athe time. The
+reason for this is that these commands are bound to <code>Ctrl+b</code> and <code>Ctr+f</code> in
+Vim. Since these are &quot;normal&quot; VS Code shortcuts we cannot remap them in
+ModalEdit. If you want to use these shortcuts, you need to add the bindings to
+the VS Code's <code>keybindings.json</code> file. Below is an example that uses the
+<code>modaledit.normal</code> context to make the shortcuts work only in normal mode. Most
+of the Vim's standard <code>Ctrl</code>+key combinations are already in use, so you
+need to decide whether you want to remap the existing commands first.</p>
 
-<pre class="syntaxhighlight"><code>        ";": [ "cursorRight", "modaledit.nextMatch" ],
-        ",": "modaledit.previousMatch"
+<pre class="syntaxhighlight"><code><span class="comment">// keybindings.json</span>
+{
+    {
+        <span class="string">"key"</span>: <span class="string">"ctrl+b"</span>,
+        <span class="string">"command"</span>: <span class="string">"cursorPageUp"</span>,
+        <span class="string">"when"</span>: <span class="string">"editorTextFocus &amp;&amp; modaledit.normal"</span>
+    },
+    {
+        <span class="string">"key"</span>: <span class="string">"ctrl+f"</span>,
+        <span class="string">"command"</span>: <span class="string">"cursorPageDown"</span>,
+        <span class="string">"when"</span>: <span class="string">"editorTextFocus &amp;&amp; modaledit.normal"</span>
+    }
+}
+</code></pre>
+<h2 id="editing">Editing</h2>
+<p>Now we'll implement Vim's common editing commands. We only add the ones that
+have counterparts in VS Code.</p>
+<h3 id="joining-lines">Joining Lines</h3>
+<p><code>J</code> joins current and next line together.</p>
+
+<pre class="syntaxhighlight"><code>        "J": "editor.action.joinLines",
+</code></pre>
+<h3 id="changing-text">Changing Text</h3>
+<p>Change commands delete some text and then enter insert mode. <code>c</code> changes the
+current line (or all selected lines), <code>c$</code> changes the text from the cursor to
+the end of line, and <code>cw</code> replaces the end of the word.</p>
+
+<pre class="syntaxhighlight"><code>        "c": {
+            "c": [
+                "deleteAllLeft",
+                "deleteAllRight",
+                "modaledit.enterInsert"
+            ],
+            "$": [
+                "deleteAllRight",
+                "modaledit.enterInsert"
+            ]
+        }
 </code></pre>
 <!--
 

@@ -301,7 +301,7 @@ incremental search command which can be customized to this purpose.
                 "args": { 
                     "caseSensitive": true, 
                     "acceptAfter": 1, 
-                    "typeAfterAccept": "h" 
+                    "typeAfterAccept": "h", 
                 }
             }, 
         },
@@ -319,10 +319,8 @@ The command is a bit involved, so let's explain what each argument does.
   selects the found character(s). With `h` command we move the cursor over the
   searched character.
   
-Now we can implement the other variants of the command: `F` searches for the
-previous character, and `t` and `T` commands move the cursor before and after 
-the searched character respectively. The new `backwards` parameter switches the
-search direction.
+Now we can implement the opposite `F` command which searches for the previous 
+character. The `backwards` parameter switches the search direction.
 */
         "F": {
             "condition": "__selecting",
@@ -332,7 +330,6 @@ search direction.
                     "caseSensitive": true, 
                     "acceptAfter": 1, 
                     "selectTillMatch": true, 
-                    "typeAfterAccept": "h",
                     "backwards": true,
                 }
             },
@@ -346,20 +343,87 @@ search direction.
                 }
             }, 
         },
-        "t": {
-            "command": "modaledit.search",
-            "args": "{ caseSensitive: true, acceptAfter: 1, selectTillMatch: __selecting, typeAfterAccept: 'hh' }"
-        },
-        "T": {
-            "command": "modaledit.search",
-            "args": "{ caseSensitive: true, backwards: true, acceptAfter: 1, selectTillMatch: __selecting, typeAfterAccept: 'v' }"
+/**
+With `;` and `,` keys you can repeat the previous `f` or `F` commands either 
+forwards or backwards.
+*/
+        ";": "modaledit.nextMatch",
+        ",": "modaledit.previousMatch",
+/**
+> We omitted few useful jump commands, like `t`, `T`, `{`, and `}` as there are
+> no corresponding commands in available in VS Code. You can always look for 
+> other [extensions][] that provide similar functionality.
+
+### Center Cursor on Screen
+
+The last movement command we add is `zz` that scrolls the screen so that cursor
+is at the center. Again, the ability to use JS expression in arguments comes in 
+handy. We use the `__line` parameter to get the line where the cursor is.
+*/
+        "z": {
+            "z": {
+                "command": "revealLine",
+                "args": "{ lineNumber: __line, at: 'center' }"
+            }
         },
 /**
-With `;` and `,` keys you can repeat the previous `f`, `F`, `t`, or `T` command
-either forwards or backwards.
+Let's test some of the movement commands. We should be able to navigate now 
+without using arrow keys or `Home` and `End` keys.
+
+![Navigation](../images/cursor-movement.gif)
+
+We skipped commands that move cursor up and down on page at athe time. The
+reason for this is that these commands are bound to `Ctrl+b` and `Ctr+f` in
+Vim. Since these are "normal" VS Code shortcuts we cannot remap them in 
+ModalEdit. If you want to use these shortcuts, you need to add the bindings to 
+the VS Code's `keybindings.json` file. Below is an example that uses the
+`modaledit.normal` context to make the shortcuts work only in normal mode. Most 
+of the Vim's standard `Ctrl`+key combinations are already in use, so you 
+need to decide whether you want to remap the existing commands first.
+```js
+// keybindings.json
+{
+    {
+        "key": "ctrl+b",
+        "command": "cursorPageUp",
+        "when": "editorTextFocus && modaledit.normal"
+    },
+    {
+        "key": "ctrl+f",
+        "command": "cursorPageDown",
+        "when": "editorTextFocus && modaledit.normal"
+    }
+}
+```
+
+## Editing
+
+Now we'll implement Vim's common editing commands. We only add the ones that 
+have counterparts in VS Code. 
+
+### Joining Lines
+
+`J` joins current and next line together.
 */
-        ";": [ "cursorRight", "modaledit.nextMatch" ],
-        ",": "modaledit.previousMatch"
+        "J": "editor.action.joinLines",
+/**
+### Changing Text
+
+Change commands delete some text and then enter insert mode. `c` changes the 
+current line (or all selected lines), `c$` changes the text from the cursor to 
+the end of line, and `cw` replaces the end of the word.
+*/
+        "c": {
+            "c": [
+                "deleteAllLeft",
+                "deleteAllRight",
+                "modaledit.enterInsert"
+            ],
+            "$": [
+                "deleteAllRight",
+                "modaledit.enterInsert"
+            ]
+        }
 /**
 <!--
 */
@@ -382,4 +446,5 @@ either forwards or backwards.
 [LiTScript]: https://johtela.github.io/litscript/
 [commands]: https://code.visualstudio.com/api/references/commands
 [Vim Cheat Sheet]: https://vim.rtorr.com/
+[extensions]: https://marketplace.visualstudio.com/
 */

@@ -226,8 +226,7 @@ async function executeVSCommand(command: string, ...rest: any[]): Promise<void> 
  * `evalString` function evaluates JavaScript expressions. Before doing so, it
  * defines some variables that can be used in the evaluated text.
  */
-function evalString(str: string, selecting: boolean): any {
-    let __selecting = selecting
+function evalString(str: string, __selecting: boolean): any {
     let __file = undefined
     let __line = undefined
     let __col = undefined
