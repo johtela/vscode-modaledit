@@ -28,3 +28,9 @@ All notable changes to the "vscode-modaledit" extension will be documented in th
   invokes normal mode key bindings (using `modaledit.typeNormalKeys`) after
   successful search. The argument can be used to enter insert mode, or clear 
   selection after search, for example.
+
+  ## Version 1.4
+
+  - Fixed few issues with `modaledit.search` command.
+  - You can use `__selection` variable in JS expressions to get currently
+    selected text.  

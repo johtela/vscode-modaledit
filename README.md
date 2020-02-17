@@ -100,6 +100,7 @@ strings:
 | `__line`      | `number`  | The line number where the cursor is currently on.
 | `__col`       | `number`  | The column number where the cursor is currently on.
 | `__char`      | `string`  | The character under the cursor.
+| `__selection` | `string`  | Currently selected text.
 | `__selecting` | `boolean` | Flag that indicates whether selection is active.
 
 Below is an example that maps key `o` to a command that moves the cursor to the 

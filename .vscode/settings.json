@@ -5,7 +5,7 @@
 [Vim][] is the great white shark of text editors. It has survived among modern 
 IDEs because of its unique philosophy. It uses [modal editing][] which is almost 
 an opposite approach to how other editors work. You start in "normal" mode where
-you can navigate and edit text, but not insert it. When you want to enter text, 
+you can navigate and edit text but not insert it. When you want to enter text, 
 you switch to "insert" mode where you can type new text, but cannot do anything 
 else. So, you end up bouncing between modes as you edit your text file.
 
@@ -81,10 +81,10 @@ _Appending_ text works analogously; `a` appends text after current character
 and `A` at the end of the line. There is a special case, though. If cursor is 
 already at the last character of the line, it should not move. This is why we
 use a conditional command to move the cursor only, if the current character
-is not `0`, which it is at the end of the line. A conditional command is an
+is not `0` which it is at the end of the line. A conditional command is an
 object that contains the `condition` property. The value of the property is a
-JS expression, which ModalEdit evaluates. It selects the command based on the
-result. In this case, the result `false` will execute `cursorRight` command.
+JS expression which ModalEdit evaluates. It selects the command based on the
+result. In this case, the result `false` will execute the `cursorRight` command.
 */
         "a": [
             {
@@ -204,7 +204,7 @@ To move cursor quickly to the top, middle, or bottom of the screen we use keys
 
 Other commonly used navigation commands in Vim include `w` and `b` which move 
 the cursor to the start of the next and previous word. For these we need to use
-conditional commands because `cursorMove` command falls short for this use case.
+conditional commands because `cursorMove` falls short in this use case.
 */
         "w":  {
             "condition": "__selecting",
@@ -372,7 +372,7 @@ without using arrow keys or `Home` and `End` keys.
 
 ![Navigation](../images/cursor-movement.gif)
 
-We skipped commands that move cursor up and down on page at athe time. The
+We skipped commands that move cursor up and down on page at the time. The
 reason for this is that these commands are bound to `Ctrl+b` and `Ctr+f` in
 Vim. Since these are "normal" VS Code shortcuts we cannot remap them in 
 ModalEdit. If you want to use these shortcuts, you need to add the bindings to 
@@ -409,9 +409,10 @@ have counterparts in VS Code.
 /**
 ### Changing Text
 
-Change commands delete some text and then enter insert mode. `c` changes the 
+_Change_ commands delete some text and then enter insert mode. `cc` changes the 
 current line (or all selected lines), `c$` changes the text from the cursor to 
-the end of line, and `cw` replaces the end of the word.
+the end of line, and `cw` changes the end of the word. Three key sequnce `ciw`
+changes the whole word under the cursor.
 */
         "c": {
             "c": [
@@ -422,9 +423,240 @@ the end of line, and `cw` replaces the end of the word.
             "$": [
                 "deleteAllRight",
                 "modaledit.enterInsert"
-            ]
-        }
+            ],
+            "w": [
+                "deleteWordEndRight",
+                "modaledit.enterInsert"
+            ],
+            "i": {
+                "w": [
+                    "deleteWordStartLeft",
+                    "deleteWordEndRight",
+                    "modaledit.enterInsert"
+                ]
+            }
+        },
 /**
+A shorthand for `c$` command is `C`.
+*/
+        "C": [
+            "deleteAllRight",
+            "modaledit.enterInsert"
+        ],
+/**
+_Substition_ commands do  basically same things as change commands; `s` changes 
+the character under cursor, and `S` is same as `cc`.
+*/
+        "s": [
+            "deleteRight",
+            "modaledit.enterInsert"
+        ],
+        "S": [
+            "deleteAllLeft",
+            "deleteAllRight",
+            "modaledit.enterInsert"
+        ],
+/**
+### Undo & Redo
+
+You can undo the last change with `u`. We also clear the selection to copy Vim's 
+operation.
+*/
+        "u": [
+            "undo",
+            "modaledit.cancelSelection"
+        ],
+/**
+Since redo is mapped to `Ctrl+r" by default, we leave this binding exercise to
+the reader.
+
+## Visual (Selection) Commands
+
+Visual commands operate on the selected text. `<` and `>` shift selected text
+left or right (indent/outdent).
+*/
+        "<": "editor.action.outdentLines",
+        ">": "editor.action.indentLines",
+/**
+
+### Clipboard Commands
+
+`y` yanks i.e. copies selected text to clipboard. Following Vim operation, we 
+also clear the selection.
+*/
+        "y": [
+            "editor.action.clipboardCopyAction",
+            "modaledit.cancelSelection"
+        ],
+/**
+`d` deletes (cuts) the selected text and puts it to clipboard. Capital `D` 
+deletes the rest of the line. `x` deletes just the character under the cursor.
+*/
+        "d": "editor.action.clipboardCutAction",
+        "D": [
+            "cursorEndSelect",
+            "editor.action.clipboardCutAction"
+        ],
+        "x": [
+            "cursorRightSelect",
+            "editor.action.clipboardCutAction"
+        ],
+/**
+> **Note**: If there is no text selected, `y` and `d` commands perform exactly
+> the same actions as `yy` and `dd` in Vim. That is, they yank or delete the 
+> current line. Again, one of the subtle differences that is futile to try to
+> unify.
+
+For pasting (or _putting_ in Vim parlance) the text in clipboard you have two 
+commands: `p` puts the text after the cursor, and `P` puts it before.
+*/
+        "p": [
+            "cursorRight",
+            "editor.action.clipboardPasteAction"
+        ],
+        "P": "editor.action.clipboardPasteAction",
+/**
+### Switching Case
+
+Switching selected text to upper or lower case is done with a nifty trick.
+We can examine the selection in a conditional command that calls different VS 
+Code commands based on the expression. The command is bound to the tilde `~` 
+character. 
+*/
+        "~": {
+            "condition": "__selection == __selection.toUpperCase()",
+            "true": "editor.action.transformToLowercase",
+            "false": "editor.action.transformToUppercase"
+        },
+/**
+## Marks
+
+Marks or bookmarks, as they are more commonly known, provide a handy way to 
+jump quickly inside documents. Surprisingly, VS Code does not contain this
+feature out-of-the-box. Since it is easy to implement, ModalEdit fills the gap 
+and adds two simple commands: `modaledit.defineBookmark` and 
+`modaledit.goToBookmark`. Using these we can implement Vim's mark commands.
+
+You can potentially define dozens of bookmarks but to keep things simple, we 
+support only four of them: from `a` to `d`. To define a bookmark, you type `ma`, 
+for example, and to jump to that mark, type `` `a``.
+*/
+        "m": {
+            "a" : {
+                "command": "modaledit.defineBookmark",
+                "args": {
+                    "bookmark": 0
+                }
+            },
+            "b" : {
+                "command": "modaledit.defineBookmark",
+                "args": {
+                    "bookmark": 1
+                }
+            },
+            "c" : {
+                "command": "modaledit.defineBookmark",
+                "args": {
+                    "bookmark": 2
+                }
+            },
+            "d" : {
+                "command": "modaledit.defineBookmark",
+                "args": {
+                    "bookmark": 3
+                }
+            }
+        },
+        "`": {
+            "a" : {
+                "command": "modaledit.goToBookmark",
+                "args": {
+                    "bookmark": 0
+                }
+            },
+            "b" : {
+                "command": "modaledit.goToBookmark",
+                "args": {
+                    "bookmark": 1
+                }
+            },
+            "c" : {
+                "command": "modaledit.goToBookmark",
+                "args": {
+                    "bookmark": 2
+                }
+            },
+            "d" : {
+                "command": "modaledit.goToBookmark",
+                "args": {
+                    "bookmark": 3
+                }
+            }
+        },
+/**
+## Searching
+
+The last category of commands we implement is searching. We use the incremental
+search command provided by ModalEdit for this. As in Vim, typing `/` starts an 
+incremental search. `?` starts a search backwards.
+*/
+        "/": {
+            "command": "modaledit.search",
+            "args": { 
+                "caseSensitive": true 
+            }
+        },
+        "?": {
+            "command": "modaledit.search",
+            "args": { 
+                "caseSensitive": true,
+                "backwards": true 
+            }
+        },
+/**
+Jumping to next previous match is done with keys `n` and `N`.
+*/
+        "n": "modaledit.nextMatch",
+        "N": "modaledit.previousMatch",
+/**
+There are some subtle differences in the search functionality as well. Instead 
+of just highlighting matches ModalEdit selects them. This is preferable 
+anyway, as replacing needs to be done manually with selection commands. Finally, 
+`modaledit.search` does not support regexes. Use VS Code's built-in find 
+command, if you need regex support.
+
+## Conclusion
+
+We have built far from complete but nevertheless usable Vim emulation which
+you can tweak in various ways to make it better. The point of this exercise was
+to show that you can significantly enhance VS Codes editing experience using 
+just a simple extension and built-in commands.
+
+When writing ModalEdit my goal was not to provide a new Vim emulation. In fact, 
+I don't use Vim-style key bindings myself. I find the countless keyboard 
+combinations in Vim superfuous and inconsistent. I doubt that anybody knows, let 
+alone _uses_ all of the commands available. Using Vim is like working in a 
+workshop where you have shelves full of bench planes but the only tool you 
+really need is your trusty No 4 Stanley.
+
+![WTF?](../images/wood-planes.jpg)
+
+What I am trying to prove is that you don't need to learn all the magical Vim
+facilities to become better at editing. Just keep an eye on what operations you 
+repeat, and think how you could make them more efficient. Then add commands 
+that will speed up those operations. Try making the new commands as general as 
+possible, and as easy as possible to use. Your text editor should adapt to your 
+way of working, not the other way around.  
+
+The thing that Vim got right, though, is modal editing. It is the laser beam 
+on the great white shark's head that really makes it cool. Modal editing puts
+all the commands at your fingertips, and makes you faster. That is why Vim is 
+still popular, even though there is lot of competition around. So, the next 
+logical step is to equip modern editors like VS Code with the same frickin' 
+laser beam. It requires some training to operate, but when properly configured
+will cut through text at the speed of light.
+
+Happy Editing! 🦈😎
 <!--
 */
     },

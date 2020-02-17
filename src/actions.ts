@@ -231,6 +231,7 @@ function evalString(str: string, __selecting: boolean): any {
     let __line = undefined
     let __col = undefined
     let __char = undefined
+    let __selection = undefined
     let editor = vscode.window.activeTextEditor
     if (editor) {
         let cursor = editor.selection.active
@@ -239,6 +240,7 @@ function evalString(str: string, __selecting: boolean): any {
         __col = cursor.character
         __char = editor.document.getText(new vscode.Range(cursor, 
             cursor.translate({ characterDelta: 1 })))
+        __selection = editor.document.getText(editor.selection)
     }
     try {
         return eval(`(${str})`)
