@@ -31,6 +31,9 @@ settings file, open command palette with `Ctrl+Shift+P` and look up command
 project specific, edit the `settings.json` that is located in the `.vscode` 
 directory under your project directory. 
 
+> You might want to skip to the [tutorial][9], if you prefer learning by example. 
+> Otherwise keep reading this document.
+
 To define the key mappings used in normal mode, add a property named 
 `modaledit.keybindings`. You should define at least one binding that will switch 
 the editor to the *insert mode*, which is the same as VS Code's default mode.
@@ -425,3 +428,4 @@ great idea and helping me jump start my project.
 [6]: https://code.visualstudio.com/api/references/commands#commands
 [7]: https://gist.github.com/johtela/b63232747fdd465748fedb9ca6422c84
 [8]: https://kakoune.org/why-kakoune/why-kakoune.html
+[9]: https://johtela.github.io/vscode-modaledit/docs/.vscode/settings.html
