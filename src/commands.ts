@@ -1,6 +1,23 @@
+/**
+ * # Commands and State
+ * 
+ * This module implements the new commands provided by ModalEdit. It also stores
+ * the extension state; which mode we are in, search parameters, bookmarks,
+ * quick snippets, etc.
+ */
 import * as vscode from 'vscode'
 import * as actions from './actions'
-
+/**
+ * ## Command Arguments
+ * 
+ * Most commands provided by ModalEdit take arguments. Since command arguments 
+ * are stored in objects by-design, we define them as interfaces.
+ * 
+ * ### Search Arguments
+ * 
+ * Search arguments are documented in the 
+ * [README](../README.html#code-modaledit-search-code).
+ */
 interface SearchArgs {
     backwards?: boolean
     caseSensitive?: boolean
@@ -8,7 +25,13 @@ interface SearchArgs {
     selectTillMatch?: boolean
     typeAfterAccept?: string
 }
-
+/**
+ * ### Bookmark Arguments
+ * 
+ * [Bookmark](../README.html#bookmarks) ID is just an index in an array. The 
+ * actual positions are stored in an object that conforms to the `Bookmark` 
+ * interface in the `bookmarks` array.
+ */
 interface BookmarkArgs {
     bookmark?: number
 }
@@ -17,20 +40,54 @@ interface Bookmark {
     document: vscode.TextDocument
     position: vscode.Position
 }
-
+/**
+ * ### Quick Snippet Arguments
+ * 
+ * [Quick snippets](../README.html#quick-snippets) are also stored in an array.
+ * So their IDs are indexes as well.
+ */
 interface QuickSnippetArgs {
     snippet: number
 }
-
+/**
+ * ### Type Normal Keys Arguments
+ * 
+ * The [`typeNormalKeys` command](../README.html#invoking-key-bindings) gets the 
+ * entered keys as a string.
+ */
 interface TypeNormalKeysArgs {
     keys: string
 }
-
+/**
+ * ## State Variables
+ * 
+ * The enabler for modal editing is the `type` event that VS Code provides. It
+ * reroutes the user's key presses to our extension. We store the handler to 
+ * this event in the `typeSubscription` variable.
+ */
 let typeSubscription: vscode.Disposable | undefined
+/**
+ * We add an item in the status bar that shows the current mode. The reference
+ * to the status bar item is stored below.
+ */
 let statusBarItem: vscode.StatusBarItem
+/**
+ * This is the main mode flag that tells if we are in normal mode or insert 
+ * mode.
+ */
 let normalMode = true
+/**
+ * The `selecting` flag indicates if we have initiated selection mode. Note that
+ * it is not the only indicator that tells whether a selection is active.
+ */
 let selecting = false
+/** 
+ * The `searching` flag tells if `modaledit.search` command is in operation. 
+ */
 let searching = false
+/**
+ * The search parameters are stored below.
+ */
 let searchString: string
 let searchStartPos: vscode.Position
 let searchBackwards = false
@@ -39,9 +96,19 @@ let searchAcceptAfter = Number.POSITIVE_INFINITY
 let searchSelectTillMatch = false
 let searchTypeAfterAccept: string | undefined
 let searchReturnToNormal = true
+/**
+ * Bookmarks are stored here.
+ */
 let bookmarks: Bookmark[] = []
+/**
+ * Quick snippets are simply stored in an array of strings.
+ */
 let quickSnippets: string[] = []
-
+/**
+ * ## Command Names
+ * 
+ * Since command names are easy to misspell, we define them as constants.
+ */
 const toggleId = "modaledit.toggle"
 const enterNormalId = "modaledit.enterNormal"
 const enterInsertId = "modaledit.enterInsert"
@@ -58,7 +125,12 @@ const fillSnippetArgsId = "modaledit.fillSnippetArgs"
 const defineQuickSnippetId = "modaledit.defineQuickSnippet"
 const insertQuickSnippetId = "modaledit.insertQuickSnippet"
 const typeNormalKeysId = "modaledit.typeNormalKeys"
-
+/**
+ * ## Registering Commands
+ * 
+ * The commands are registered when the extension is activated (main entry point
+ * calls this function). We also create the status bar item.
+ */
 export function register(context: vscode.ExtensionContext) {
     context.subscriptions.push(
         vscode.commands.registerCommand(toggleId, toggle),
@@ -79,7 +151,6 @@ export function register(context: vscode.ExtensionContext) {
         vscode.commands.registerCommand(insertQuickSnippetId, insertQuickSnippet),
         vscode.commands.registerCommand(typeNormalKeysId, typeNormalKeys)
     )
-
     statusBarItem = vscode.window.createStatusBarItem(
         vscode.StatusBarAlignment.Left);
     statusBarItem.command = toggleId;

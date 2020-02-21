@@ -126,13 +126,13 @@
         <h1 id="build-your-own-vim-emulation-for-vs-code">Build Your Own Vim Emulation for VS Code</h1>
 <p><img src="../images/sharks.png" alt="Shark" width="256" height="206">
 <a href="https://www.vim.org/">Vim</a> is the great white shark of text editors. It has survived among modern
-IDEs because of its unique philosophy. It uses <a href="https://unix.stackexchange.com/questions/57705/modeless-vs-modal-editors">modal editing</a> which is almost
-an opposite approach to how other editors work. You start in &quot;normal&quot; mode where
-you can navigate and edit text but not insert it. When you want to enter text,
-you switch to &quot;insert&quot; mode where you can type new text, but cannot do anything
-else. So, you end up bouncing between modes as you edit your text file.</p>
+IDEs because of its unique philosophy. It supports <a href="https://unix.stackexchange.com/questions/57705/modeless-vs-modal-editors">modal editing</a> which is
+almost an opposite approach to how other editors work. You start in &quot;normal&quot;
+mode where you can navigate and edit text but not insert it. When you want to
+enter text, you switch to &quot;insert&quot; mode where you can type new text but do
+nothing else. So, you end up bouncing between modes as you edit your file.</p>
 <p>This might sound difficult, and granted, the learning curve is steep. But after
-you are accustomed to this way of working, it is very difficult to go back. For
+you are accustomed to this way of editing, it is very difficult to go back. For
 example, having to use arrow keys to move cursor feels uncomfortable. The proof
 of this is that nearly all popular text editors have some kind of add-in that
 provides Vim emulation. VS Code has several of them.</p>
@@ -145,28 +145,27 @@ that do not have counterparts in VS Code.</p>
 just add the concept of modal editing to the mix. Turns out implementing modal
 editing is extremely simple. We basically provide pair of commands that switch
 between normal mode and insert mode.</p>
-<p>To complete the feature set, we need to be able to bind key sequences pressed
-in normal mode to VS Code's commands. This we can do by defining the key
-bindings in the VS Code's standard configuration file <code>settings.json</code>. We provide
-a way to bind any key to any command, or sequence of commands. We can even
-provide conditional commands that do different things based on editor state.
-Refer to the <a href="../README.html">README</a> page for the details of the configuration
-options.</p>
-<p>With these capabilities we can start building our Vim emulation. We don't need
-to use Vim's standard key bindings, if we don't want to. You can map any key
+<p>To complete the feature set, we need an ability to bind normal mode key
+sequences to VS Code's commands. ModalEdit accomplishes this by defining the key
+bindings in the VS Code's standard configuration file <code>settings.json</code>. It allows
+binding any key to any command, or a sequence of commands. It supports also
+conditional commands that do different things based on editor state. Refer to
+the <a href="../README.html">README</a> page for the details of the configuration options.</p>
+<p>With these capabilities we can start building our Vim emulation. We don't have
+to use Vim's standard key bindings, if we prefer not to. You can map any key
 (sequence) to any command. But to keep things familiar, we'll follow Vim's
-conventions to demonstrate how you can implement its functionality.</p>
+conventions in this tutorial.</p>
 <blockquote>
 <p>This document is actually a <a href="../../.vscode/settings.json">literate <code>settings.json</code> file</a>. That
-is, the actual configuration file that contains documentation in comments.
+is, an actual configuration file that contains documentation in comments.
 The upshot of this is that I can test the key bindings right away while
 writing this document.  Saving the file makes ModalEdit apply the bindings.
 The web page you are reading is generated from the file using LiTScript. See
 <a href="https://johtela.github.io/litscript/">LiTScript home page</a>, if you want to learn more about that.</p>
 </blockquote>
-<p>So, let's start configuring our Vim emulator by adding the ModalEdit's
-configuration block for key bindings. We'll use the <a href="https://vim.rtorr.com/">Vim Cheat Sheet</a> as our
-specification telling what to implement.</p>
+<p>Let's start configuring our Vim emulator by adding the ModalEdit's configuration
+block for key bindings. We'll use the <a href="https://vim.rtorr.com/">Vim Cheat Sheet</a> as our specification
+for key bindings to be added.</p>
 
 <pre class="syntaxhighlight"><code>{
     <span class="attr">"modaledit.keybindings"</span>: {
@@ -174,7 +173,7 @@ specification telling what to implement.</p>
 <h2 id="switching-between-modes">Switching Between Modes</h2>
 <p>First things first: we need to be able to enter the normal mode somehow. The
 <code>Esc</code> key is mapped to the <code>modaledit.enterNormal</code> command by default, so we
-dont't need to do anything about that. If you like, you can map other keys to
+dont't need to do anything for that. If you like, you can map other keys to
 this command using VS Code's standard keymappings pressing <code>Ctrl+K Ctrl+S</code>.</p>
 <h3 id="insert-text">Insert Text</h3>
 <p>There are multiple ways to enter insert mode. If you want to insert text in the
@@ -195,9 +194,9 @@ need a command sequence, i.e. an array of commands.</p>
 and <code>A</code> at the end of the line. There is a special case, though. If cursor is
 already at the last character of the line, it should not move. This is why we
 use a conditional command to move the cursor only, if the current character
-is not <code>0</code> which it is at the end of the line. A conditional command is an
-object that contains the <code>condition</code> property. The value of the property is a
-JS expression which ModalEdit evaluates. It selects the command based on the
+is not <code>0</code> which marks the end of the line. A conditional command is an object
+that contains the <code>condition</code> property. The value of the property is a JS
+expression which ModalEdit evaluates. It selects the command based on the
 result. In this case, the result <code>false</code> will execute the <code>cursorRight</code> command.</p>
 
 <pre class="syntaxhighlight"><code>        "a": [
@@ -246,7 +245,7 @@ flag that you can set when you want to select text as you move the cursor.</p>
 <p>Selection mode is also implicitly on whenever there is text selected. If you
 select text with mouse, for example, the selection mode is turned on (Vim
 behaves like this too). To turn off the selection mode, call
-<code>modaledit.toggleSelection</code> again.</p>
+<code>modaledit.toggleSelection</code> again (or <code>modaledit.clearSelection</code>).</p>
 <p>The end result is that selection mode works <em>almost</em> like visual mode in Vim,
 the main difference being that selection mode is not automatically turned off
 when you enter insert mode.</p>
@@ -470,7 +469,7 @@ handy. We use the <code>__line</code> parameter to get the line where the cursor
 without using arrow keys or <code>Home</code> and <code>End</code> keys.</p>
 <p><img src="../images/cursor-movement.gif" alt="Navigation"></p>
 <p>We skipped commands that move cursor up and down on page at the time. The
-reason for this is that these commands are bound to <code>Ctrl+b</code> and <code>Ctr+f</code> in
+reason for this is that these commands are bound to <code>Ctrl+b</code> and <code>Ctrl+f</code> in
 Vim. Since these are &quot;normal&quot; VS Code shortcuts we cannot remap them in
 ModalEdit. If you want to use these shortcuts, you need to add the bindings to
 the VS Code's <code>keybindings.json</code> file. Below is an example that uses the
@@ -558,8 +557,8 @@ operation.</p>
             "modaledit.cancelSelection"
         ],
 </code></pre>
-<p>Since redo is mapped to `Ctrl+r&quot; by default, we leave this binding exercise to
-the reader.</p>
+<p>Since redo is mapped to `Ctrl+r&quot; by default, we leave this binding as an
+exercise to the reader.</p>
 <h2 id="visual-selection-commands">Visual (Selection) Commands</h2>
 <p>Visual commands operate on the selected text. <code>&lt;</code> and <code>&gt;</code> shift selected text
 left or right (indent/outdent).</p>
@@ -568,7 +567,7 @@ left or right (indent/outdent).</p>
         "&gt;": "editor.action.indentLines",
 </code></pre>
 <h3 id="clipboard-commands">Clipboard Commands</h3>
-<p><code>y</code> yanks i.e. copies selected text to clipboard. Following Vim operation, we
+<p><code>y</code> yanks, i.e. copies, selected text to clipboard. Following Vim convention, we
 also clear the selection.</p>
 
 <pre class="syntaxhighlight"><code>        "y": [
@@ -720,17 +719,17 @@ alone <em>uses</em> all the available commands. Using Vim is like working in a
 workshop where you have shelves full of bench planes but the only tool you
 really need is your trusty No 4 Stanley.</p>
 <p><img src="../images/wood-planes.jpg" alt="WTF?"></p>
-<p>What I am trying to prove is that you don't need to learn all the magical Vim
-facilities to become better at editing. Just keep an eye on what operations you
-repeat, and think how you could make them more efficient. Then add commands
-that will speed up those operations. Try making the new commands as general as
+<p>What I am trying to demonstrate is that you don't need to learn all the magical
+Vim facilities to become better at editing. Just keep an eye on what operations
+you repeat, and think how you could make them more efficient. Then add commands
+that will speed up those operations. Try to make the new commands as general as
 possible, and as easy as possible to use. Your text editor should adapt to your
 way of working, not the other way around.</p>
 <p>The thing that Vim got right, though, is modal editing. It is the laser beam
 on the great white shark's head that really makes it cool. Modal editing puts
 all the commands at your fingertips, and makes you faster. That is why Vim is
-still popular, even though there is lot of competition around. So, the next
-logical step is to equip modern editors like VS Code with the same frickin'
+still popular, even though there is lot of competition around. So, the obvious
+conclusion is to equip modern editors like VS Code with the same frickin'
 laser beam. It requires some training to operate, but when properly configured
 will cut through text at the speed of light.</p>
 <p>Happy Editing! 🦈😎</p>
