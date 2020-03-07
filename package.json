@@ -20,7 +20,7 @@
 		"*"
 	],
 	"icon": "images/normal.jpg",
-	"main": "./dist/extension.js",
+	"main": "./out/extension.js",
 	"contributes": {
 		"configuration": {
 			"type": "object",
@@ -31,7 +31,7 @@
 					"description": "Keybindings map, key → VS Code actions/commands",
 					"default": {},
 					"patternProperties": {
-						"^.$": {
+						"^.(\\-.)?$": {
 							"anyOf": [
 								{
 									"type": "string",
@@ -39,7 +39,7 @@
 								},
 								{
 									"type": "array",
-									"description": "Sequence of actions",
+									"description": "Sequence of commands",
 									"items": {
 										"anyOf": [
 											{
@@ -76,13 +76,17 @@
 								},
 								{
 									"type": "object",
-									"description": "Conditional action",
+									"description": "Conditional command",
 									"properties": {
 										"condition": {
 											"type": "string",
 											"description": "JavaScript expression that is evaluated"
 										}
 									}
+								},
+								{
+									"type": "number",
+									"description": "Keymap id"
 								}
 							]
 						}

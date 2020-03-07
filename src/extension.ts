@@ -24,19 +24,26 @@ export function activate(context: vscode.ExtensionContext) {
 	 */
 	commands.register(context)
 	/**
-	 * Next we update the active settings from the config file.
+	 * We create an output channel for diagnostic messages and give it to
+	 * actions module.
 	 */
-	actions.updateFromConfig()
+	let channel = vscode.window.createOutputChannel("ModalEdit")
+	actions.setOutputChannel(channel)
 	/**
-	 * Then we subscribe to events we want to react to, and at last, we enter 
-	 * into normal or edit mode depending on the settings.
+	 * Then we subscribe to events we want to react to.
 	 */
 	context.subscriptions.push(
+		channel,
 		vscode.workspace.onDidChangeConfiguration(actions.updateFromConfig),
 		vscode.window.onDidChangeVisibleTextEditors(editors =>
 			editors.forEach(commands.updateCursorAndStatusBar)),
 		vscode.window.onDidChangeTextEditorSelection(e =>
 			commands.updateStatusBar(e.textEditor)))
+	/**
+	 * Next we update the active settings from the config file, and at last, 
+	 * we enter into normal or edit mode depending on the settings.
+	 */
+	actions.updateFromConfig()
 	if (actions.getStartInNormalMode())
 		commands.enterNormal()
 	else
