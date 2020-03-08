@@ -35,6 +35,7 @@ export interface Conditional {
 export interface Parameterized {
     command: string
     args?: {} | string
+    repeat?: number | string
 }
 /**
  * A keymap is a dictionary of keys (characters) to actions. With keymaps you
@@ -125,6 +126,10 @@ export function setLastCommand(command: string) {
 export function setOutputChannel(channel: vscode.OutputChannel) {
     outputChannel = channel
 }
+
+export function log(message: string) {
+    outputChannel.appendLine(message)
+}
 /**
  * ## Update Configuration from settings.json
  * 
@@ -135,7 +140,7 @@ export function setOutputChannel(channel: vscode.OutputChannel) {
 export function updateFromConfig(): void {
     const config = vscode.workspace.getConfiguration("modaledit")
     const keybindings = config.get<object>("keybindings")
-    outputChannel.appendLine("Validating keybindings in 'settings.json'...")
+    log("Validating keybindings in 'settings.json'...")
     if (isKeymap(keybindings)) {
         rootKeymap = keybindings
         keymap = rootKeymap
@@ -143,15 +148,13 @@ export function updateFromConfig(): void {
         errors = 0
         validateAndExpandKeymaps(keymap)
         if (errors > 0)
-            outputChannel.appendLine(
-                `Found ${errors} error${errors > 1 ? "s": ""}. ` +
+            log(`Found ${errors} error${errors > 1 ? "s" : ""}. ` +
                 "Keybindings might not work correctly.")
         else
-            outputChannel.appendLine("Validation completed succesfully.")
+            log("Validation completed succesfully.")
     }
     else if (keybindings)
-        outputChannel.appendLine(
-            "ERROR: Invalid configuration structure. Keybindings not updated.")
+        log("ERROR: Invalid configuration structure. Keybindings not updated.")
     insertCursorStyle = toVSCursorStyle(
         config.get<Cursor>("insertCursorStyle", "line"))
     normalCursorStyle = toVSCursorStyle(
@@ -162,10 +165,11 @@ export function updateFromConfig(): void {
 }
 
 let errors: number
+let keyRE = /^.([\-,].)+$/
 
 function validateAndExpandKeymaps(keybindings: Keymap) {
     function error(message: string) {
-        outputChannel.appendLine("ERROR: " + message)
+        log("ERROR: " + message)
         errors++
     }
     if (typeof keybindings.id === 'number')
@@ -183,15 +187,22 @@ function validateAndExpandKeymaps(keybindings: Keymap) {
                 else
                     keybindings[key] = target
             }
-            if (key.length == 3 && key[1] == '-') {
-                let first = key.charCodeAt(0)
-                let last = key.charCodeAt(2)
-                if (first > last) 
-                    error(`Invalid key range: "${key}"`)
-                else
-                    for (let i = first; i <= last; i++)
-                        keybindings[String.fromCharCode(i)] = target
-            }
+            if (key.match(keyRE))
+                for (let i = 1; i < key.length; i += 2) {
+                    if (key[i] == '-') {
+                        let first = key.charCodeAt(i - 1)
+                        let last = key.charCodeAt(i + 1)
+                            if (first > last)
+                            error(`Invalid key range: "${key}"`)
+                        else
+                            for (let i = first; i <= last; i++)
+                                keybindings[String.fromCharCode(i)] = target
+                    }
+                    else {
+                        keybindings[key[i - 1]] = target
+                        keybindings[key[i + 1]] = target
+                    }
+                }
             else if (key.length != 1)
                 error(`Invalid key binding: "${key}"`)
         }
@@ -246,7 +257,7 @@ function isObject(x: any): boolean {
  * This checks if a value is a command.
  */
 function isCommand(x: any): x is Action {
-    return isString(x) || isParameterized(x) || isConditional(x) || 
+    return isString(x) || isParameterized(x) || isConditional(x) ||
         isCommandSequence(x)
 }/**
  * This checks if a value is an array of commands.
@@ -259,7 +270,7 @@ function isCommandSequence(x: any): x is Command[] {
  */
 function isConditional(x: any): x is Conditional {
     return isObject(x) && isString(x.condition) &&
-        Object.keys(x).every(key => 
+        Object.keys(x).every(key =>
             key === "condition" || isCommand(x[key]))
 }
 /**
@@ -267,7 +278,8 @@ function isConditional(x: any): x is Conditional {
  */
 function isParameterized(x: any): x is Parameterized {
     return isObject(x) && isString(x.command) &&
-        (!x.args || isObject(x.args) || isString(x.args))
+        (!x.args || isObject(x.args) || isString(x.args)) &&
+        (!x.repeat || isNumber(x.repeat) || isString(x.repeat))
 }
 /**
  * And finally this one checks if a value is a keymap.
@@ -303,13 +315,14 @@ function evalString(str: string, __selecting: boolean): any {
     let __col = undefined
     let __char = undefined
     let __selection = undefined
+    let __keySequence = keySequence
     let editor = vscode.window.activeTextEditor
     if (editor) {
         let cursor = editor.selection.active
         __file = editor.document.fileName
         __line = cursor.line
         __col = cursor.character
-        __char = editor.document.getText(new vscode.Range(cursor, 
+        __char = editor.document.getText(new vscode.Range(cursor,
             cursor.translate({ characterDelta: 1 })))
         __selection = editor.document.getText(editor.selection)
     }
@@ -325,7 +338,7 @@ function evalString(str: string, __selecting: boolean): any {
  * condition is evaluated and if a key is found that matches the result, it is
  * executed.
  */
-async function executeConditional(cond: Conditional, selecting: boolean): 
+async function executeConditional(cond: Conditional, selecting: boolean):
     Promise<void> {
     let res = evalString(cond.condition, selecting)
     let branch = isString(res) ? res : JSON.stringify(res)
@@ -337,15 +350,29 @@ async function executeConditional(cond: Conditional, selecting: boolean):
  * the actual arguments. 
  */
 async function executeParameterized(action: Parameterized, selecting: boolean) {
+    let times = 1
+    async function executeCommand(command: string, args?: any) {
+        for (let i = 0; i < times; i++)
+            await executeVSCommand(action.command, args)
+    }
+    if (action.repeat) {
+        if (isString(action.repeat)) {
+            let val = evalString(action.repeat, selecting)
+            if (isNumber(val))
+                times = val
+        }
+        else
+            times = action.repeat
+    }
     if (action.args) {
         if (typeof action.args === 'string')
-            await executeVSCommand(action.command, 
+            await executeCommand(action.command,
                 evalString(action.args, selecting))
         else
-            await executeVSCommand(action.command, action.args)
+            await executeCommand(action.command, action.args)
     }
     else
-        await executeVSCommand(action.command)
+        await executeCommand(action.command)
 }
 /**
  * ## Executing Actions
@@ -364,8 +391,8 @@ async function execute(action: Action, selecting: boolean): Promise<void> {
         await executeConditional(action, selecting)
     else if (isParameterized(action))
         await executeParameterized(action, selecting)
-    else if (isKeymap(action))
-        keymap = action
+    else
+        keymap = <Keymap>action
 }
 /**
  * ## Key Press Handler

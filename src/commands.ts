@@ -586,6 +586,8 @@ async function insertQuickSnippet(args?: QuickSnippetArgs): Promise<void> {
  * Implementing that is as easy as calling the keyboard handler.
  */
 async function typeNormalKeys(args: TypeNormalKeysArgs): Promise<void> {
+    if (typeof args !== 'object' || typeof(args.keys) !== 'string')
+        throw Error(`${typeNormalKeysId}: Invalid args: ${JSON.stringify(args)}`) 
     for (let i = 0; i < args.keys.length; i++)
         await onType({ text: args.keys[i] })
 }
