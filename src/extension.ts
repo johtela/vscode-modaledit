@@ -17,7 +17,6 @@ import * as commands from './commands'
  * which means that the extension is activated as soon as VS Code is running.
  */
 export function activate(context: vscode.ExtensionContext) {
-
 	/**
 	 * The commands are defined in the `package.json` file. We register them
 	 * with function defined in the `commands` module. 

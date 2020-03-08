@@ -1,36 +1,43 @@
 /**
- * # Actions and Configuration
+ * # Converting Keybinding Definitions to Actions
  * 
- * This module defines the data types used in the configuration file. It also
- * includes functions to execute commands defined in configuration. First we 
- * need to import VS Code definitions. 
+ * This module defines the schema of the configuration file using TypeScript
+ * interfaces. We parse the configuration JSON to TypeScript objects which
+ * directly define all the valid keyboard sequences and the commands that these
+ * will invoke. First we import VS Code's definitions. 
  */
 import * as vscode from 'vscode'
 /**
  * ## Action Definitions
  * 
- * The configuration consist of _actions_ that can take many forms. First of 
- * all, an action can be a single command or sequence of commands (array).
+ * The keybinding configuration consist of _actions_ that can take three forms. 
+ * An action can be a command (defined later), a keymap, or a number that refers 
+ * to a keymap defined earlier.
  */
 export type Action = Command | Keymap | number
 /**
- * A singular action can be either a command name (string), a conditional 
- * action, command with parameters, or a keymap (dictionary) which points to
- * further actions.
+ * A command can be either a command name (string), a conditional command, 
+ * command with parameters, or a sequence of commands. The definition is
+ * recursive, meaning that the sequence can contain all previous types of 
+ * commands.
  */
 export type Command = string | Conditional | Parameterized | Command[]
 /**
- * A conditional action consist of condition (duh) and set of branches to take
- * depending on the result of the condition.
+ * A conditional command consist of condition (duh) and set of branches to take
+ * depending on the result of the condition. Each branch can be any type of
+ * command defined above.
  */
 export interface Conditional {
     condition: string
     [branch: string]: Command
 }
 /**
- * A command which requires arguments need to be defined using the `Command`
+ * A command that takes arguments can be invoked through the `Parameterized`
  * interface. Arguments can be defined either as an object or string, which
- * is evaluated on the fly.
+ * is assumed to contain valid JS expression. Additionally, you can specify that
+ * the command is run multiple times by setting the `repeat` property. The 
+ * property cmsut be either a number, or a JS expression that evaluates to a 
+ * number. If these conditions are not true, the command is executed once. 
  */
 export interface Parameterized {
     command: string
@@ -38,11 +45,22 @@ export interface Parameterized {
     repeat?: number | string
 }
 /**
- * A keymap is a dictionary of keys (characters) to actions. With keymaps you
- * can define commands that require multiple keypresses.
+ * A keymap is a dictionary of keys (characters) to actions. Keys are either
+ * single characters or character ranges, denoted by sequences of `<char>,<char>` 
+ * and `<char>-<char>`. Values of the dictionary can be also nested keymaps. 
+ * This is how you can define commands that require  multiple keypresses. 
+ * 
+ * When the value of a key is number, it refers to another keymap whose `id` 
+ * equals the number. The number can also point to the same  keymap where it 
+ * resides. With this mechanism, you can define _recursive_ keymaps that can 
+ * take (theoretically) infinitely long key sequences. 
+ * 
+ * The `help` field contains help text that is shown in the status bar when the 
+ * keymap is active.
  */
 export interface Keymap {
     id: number
+    help: string
     [key: string]: Action
 }
 /**
@@ -89,13 +107,13 @@ let keymap: Keymap
 let lastCommand: string
 /**
  * The key sequence that user has pressed is stored for error reporting 
- * purposes.
+ * purposes and to make it available to command arguments.
  */
 let keySequence: string[] = []
-
+/**
+ * We need a dictionary that returns a keymap for given id.
+ */
 let keymapsById: { [id: number]: Keymap }
-
-let outputChannel: vscode.OutputChannel
 /**
  * ## Configuration Accessors
  * 
@@ -122,16 +140,28 @@ export function getStartInNormalMode(): boolean {
 export function setLastCommand(command: string) {
     lastCommand = command
 }
+/**
+ * ## Logging
+ * 
+ * To enable logging and error reporting ModalEdit creates an output channel
+ * that is visible in the output pane. The channel is created in the extension
+ * activation hook, but it is passed to this module using the `setOutputChannel`
+ * function.
+ */
+let outputChannel: vscode.OutputChannel
 
 export function setOutputChannel(channel: vscode.OutputChannel) {
     outputChannel = channel
 }
-
+/**
+ * Once the channel is set, we can output messages to it using the `log` 
+ * function.
+ */
 export function log(message: string) {
     outputChannel.appendLine(message)
 }
 /**
- * ## Update Configuration from settings.json
+ * ## Updating Configuration from settings.json
  * 
  * Whenever the user saves either global `settings.json` or the one located
  * in the `.vsode` directory VS Code calls this function that updates the
@@ -146,7 +176,7 @@ export function updateFromConfig(): void {
         keymap = rootKeymap
         keymapsById = {}
         errors = 0
-        validateAndExpandKeymaps(keymap)
+        validateAndResolveKeymaps(keymap)
         if (errors > 0)
             log(`Found ${errors} error${errors > 1 ? "s" : ""}. ` +
                 "Keybindings might not work correctly.")
@@ -163,11 +193,31 @@ export function updateFromConfig(): void {
         config.get<Cursor>("searchCursorStyle", "underline"))
     startInNormalMode = config.get<boolean>("startInNormalMode", true)
 }
-
+/**
+ * To make sure that the keybinding section is valid, we define a function that
+ * checks it. At the same time the function resolves all the keymaps that are
+ * referred by an id. It records the number of errors.
+ */
 let errors: number
+/**
+ * The keymap ranges are recognized with the following regular expression. 
+ * Examples of valid key sequences include:
+ * 
+ * - `0-9`
+ * - `a,b,c`
+ * - `d,e-h,l`
+ * 
+ * Basically you can add individual characters to the range with a comma `,` and
+ * an ASCII range with dash `-`. The ASCII code of the first character must be
+ * smaller than the second one's.
+ */
 let keyRE = /^.([\-,].)+$/
-
-function validateAndExpandKeymaps(keybindings: Keymap) {
+/**
+ * The function itself is recursive; it calls itself, if it finds a nested
+ * keymap. It stores all the keymaps it encounters in the `keymapsById` 
+ * dictionary.
+ */
+function validateAndResolveKeymaps(keybindings: Keymap) {
     function error(message: string) {
         log("ERROR: " + message)
         errors++
@@ -175,10 +225,10 @@ function validateAndExpandKeymaps(keybindings: Keymap) {
     if (typeof keybindings.id === 'number')
         keymapsById[keybindings.id] = keybindings
     for (let key in keybindings) {
-        if (keybindings.hasOwnProperty(key) && key != "id") {
+        if (keybindings.hasOwnProperty(key) && key != "id" && key != "help") {
             let target = keybindings[key]
             if (isKeymap(target))
-                validateAndExpandKeymaps(target)
+                validateAndResolveKeymaps(target)
             else if (typeof target === 'number') {
                 let id = target
                 target = keymapsById[id]
@@ -259,7 +309,8 @@ function isObject(x: any): boolean {
 function isCommand(x: any): x is Action {
     return isString(x) || isParameterized(x) || isConditional(x) ||
         isCommandSequence(x)
-}/**
+}
+/**
  * This checks if a value is an array of commands.
  */
 function isCommandSequence(x: any): x is Command[] {
@@ -293,7 +344,9 @@ function isKeymap(x: any): x is Keymap {
  * 
  * In the end all keybindings will invoke one or more VS Code commands. The
  * following function runs a command whose name and arguments are given as
- * parameters.
+ * parameters. If the command throws an exception because of invalid arguments,
+ * for example, the error is shown in the popup window at the corner of the 
+ * screen.
  */
 async function executeVSCommand(command: string, ...rest: any[]): Promise<void> {
     try {
@@ -385,8 +438,8 @@ async function execute(action: Action, selecting: boolean): Promise<void> {
     if (isString(action))
         await executeVSCommand(action)
     else if (isCommandSequence(action))
-        for (const subAction of action)
-            await execute(subAction, selecting)
+        for (const command of action)
+            await execute(command, selecting)
     else if (isConditional(action))
         await executeConditional(action, selecting)
     else if (isParameterized(action))
@@ -418,4 +471,14 @@ export async function handleKey(key: string, selecting: boolean,
         keySequence = []
         keymap = rootKeymap
     }
+}
+/**
+ * ## Keymap Help
+ * 
+ * When defining complex key sequences you can help the user by defining what
+ * keys she can press next and what they do. If the help is defined, it is shown 
+ * in the status bar. 
+ */
+export function getHelp(): string | undefined {
+    return keymap.help
 }

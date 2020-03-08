@@ -166,6 +166,7 @@ export function register(context: vscode.ExtensionContext) {
  */
 async function onType(event: { text: string }): Promise<void> {
     await actions.handleKey(event.text, isSelecting(), searching)
+    updateStatusBar(vscode.window.activeTextEditor, actions.getHelp())
 }
 /**
  * ## Mode Switching  Commands
@@ -244,16 +245,20 @@ export function updateCursorAndStatusBar(editor: vscode.TextEditor | undefined) 
  * indicates if selection is active or if search mode on. If so, it shows the 
  * search parameters. If no editor is active, we hide the status bar item.
  */
-export function updateStatusBar(editor: vscode.TextEditor | undefined) {
+export function updateStatusBar(editor: vscode.TextEditor | undefined,
+    help?: string) {
     if (editor) {
+        let text: string 
         if (searching)
-            statusBarItem.text = `SEARCH [${searchBackwards ? "B" : "F"
+            text = `SEARCH [${searchBackwards ? "B" : "F"
                 }${searchCaseSensitive ? "S" : ""}]: ${searchString}`
         else {
             let sel = isSelecting() ? " [S]" : ""
-            statusBarItem.text = normalMode ?
-                `--NORMAL${sel}--` : `--INSERT${sel}--`
+            text = normalMode ? `--NORMAL${sel}--` : `--INSERT${sel}--`
         }
+        if (help)
+            text = `${text}  ${help}`
+        statusBarItem.text = text
         statusBarItem.show()
     }
     else
