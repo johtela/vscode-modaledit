@@ -43,7 +43,7 @@ Contains multiple new features:
 - `repeat` attribute added to commands with parameters.
 - Keymaps can contain [key ranges](https://johtela.github.io/vscode-modaledit/docs/README.html#key-ranges).
 - Support for [recursive keymaps](https://johtela.github.io/vscode-modaledit/docs/README.html#defining-recursive-keymaps).
-- New `__keySequence` variable added to JS experssions. Contains the key
+- New `__keySequence` variable added to JS expressions. Contains the key
   sequence that was used to invoke a command.
 - New property `help` added to keymaps. The help string is shown in the status
   bar when the associated keymap is active.
