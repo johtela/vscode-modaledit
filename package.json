@@ -2,7 +2,7 @@
 	"name": "vscode-modaledit",
 	"displayName": "ModalEdit",
 	"description": "DIY Vim emulation",
-	"version": "1.4.1",
+	"version": "1.5.0",
 	"publisher": "johtela",
 	"engines": {
 		"vscode": "^1.41.0"
