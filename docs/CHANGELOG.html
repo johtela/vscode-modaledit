@@ -124,7 +124,7 @@
             
     <div class="contentarea">
         <h1 id="change-log">Change Log</h1>
-<p>All notable changes to the &quot;vscode-modaledit&quot; extension will be documented in this file.</p>
+<p>All notable changes to the ModalEdit extension will be documented in this file.</p>
 <h2 id="version-1-0">Version 1.0</h2>
 <ul>
 <li>Initial release</li>
@@ -156,6 +156,20 @@ selection after search, for example.</li>
 <li>Fixed few issues with <code>modaledit.search</code> command.</li>
 <li>You can use <code>__selection</code> variable in JS expressions to access currently
 selected text.</li>
+</ul>
+<h2 id="version-1-5">Version 1.5</h2>
+<p>Update that was sparked by issue <a href="https://github.com/johtela/vscode-modaledit/issues/6">#6</a>.
+Contains multiple new features:</p>
+<ul>
+<li><code>repeat</code> attribute added to commands with parameters.</li>
+<li>Keymaps can contain <a href="https://johtela.github.io/vscode-modaledit/docs/README.html#key-ranges">key ranges</a>.</li>
+<li>Support for <a href="https://johtela.github.io/vscode-modaledit/docs/README.html#defining-recursive-keymaps">recursive keymaps</a>.</li>
+<li>New <code>__keySequence</code> variable added to JS experssions. Contains the key
+sequence that was used to invoke a command.</li>
+<li>New property <code>help</code> added to keymaps. The help string is shown in the status
+bar when the associated keymap is active.</li>
+<li>Added ModalEdit log to <a href="https://johtela.github.io/vscode-modaledit/docs/README.html#debugging-keybindings">output window</a>.</li>
+<li>Semi-large refactoring of type definitions in the <a href="https://johtela.github.io/vscode-modaledit/docs/src/actions.html">actions module</a>.</li>
 </ul>
 
         

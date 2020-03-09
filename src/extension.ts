@@ -7,7 +7,6 @@
 import * as vscode from 'vscode'
 import * as actions from './actions'
 import * as commands from './commands'
-
 /** 
  * This method is called when the extension is activated. The activation events
  * are set in the `package.json` like this:
@@ -23,8 +22,8 @@ export function activate(context: vscode.ExtensionContext) {
 	 */
 	commands.register(context)
 	/**
-	 * We create an output channel for diagnostic messages and give it to
-	 * actions module.
+	 * We create an output channel for diagnostic messages and pass it to the
+	 * `actions` module.
 	 */
 	let channel = vscode.window.createOutputChannel("ModalEdit")
 	actions.setOutputChannel(channel)

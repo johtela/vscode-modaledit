@@ -1,6 +1,6 @@
 # Change Log
 
-All notable changes to the "vscode-modaledit" extension will be documented in this file.
+All notable changes to the ModalEdit extension will be documented in this file.
 
 ## Version 1.0
 
@@ -34,3 +34,18 @@ All notable changes to the "vscode-modaledit" extension will be documented in th
 - Fixed few issues with `modaledit.search` command.
 - You can use `__selection` variable in JS expressions to access currently
   selected text.  
+
+## Version 1.5
+
+Update that was sparked by issue [#6](https://github.com/johtela/vscode-modaledit/issues/6).
+Contains multiple new features:
+
+- `repeat` attribute added to commands with parameters.
+- Keymaps can contain [key ranges](https://johtela.github.io/vscode-modaledit/docs/README.html#key-ranges).
+- Support for [recursive keymaps](https://johtela.github.io/vscode-modaledit/docs/README.html#defining-recursive-keymaps).
+- New `__keySequence` variable added to JS experssions. Contains the key
+  sequence that was used to invoke a command.
+- New property `help` added to keymaps. The help string is shown in the status
+  bar when the associated keymap is active.
+- Added ModalEdit log to [output window](https://johtela.github.io/vscode-modaledit/docs/README.html#debugging-keybindings).
+- Semi-large refactoring of type definitions in the [actions module](https://johtela.github.io/vscode-modaledit/docs/src/actions.html).

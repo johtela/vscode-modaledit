@@ -4,39 +4,41 @@
  * This module defines the schema of the configuration file using TypeScript
  * interfaces. We parse the configuration JSON to TypeScript objects which
  * directly define all the valid keyboard sequences and the commands that these
- * will invoke. First we import VS Code's definitions. 
+ * will invoke.
  */
+//#region -c action.ts imports
 import * as vscode from 'vscode'
+//#endregion
 /**
  * ## Action Definitions
  * 
- * The keybinding configuration consist of _actions_ that can take three forms. 
- * An action can be a command (defined later), a keymap, or a number that refers 
+ * The keybinding configuration consist of _actions_ that can take three forms: 
+ * an action can be a command (defined later), a keymap, or a number that refers 
  * to a keymap defined earlier.
  */
 export type Action = Command | Keymap | number
 /**
- * A command can be either a command name (string), a conditional command, 
- * command with parameters, or a sequence of commands. The definition is
- * recursive, meaning that the sequence can contain all previous types of 
- * commands.
+ * Commands can be invoked in four ways: by specifying just command a name 
+ * (string), or using a conditional command, a command with parameters, or a
+ * sequence (array) of commands. The definition is recursive, meaning that a 
+ * sequence can contain all four types of commands.
  */
 export type Command = string | Conditional | Parameterized | Command[]
 /**
- * A conditional command consist of condition (duh) and set of branches to take
- * depending on the result of the condition. Each branch can be any type of
- * command defined above.
+ * A conditional command consist of condition (a JavaScript expression) and set 
+ * of branches to take depending on the result of the condition. Each branch can 
+ * be any type of command defined above.
  */
 export interface Conditional {
     condition: string
     [branch: string]: Command
 }
 /**
- * A command that takes arguments can be invoked through the `Parameterized`
- * interface. Arguments can be defined either as an object or string, which
- * is assumed to contain valid JS expression. Additionally, you can specify that
- * the command is run multiple times by setting the `repeat` property. The 
- * property cmsut be either a number, or a JS expression that evaluates to a 
+ * A command that takes arguments can be specified using the `Parameterized`
+ * interface. Arguments can be given either as an object or a string, which
+ * is assumed to contain a valid JS expression. Additionally, you can specify 
+ * that the command is run multiple times by setting the `repeat` property. The 
+ * property must be either a number, or a JS expression that evaluates to a 
  * number. If these conditions are not true, the command is executed once. 
  */
 export interface Parameterized {
@@ -50,10 +52,12 @@ export interface Parameterized {
  * and `<char>-<char>`. Values of the dictionary can be also nested keymaps. 
  * This is how you can define commands that require  multiple keypresses. 
  * 
+ * ![keymap example](../images/keymap.png)
  * When the value of a key is number, it refers to another keymap whose `id` 
  * equals the number. The number can also point to the same  keymap where it 
  * resides. With this mechanism, you can define _recursive_ keymaps that can 
- * take (theoretically) infinitely long key sequences. 
+ * take (theoretically) infinitely long key sequences. The picture on the right
+ * illustrates this.
  * 
  * The `help` field contains help text that is shown in the status bar when the 
  * keymap is active.
@@ -163,9 +167,9 @@ export function log(message: string) {
 /**
  * ## Updating Configuration from settings.json
  * 
- * Whenever the user saves either global `settings.json` or the one located
- * in the `.vsode` directory VS Code calls this function that updates the
- * current configuration.
+ * Whenever you save the user-level `settings.json` or the one located in the 
+ * `.vsode` directory VS Code calls this function that updates the current 
+ * configuration.
  */
 export function updateFromConfig(): void {
     const config = vscode.workspace.getConfiguration("modaledit")
@@ -399,39 +403,46 @@ async function executeConditional(cond: Conditional, selecting: boolean):
         await execute(cond[branch], selecting)
 }
 /**
- * Command arguments can be given as strings which will be evaluated to get
- * the actual arguments. 
+ * Parameterized commands can get their arguments in two forms: as a string 
+ * that is evaluated to get the actual arguments, or as an object. Before 
+ * executing the command, we inspect the `repeat` property. If it is string
+ * we evaluate it, and check if the result is a number. If so, we update the 
+ * `repeat` variable that designates repetition count. If not, we leave it as 
+ * default (1). The sub-function `exec` runs the command `repeat` times. 
  */
 async function executeParameterized(action: Parameterized, selecting: boolean) {
-    let times = 1
-    async function executeCommand(command: string, args?: any) {
-        for (let i = 0; i < times; i++)
+    let repeat = 1
+    async function exec(command: string, args?: any) {
+        for (let i = 0; i < repeat; i++)
             await executeVSCommand(action.command, args)
     }
     if (action.repeat) {
         if (isString(action.repeat)) {
             let val = evalString(action.repeat, selecting)
             if (isNumber(val))
-                times = val
+                repeat = val
         }
         else
-            times = action.repeat
+            repeat = action.repeat
     }
     if (action.args) {
         if (typeof action.args === 'string')
-            await executeCommand(action.command,
+            await exec(action.command,
                 evalString(action.args, selecting))
         else
-            await executeCommand(action.command, action.args)
+            await exec(action.command, action.args)
     }
     else
-        await executeCommand(action.command)
+        await exec(action.command)
 }
 /**
  * ## Executing Actions
  * 
  * Before running any commands, we need to identify which type of action we got.
- * Depending on the type we use different function to execute the command.
+ * Depending on the type we use different function to execute the command. If
+ * the action is not a command, it has to be a keymap. Since we resolved `id` 
+ * referenences in `validateAndResolveKeymaps`, an action has to be a keymap 
+ * object at this point. We set the new keymap as the active one.
  */
 async function execute(action: Action, selecting: boolean): Promise<void> {
     keymap = rootKeymap

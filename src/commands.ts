@@ -5,8 +5,10 @@
  * the extension state; which mode we are in, search parameters, bookmarks,
  * quick snippets, etc.
  */
+//#region -c commands.ts imports
 import * as vscode from 'vscode'
 import * as actions from './actions'
+//#endregion
 /**
  * ## Command Arguments
  * 

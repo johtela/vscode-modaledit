@@ -11,7 +11,7 @@ As in Vim, the goal of the extension is to save your keystrokes and make editing
 as fast as possible. Unlike most Vim emulators, ModalEdit leverages the 
 built-in features of VS Code. It uses commands provided by VS Code and other 
 extensions. You can build complex operations by arranging commands into 
-sequences. You can even define conditional commands that do different things 
+sequences. You can define conditional commands that do different things 
 based on editor state. Also, you can map these commands to arbitrarily long 
 keyboard sequences.
 
@@ -88,6 +88,7 @@ executed by defining an object with prefined properties:
 "<key>":  {
     "command": "<command>",
     "args": { ... } | "{ ... }"
+    "repeat": number | "<JS expression>"
 }
 ```
 The `<command>` is again a valid VS Code command. The `args` property contains 
@@ -97,14 +98,20 @@ treats it as a JavaScript expression. It evaluates the expression and passes the
 result to the command. The following variables can be used inside expression 
 strings:
 
-| Variable      | Type      | Description 
-| ------------- | --------- | -------------------------------------------------
-| `__file`      | `string`  | The file name of the document that is edited.
-| `__line`      | `number`  | The line number where the cursor is currently on.
-| `__col`       | `number`  | The column number where the cursor is currently on.
-| `__char`      | `string`  | The character under the cursor.
-| `__selection` | `string`  | Currently selected text.
-| `__selecting` | `boolean` | Flag that indicates whether selection is active.
+| Variable        | Type       | Description 
+| --------------- | ---------- | -------------------------------------------------
+| `__file`        | `string`   | The file name of the document that is edited.
+| `__line`        | `number`   | The line number where the cursor is currently on.
+| `__col`         | `number`   | The column number where the cursor is currently on.
+| `__char`        | `string`   | The character under the cursor.
+| `__selection`   | `string`   | Currently selected text.
+| `__selecting`   | `boolean`  | Flag that indicates whether selection is active.
+| `__keySequence` | `string[]` | Array of keys that were pressed to invoke the command. 
+
+The `repeat` property allows you to run the command multiple times. If the value
+of the property is number, it directly determines the repetition count. If it is
+a string, ModalEdit evaluates it as JS expression and checks if the result is a
+number. If not, the command is run once as by default. 
 
 Below is an example that maps key `o` to a command that moves the cursor to the 
 end of line. It also selects the jumped range, if we have selection active.
@@ -189,7 +196,7 @@ The example below defines two commands that are bound to key sequences `g - f`
         "command": "modaledit.search",
         "args": {}
     },
-    "b": {
+    "b": 
         "command": "modaledit.search",
         "args": {
             "backwards": true
@@ -197,6 +204,90 @@ The example below defines two commands that are bound to key sequences `g - f`
     }
 }
 ```
+
+### Defining Recursive Keymaps
+
+Version 1.5 of ModalEdit introduced the possibility to create recursive keymaps.
+With this feature you can define arbitrarily long keyboard sequences. This is
+useful, for example, for creating commands that you can repeat by entering first
+a number followed by a command key. Keymaps got two new features to enable this
+functionality.
+
+#### Key Ranges
+
+You can add multiple characters to a keybinding comma `,` and dash `-`. For
+example, `a,b` bind both `a` and `b` to the same action. You can also add ranges
+like any numeric character `0-9`. The ASCII code of the first character must be 
+smaller than the second one's. You can also combine these notations; for
+instance, range `a,d-f` maps keys `a`, `d`, `e`, and `f` to a same action.
+
+#### Keymap IDs
+
+By giving keymap a numeric ID, you can refer to it in another (or same) keymap.
+With key ranges, this allows you to create a binding that can take theoretically
+infinitely long key sequence. The example below shows how you can define 
+commands like `3w` that moves the cursor forward by three words. First we define
+the commands that moves or select the previous/next word (with keys `b` and `w`), 
+and then we create a binding that matches a positive number using key ranges and 
+a recursive keymap. We also use the 
+[`modaledit.typeNormalKeys` command](#invoking-key-bindings) to invoke the
+existing key bindings and the [`repeat` property](#commands-with-arguments) to
+repeat the command.
+```js
+        "w": {
+            "condition": "__selecting",
+            "true": "cursorWordStartRightSelect",
+            "false": "cursorWordStartRight"
+        },
+        "b": {
+            "condition": "__selecting",
+            "true": "cursorWordStartLeftSelect",
+            "false": "cursorWordStartLeft"
+        },
+        "1-9": {
+            "id": 1,
+            "help": "Enter count followed by [w, b]",
+            "0-9": 1,
+            "w,b": {
+                "command": "modaledit.typeNormalKeys",
+                "args": "{ keys: __keySequence[__keySequence.length - 1] }",
+                "repeat": "Number(__keySequence.slice(0, -1).join(''))"
+            }
+        }
+```
+We give the keymap attached to key range `1-9` the `id` of 1. When that keymap 
+is active pressing key `0-9` will "jump" back to the same keymap. That is 
+designated by the number `1` in the key binding. Only when the user presses 
+some other key we get out of this keymap. If the user presses `w` or `b`, we 
+run the command bound to the respective key. We get the repetition count by 
+slicing the all but last character from the `__keySequence` array and 
+converting that to number. The command key is the last item of the 
+`__keySequence`. The picture below illustrates how keymap and command objects 
+are stored in memory.
+
+![recursive keymap](images/recursive-keymap-example.png)
+
+It is also possible to jump to another keymap, which enables even more 
+complicated keyboard sequences. The only restriction is that you can only jump 
+to a key binding which is already defined. I.e. you cannot refer to an ID of a 
+keymap that appears later in the configuration.
+
+> To better understand how keymaps work behind the scenes check the source
+> [documentation][10]. 
+
+Another new feature used in the example above is the optional `help` property 
+in the keymap. The contents of the property is shown in the status bar when the 
+keymap is active. It makes using long keyboard sequences easier by providing a 
+hint what keys you can press next.
+
+### Debugging Keybindings
+
+If you are not sure that your bindings are correct, check the ModalEdit's
+output log. You can find it by opening **View - Output** and then choosing the
+**ModalEdit** from the drop-down menu. Errors in configuration will be reported 
+there. If your configuration is ok, you should see the following message. 
+
+![output log](images/output-log.png)
 
 ### Changing Cursors
 
@@ -429,3 +520,4 @@ great idea and helping me jump start my project.
 [7]: https://gist.github.com/johtela/b63232747fdd465748fedb9ca6422c84
 [8]: https://kakoune.org/why-kakoune/why-kakoune.html
 [9]: https://johtela.github.io/vscode-modaledit/docs/.vscode/settings.html
+[10]: https://johtela.github.io/vscode-modaledit/docs/src/actions.html

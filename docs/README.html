@@ -134,7 +134,7 @@ suit your preferences.</p>
 as fast as possible. Unlike most Vim emulators, ModalEdit leverages the
 built-in features of VS Code. It uses commands provided by VS Code and other
 extensions. You can build complex operations by arranging commands into
-sequences. You can even define conditional commands that do different things
+sequences. You can define conditional commands that do different things
 based on editor state. Also, you can map these commands to arbitrarily long
 keyboard sequences.</p>
 <h2 id="getting-started">Getting Started</h2>
@@ -193,6 +193,7 @@ executed by defining an object with prefined properties:</p>
 <pre class="syntaxhighlight"><code><span class="string">"&lt;key&gt;"</span>:  {
     <span class="string">"command"</span>: <span class="string">"&lt;command&gt;"</span>,
     <span class="string">"args"</span>: { ... } | <span class="string">"{ ... }"</span>
+    <span class="string">"repeat"</span>: number | <span class="string">"&lt;JS expression&gt;"</span>
 }
 </code></pre>
 <p>The <code>&lt;command&gt;</code> is again a valid VS Code command. The <code>args</code> property contains
@@ -240,9 +241,18 @@ strings:</p>
 <td><code>boolean</code></td>
 <td>Flag that indicates whether selection is active.</td>
 </tr>
+<tr>
+<td><code>__keySequence</code></td>
+<td><code>string[]</code></td>
+<td>Array of keys that were pressed to invoke the command.</td>
+</tr>
 </tbody>
 </table>
-</div><p>Below is an example that maps key <code>o</code> to a command that moves the cursor to the
+</div><p>The <code>repeat</code> property allows you to run the command multiple times. If the value
+of the property is number, it directly determines the repetition count. If it is
+a string, ModalEdit evaluates it as JS expression and checks if the result is a
+number. If not, the command is run once as by default.</p>
+<p>Below is an example that maps key <code>o</code> to a command that moves the cursor to the
 end of line. It also selects the jumped range, if we have selection active.</p>
 
 <pre class="syntaxhighlight"><code><span class="string">"o"</span>: {
@@ -317,7 +327,7 @@ the command you first press <code>&lt;key1&gt;</code> in normal mode followed by
         <span class="string">"command"</span>: <span class="string">"modaledit.search"</span>,
         <span class="string">"args"</span>: {}
     },
-    <span class="string">"b"</span>: {
+    <span class="string">"b"</span>: 
         <span class="string">"command"</span>: <span class="string">"modaledit.search"</span>,
         <span class="string">"args"</span>: {
             <span class="string">"backwards"</span>: <span class="literal">true</span>
@@ -325,6 +335,79 @@ the command you first press <code>&lt;key1&gt;</code> in normal mode followed by
     }
 }
 </code></pre>
+<h3 id="defining-recursive-keymaps">Defining Recursive Keymaps</h3>
+<p>Version 1.5 of ModalEdit introduced the possibility to create recursive keymaps.
+With this feature you can define arbitrarily long keyboard sequences. This is
+useful, for example, for creating commands that you can repeat by entering first
+a number followed by a command key. Keymaps got two new features to enable this
+functionality.</p>
+<h4 id="key-ranges">Key Ranges</h4>
+<p>You can add multiple characters to a keybinding comma <code>,</code> and dash <code>-</code>. For
+example, <code>a,b</code> bind both <code>a</code> and <code>b</code> to the same action. You can also add ranges
+like any numeric character <code>0-9</code>. The ASCII code of the first character must be
+smaller than the second one's. You can also combine these notations; for
+instance, range <code>a,d-f</code> maps keys <code>a</code>, <code>d</code>, <code>e</code>, and <code>f</code> to a same action.</p>
+<h4 id="keymap-i-ds">Keymap IDs</h4>
+<p>By giving keymap a numeric ID, you can refer to it in another (or same) keymap.
+With key ranges, this allows you to create a binding that can take theoretically
+infinitely long key sequence. The example below shows how you can define
+commands like <code>3w</code> that moves the cursor forward by three words. First we define
+the commands that moves or select the previous/next word (with keys <code>b</code> and <code>w</code>),
+and then we create a binding that matches a positive number using key ranges and
+a recursive keymap. We also use the
+<a href="#invoking-key-bindings"><code>modaledit.typeNormalKeys</code> command</a> to invoke the
+existing key bindings and the <a href="#commands-with-arguments"><code>repeat</code> property</a> to
+repeat the command.</p>
+
+<pre class="syntaxhighlight"><code>        <span class="string">"w"</span>: {
+            <span class="string">"condition"</span>: <span class="string">"__selecting"</span>,
+            <span class="string">"true"</span>: <span class="string">"cursorWordStartRightSelect"</span>,
+            <span class="string">"false"</span>: <span class="string">"cursorWordStartRight"</span>
+        },
+        <span class="string">"b"</span>: {
+            <span class="string">"condition"</span>: <span class="string">"__selecting"</span>,
+            <span class="string">"true"</span>: <span class="string">"cursorWordStartLeftSelect"</span>,
+            <span class="string">"false"</span>: <span class="string">"cursorWordStartLeft"</span>
+        },
+        <span class="string">"1-9"</span>: {
+            <span class="string">"id"</span>: <span class="number">1</span>,
+            <span class="string">"help"</span>: <span class="string">"Enter count followed by [w, b]"</span>,
+            <span class="string">"0-9"</span>: <span class="number">1</span>,
+            <span class="string">"w,b"</span>: {
+                <span class="string">"command"</span>: <span class="string">"modaledit.typeNormalKeys"</span>,
+                <span class="string">"args"</span>: <span class="string">"{ keys: __keySequence[__keySequence.length - 1] }"</span>,
+                <span class="string">"repeat"</span>: <span class="string">"Number(__keySequence.slice(0, -1).join(''))"</span>
+            }
+        }
+</code></pre>
+<p>We give the keymap attached to key range <code>1-9</code> the <code>id</code> of 1. When that keymap
+is active pressing key <code>0-9</code> will &quot;jump&quot; back to the same keymap. That is
+designated by the number <code>1</code> in the key binding. Only when the user presses
+some other key we get out of this keymap. If the user presses <code>w</code> or <code>b</code>, we
+run the command bound to the respective key. We get the repetition count by
+slicing the all but last character from the <code>__keySequence</code> array and
+converting that to number. The command key is the last item of the
+<code>__keySequence</code>. The picture below illustrates how keymap and command objects
+are stored in memory.</p>
+<p><img src="images/recursive-keymap-example.png" alt="recursive keymap"></p>
+<p>It is also possible to jump to another keymap, which enables even more
+complicated keyboard sequences. The only restriction is that you can only jump
+to a key binding which is already defined. I.e. you cannot refer to an ID of a
+keymap that appears later in the configuration.</p>
+<blockquote>
+<p>To better understand how keymaps work behind the scenes check the source
+<a href="https://johtela.github.io/vscode-modaledit/docs/src/actions.html">documentation</a>.</p>
+</blockquote>
+<p>Another new feature used in the example above is the optional <code>help</code> property
+in the keymap. The contents of the property is shown in the status bar when the
+keymap is active. It makes using long keyboard sequences easier by providing a
+hint what keys you can press next.</p>
+<h3 id="debugging-keybindings">Debugging Keybindings</h3>
+<p>If you are not sure that your bindings are correct, check the ModalEdit's
+output log. You can find it by opening <strong>View - Output</strong> and then choosing the
+<strong>ModalEdit</strong> from the drop-down menu. Errors in configuration will be reported
+there. If your configuration is ok, you should see the following message.</p>
+<p><img src="images/output-log.png" alt="output log"></p>
 <h3 id="changing-cursors">Changing Cursors</h3>
 <p>You can set the cursor shape shown in each mode by changing the following
 settings.</p>
