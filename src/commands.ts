@@ -61,6 +61,26 @@ interface TypeNormalKeysArgs {
     keys: string
 }
 /**
+ * ### Select Between Arguments
+ * 
+ * The `selectBetween` command takes as arguments the strings which delimit
+ * the selection. Both of them are optional, but one of them needs to be
+ * defined. if the `from` argument is missing, the selection goes from the 
+ * cursor position forwards to the `to` string. If the `to` is missing the
+ * selection goes backwards till the `from` string. 
+ * 
+ * The `inclusive` flag tells if the delimiter strings are included in the 
+ * selection or not. By default the delimiter strings are not part of the 
+ * selection. Last, the `caseSensitive` flag makes the search case sensitive. 
+ * When this flag is missing or false the search is case insensitive.
+ */
+interface SelectBetweenArgs {
+    from: string
+    to: string
+    inclusive: boolean
+    caseSensitive: boolean
+}
+/**
  * ## State Variables
  * 
  * The enabler for modal editing is the `type` event that VS Code provides. It
@@ -127,6 +147,7 @@ const fillSnippetArgsId = "modaledit.fillSnippetArgs"
 const defineQuickSnippetId = "modaledit.defineQuickSnippet"
 const insertQuickSnippetId = "modaledit.insertQuickSnippet"
 const typeNormalKeysId = "modaledit.typeNormalKeys"
+const selectBetweenId = "modaledit.selectBetween"
 /**
  * ## Registering Commands
  * 
@@ -151,7 +172,8 @@ export function register(context: vscode.ExtensionContext) {
         vscode.commands.registerCommand(fillSnippetArgsId, fillSnippetArgs),
         vscode.commands.registerCommand(defineQuickSnippetId, defineQuickSnippet),
         vscode.commands.registerCommand(insertQuickSnippetId, insertQuickSnippet),
-        vscode.commands.registerCommand(typeNormalKeysId, typeNormalKeys)
+        vscode.commands.registerCommand(typeNormalKeysId, typeNormalKeys),
+        vscode.commands.registerCommand(selectBetweenId, selectBetween)
     )
     statusBarItem = vscode.window.createStatusBarItem(
         vscode.StatusBarAlignment.Left);
@@ -250,7 +272,7 @@ export function updateCursorAndStatusBar(editor: vscode.TextEditor | undefined) 
 export function updateStatusBar(editor: vscode.TextEditor | undefined,
     help?: string) {
     if (editor) {
-        let text: string 
+        let text: string
         if (searching)
             text = `SEARCH [${searchBackwards ? "B" : "F"
                 }${searchCaseSensitive ? "S" : ""}]: ${searchString}`
@@ -427,7 +449,7 @@ function highlightNextMatch(editor: vscode.TextEditor, startPos: vscode.Position
             let newPos = doc.positionAt(offs)
             let start = searchSelectTillMatch ? searchStartPos : newPos
             changeSelection(editor, start,
-                newPos.with(undefined, newPos.character + 
+                newPos.with(undefined, newPos.character +
                     (newPos.isBefore(start) ? 0 : searchString.length)))
         }
     }
@@ -500,12 +522,12 @@ async function nextMatch(): Promise<void> {
         if (searchBackwards)
             highlightNextMatch(editor, s.active, searchString,
                 (searchSelectTillMatch && s.active.isBefore(searchStartPos)) ||
-                    s.isEmpty ? -1 : 
+                    s.isEmpty ? -1 :
                     -searchString.length - 1)
         else
             highlightNextMatch(editor, s.active, searchString,
                 searchSelectTillMatch && s.active.isBefore(searchStartPos) ?
-                    searchString.length : 
+                    searchString.length :
                     s.isEmpty ? 1 : 0)
         await typeAfterMatch()
     }
@@ -593,8 +615,42 @@ async function insertQuickSnippet(args?: QuickSnippetArgs): Promise<void> {
  * Implementing that is as easy as calling the keyboard handler.
  */
 async function typeNormalKeys(args: TypeNormalKeysArgs): Promise<void> {
-    if (typeof args !== 'object' || typeof(args.keys) !== 'string')
-        throw Error(`${typeNormalKeysId}: Invalid args: ${JSON.stringify(args)}`) 
+    if (typeof args !== 'object' || typeof (args.keys) !== 'string')
+        throw Error(`${typeNormalKeysId}: Invalid args: ${JSON.stringify(args)}`)
     for (let i = 0; i < args.keys.length; i++)
         await onType({ text: args.keys[i] })
+}
+/**
+ * ## Advanced Selection Command
+ * 
+ * For selecting ranges of text between two characters (inside parenthesis, for
+ * ecample) we add the `modaledit.selectBetween` command. 
+ */
+async function selectBetween(args: SelectBetweenArgs): Promise<void> {
+    let editor = vscode.window.activeTextEditor
+    if (!editor)
+        return
+    if (typeof args !== 'object')
+        throw Error(`${selectBetweenId}: Invalid args: ${JSON.stringify(args)}`)
+    let doc = editor.document
+    let cursorOffs = doc.offsetAt(editor.selection.active)
+    let docText = args.caseSensitive ?
+        doc.getText() : doc.getText().toLowerCase()
+    let fromOffs = args.from ?
+        docText.lastIndexOf(args.caseSensitive ?
+            args.from : args.from.toLowerCase(), cursorOffs) :
+        cursorOffs
+    let toOffs = args.to ?
+        docText.indexOf(args.caseSensitive ?
+            args.to : args.to.toLowerCase(), cursorOffs) :
+        cursorOffs
+    if (fromOffs < 0)
+        fromOffs = cursorOffs
+    else if (!args.inclusive && args.from)
+        fromOffs += args.from.length
+    if (toOffs < 0)
+        toOffs = cursorOffs
+    else if (args.inclusive && args.to)
+        toOffs += args.to.length 
+    changeSelection(editor, doc.positionAt(fromOffs), doc.positionAt(toOffs))
 }
