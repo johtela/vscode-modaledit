@@ -63,22 +63,31 @@ interface TypeNormalKeysArgs {
 /**
  * ### Select Between Arguments
  * 
- * The `selectBetween` command takes as arguments the strings which delimit
- * the selection. Both of them are optional, but one of them needs to be
- * defined. if the `from` argument is missing, the selection goes from the 
- * cursor position forwards to the `to` string. If the `to` is missing the
- * selection goes backwards till the `from` string. 
+ * The `selectBetween` command takes as arguments the strings/regular 
+ * expressions which delimit the text to be selected. Both of them are optional, 
+ * but in order for the command to do anything one of them needs to be defined. 
+ * If the `from` argument is missing, the selection goes from the cursor 
+ * position forwards to the `to` string. If the `to` is missing the selection 
+ * goes backwards till the `from` string. 
+ * 
+ * If the `regex` flag is on, `from` and `to` strings are treated as regular
+ * expressions in the search.
  * 
  * The `inclusive` flag tells if the delimiter strings are included in the 
  * selection or not. By default the delimiter strings are not part of the 
  * selection. Last, the `caseSensitive` flag makes the search case sensitive. 
  * When this flag is missing or false the search is case insensitive.
+ * 
+ * By default the search scope is the current line. If you want search inside
+ * the whole document, set the `docScope` flag.
  */
 interface SelectBetweenArgs {
     from: string
     to: string
+    regex: boolean
     inclusive: boolean
     caseSensitive: boolean
+    docScope: boolean
 }
 /**
  * ## State Variables
@@ -633,24 +642,52 @@ async function selectBetween(args: SelectBetweenArgs): Promise<void> {
     if (typeof args !== 'object')
         throw Error(`${selectBetweenId}: Invalid args: ${JSON.stringify(args)}`)
     let doc = editor.document
-    let cursorOffs = doc.offsetAt(editor.selection.active)
-    let docText = args.caseSensitive ?
-        doc.getText() : doc.getText().toLowerCase()
-    let fromOffs = args.from ?
-        docText.lastIndexOf(args.caseSensitive ?
-            args.from : args.from.toLowerCase(), cursorOffs) :
-        cursorOffs
-    let toOffs = args.to ?
-        docText.indexOf(args.caseSensitive ?
-            args.to : args.to.toLowerCase(), cursorOffs) :
-        cursorOffs
-    if (fromOffs < 0)
-        fromOffs = cursorOffs
-    else if (!args.inclusive && args.from)
-        fromOffs += args.from.length
-    if (toOffs < 0)
-        toOffs = cursorOffs
-    else if (args.inclusive && args.to)
-        toOffs += args.to.length 
+    let cursorPos = editor.selection.active
+    let startPos = new vscode.Position(args.docScope ? 0 : cursorPos.line, 0)
+    let endPos = doc.lineAt(args.docScope ? doc.lineCount - 1 : cursorPos.line)
+        .range.end
+    let cursorOffs = doc.offsetAt(cursorPos)
+    let startOffs = doc.offsetAt(startPos) 
+    let endOffs = doc.offsetAt(endPos)
+    let fromOffs = cursorOffs
+    let toOffs = cursorOffs
+    if (args.regex) {
+        if (args.from) {
+            fromOffs = startOffs
+            let text = doc.getText(new vscode.Range(startPos, cursorPos))
+            let re = new RegExp(args.from, args.caseSensitive ? "g" : "gi")
+            let match: RegExpExecArray | null = null
+            while ((match = re.exec(text)) != null) {
+                fromOffs = startOffs + match.index +
+                    (args.inclusive ? 0 : match[0].length)
+            }
+        }
+        if (args.to) {
+            toOffs = endOffs
+            let text = doc.getText(new vscode.Range(cursorPos, endPos))
+            let re = new RegExp(args.to, args.caseSensitive ? undefined : "i")
+            let match = re.exec(text)
+            if (match)
+                toOffs = cursorOffs + match.index +
+                    (args.inclusive ? match[0].length : 0)
+        }
+    }
+    else {
+        let text = doc.getText(new vscode.Range(startPos, endPos))
+        if (args.caseSensitive)
+            text = text.toLowerCase()
+        if (args.from) {
+            fromOffs = text.lastIndexOf(args.caseSensitive ?
+                args.from : args.from.toLowerCase(), cursorOffs - startOffs)
+            fromOffs = fromOffs < 0 ? startOffs :
+                startOffs + fromOffs + (args.inclusive ? 0 : args.from.length)
+        }
+        if (args.to) {
+            toOffs = text.indexOf(args.caseSensitive ?
+                args.to : args.to.toLowerCase(), cursorOffs - startOffs)
+            toOffs = toOffs < 0 ? endOffs :
+                startOffs + toOffs + (args.inclusive ? args.to.length : 0)
+        }
+    }
     changeSelection(editor, doc.positionAt(fromOffs), doc.positionAt(toOffs))
 }

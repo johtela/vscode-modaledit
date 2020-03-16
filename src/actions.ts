@@ -373,6 +373,7 @@ function evalString(str: string, __selecting: boolean): any {
     let __char = undefined
     let __selection = undefined
     let __keySequence = keySequence
+    let __keys = keySequence
     let editor = vscode.window.activeTextEditor
     if (editor) {
         let cursor = editor.selection.active
