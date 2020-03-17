@@ -306,7 +306,7 @@ as selection mode is turned on automatically.</p>
 the cursor to the start of the next and previous word. For these we need to use
 conditional commands because <code>cursorMove</code> falls short in this use case.</p>
 
-<pre class="syntaxhighlight"><code>        "w":  {
+<pre class="syntaxhighlight"><code>        "w": {
             "condition": "__selecting",
             "true": "cursorWordStartRightSelect",
             "false": "cursorWordStartRight"
@@ -321,7 +321,7 @@ conditional commands because <code>cursorMove</code> falls short in this use cas
 
 <pre class="syntaxhighlight"><code>        "e": {
             "condition": "__selecting",
-            "true": "cursorWordEndRightSelect", 
+            "true": "cursorWordEndRightSelect",
             "false": "cursorWordEndRight"
         },
 </code></pre>
@@ -364,7 +364,7 @@ file.</p>
 
 <pre class="syntaxhighlight"><code>            "g": {
                 "condition": "__selecting",
-                "true": "cursorTopSelect", 
+                "true": "cursorTopSelect",
                 "false": "cursorTop"
             },
         },
@@ -373,7 +373,7 @@ file.</p>
 
 <pre class="syntaxhighlight"><code>        "G": {
             "condition": "__selecting",
-            "true": "cursorBottomSelect", 
+            "true": "cursorBottomSelect",
             "false": "cursorBottom"
         },
 </code></pre>
@@ -388,20 +388,20 @@ incremental search command which can be customized to this purpose.</p>
             "condition": "__selecting",
             "true": {
                 "command": "modaledit.search",
-                "args": { 
-                    "caseSensitive": true, 
-                    "acceptAfter": 1, 
-                    "selectTillMatch": true, 
+                "args": {
+                    "caseSensitive": true,
+                    "acceptAfter": 1,
+                    "selectTillMatch": true,
                 }
             },
             "false": {
                 "command": "modaledit.search",
-                "args": { 
-                    "caseSensitive": true, 
-                    "acceptAfter": 1, 
-                    "typeAfterAccept": "h", 
+                "args": {
+                    "caseSensitive": true,
+                    "acceptAfter": 1,
+                    "typeAfterAccept": "h",
                 }
-            }, 
+            },
         },
 </code></pre>
 <p>The command is a bit involved, so let's explain what each argument does.</p>
@@ -424,22 +424,22 @@ character. The <code>backwards</code> parameter switches the search direction.</
             "condition": "__selecting",
             "true": {
                 "command": "modaledit.search",
-                "args": { 
-                    "caseSensitive": true, 
-                    "acceptAfter": 1, 
-                    "selectTillMatch": true, 
+                "args": {
+                    "caseSensitive": true,
+                    "acceptAfter": 1,
+                    "selectTillMatch": true,
                     "backwards": true,
                 }
             },
             "false": {
                 "command": "modaledit.search",
-                "args": { 
-                    "caseSensitive": true, 
-                    "acceptAfter": 1, 
-                    "typeAfterAccept": "h", 
+                "args": {
+                    "caseSensitive": true,
+                    "acceptAfter": 1,
+                    "typeAfterAccept": "h",
                     "backwards": true
                 }
-            }, 
+            },
         },
 </code></pre>
 <p>With <code>;</code> and <code>,</code> keys you can repeat the previous <code>f</code> or <code>F</code> commands either
@@ -491,6 +491,66 @@ need to decide whether you want to remap the existing commands first.</p>
     }
 }
 </code></pre>
+<h2 id="commands-with-counts">Commands with Counts</h2>
+<p>Some commands allow repeating them by typing first a number. For example, <code>3j</code>
+moves the cursor down three lines. Implementing these kind of commands is
+possible starting from ModalEdit version 1.5 which introduced key ranges and
+<a href="https://johtela.github.io/vscode-modaledit/docs/README.html#defining-recursive-keymaps">recursive keymaps</a>.</p>
+<p>First of all, we define a keymap that is activated when pressing a number key
+<code>1-9</code>. We give the keymap an unique <code>id</code> which we can then recursively &quot;call&quot;.
+We also add a <code>help</code> string that is shown in the status when the keymap is
+active (after user has pressed a number key).</p>
+<p>Then we define the recursive part; we want to stay in the same keymap as long
+as user presses another number key. We implement this by defining inner key
+range <code>0-9</code> which maps to the <code>id</code> 1. Whenever you specify a number as the
+target for a mapping, ModalEdit treats it as an <code>id</code> that has to be assigned to
+a previously defined keymap. In this case we map back to the same keymap, but
+you can also jump to other keymaps too.</p>
+<p>When the user presses some other than numeric key, we break out from the loop
+and run an actual command. The number that was typed is stored in the <code>__keys</code>
+variable which is available to all JS expressions. In this case we use it to get
+the repeat count as a number. The JS expression in the <code>repeat</code> argument does
+just this. We also get the actual command from the last item of the <code>__keys</code>
+array and pass it to the <code>modaledit.typeNormalKeys</code> which runs the command
+mapped to the key.</p>
+
+<pre class="syntaxhighlight"><code>        "1-9": {
+            "1-9": {
+                "id": 1,
+                "help": "Enter count followed by [h,j,k,l,w,b,e]",
+                "0-9": 1,
+                "h,j,k,l,w,b,e": {
+                    "command": "modaledit.typeNormalKeys",
+                    "args": "{ keys: __keys[__keys.length - 1] }",
+                    "repeat": "Number(__keys.slice(0, -1).join(''))"
+                },
+</code></pre>
+<p>With this one reletively simply mapping we can implement the repeating
+functionality for any command that we have already defined.</p>
+<h3 id="jumping-to-line">Jumping to Line</h3>
+<p>Another command that has a number prefix is <em>x</em><code>G</code> where <em>x</em> is the line number
+you want to jump to. Let's add that as well in the same keymap. While the
+mapping is trivial the command itself is a bit involved, because we need to use
+two commands to do the jumping. First we move the target line to the top of the
+screen, and then we move the cursor to the same line. Unfortunately the
+built-in command <code>workbench.action.gotoLine</code> does not take any arguments , so
+we have to reinvent the wheel.</p>
+
+<pre class="syntaxhighlight"><code>                "G": [
+                    {
+                        "command": "revealLine",
+                        "args": "{ lineNumber: Number(__keys.slice(0, -1).join('')) - 1, at: 'top' }"
+                    },
+                    {
+                        "command": "cursorMove",
+                        "args": {
+                            "to": "viewPortTop"
+                        }
+                    }
+                ]
+            }
+        },
+</code></pre>
 <h2 id="editing">Editing</h2>
 <p>Now we'll implement Vim's common editing commands. We only add the ones that
 have counterparts in VS Code.</p>
@@ -519,15 +579,117 @@ changes the whole word under the cursor.</p>
                 "deleteWordEndRight",
                 "modaledit.enterInsert"
             ],
-            "i": {
-                "w": [
-                    "deleteWordStartLeft",
-                    "deleteWordEndRight",
+</code></pre>
+<h3 id="change-until-around-inside">Change Until/Around/Inside</h3>
+<p>Very useful variants of change commands are those which allow changing text
+upto a given chracter or between given characters. For example, <code>ct_</code> changes
+the text until next underscore, and <code>ci&quot;</code> changes the text inside quotation
+marks. The cursor can be anywhere inside the quotation marks and the command
+still works.</p>
+<p>To help implement these type of operations version 1.6 included the
+<a href="https://johtela.github.io/vscode-modaledit/docs/README.html#selecting-text-between-delimiters"><code>modaledit.selectBetween</code> command</a>. It is a swiss army knife
+type of command that serves many use cases. We use it first to implement the
+&quot;change until&quot; commands: <code>ct</code><em>x</em> changes the text fromthe cursor till the next
+occurrence of <em>x</em>. <code>cf</code><em>x</em> does the same and deletes <em>x</em> too.</p>
+
+<pre class="syntaxhighlight"><code>            "t,f": {
+                "help": "Change until _",
+                " -~": [
+                    {
+                        "command": "modaledit.selectBetween",
+                        "args": "{ to: __keys[2], inclusive: __keys[1] == 'f' }"
+                    },
+                    "deleteLeft",
+                    "modaledit.enterInsert"
+                ]
+            },
+</code></pre>
+<p>We exploit key ranges to capture all visible ASCII character from spacebar to
+tilde. We find the next occurrence of the character typed last (found in
+<code>__keys[2]</code>) and select the range. Note that <code>selectBetween</code> only searches till
+the end of the current line by default. If you want to search till the end of
+the whole document, set the <code>docScope</code> flag to <code>true</code>. When only the <code>to</code>
+argument is specified, the selection starts from the cursor position.</p>
+<p>If the user pressed <code>f</code> instead of <code>t</code> as the second key in the sequence, we
+set the <code>inclusive</code> flag to true. That extends the selection over the searched
+character.</p>
+<p>Next we add the change around/inside commands. The first variant takes care of
+the characters that are not braces.</p>
+
+<pre class="syntaxhighlight"><code>            "a,i": {
+                "help": "Change around/inside _",
+                " -/,:-@,[-`,{-~": [
+                    {
+                        "command": "modaledit.selectBetween",
+                        "args": "{ from: __keys[2], to: __keys[2], inclusive: __keys[1] == 'a' }"
+                    },
+                    "deleteLeft",
+                    "modaledit.enterInsert"
+                ],
+</code></pre>
+<p>The rather cryptic key range captures all visible non-alphanumeric ASCII
+characters. The rest of the command is exactly same as in the previous example.
+The only difference is that we store the character to be searched into both
+<code>from</code> and <code>to</code> arguments.</p>
+<p>Now we can add the commands that change text inside braces, such as <code>ci{</code> or
+<code>ca]</code>.</p>
+
+<pre class="syntaxhighlight"><code>                "(,)": [
+                    {
+                        "command": "modaledit.selectBetween",
+                        "args": "{ from: '(', to: ')', inclusive: __keys[1] == 'a' }"
+                    },
+                    "deleteLeft",
+                    "modaledit.enterInsert"
+                ],
+                "{,}": [
+                    {
+                        "command": "modaledit.selectBetween",
+                        "args": "{ from: '{', to: '}', inclusive: __keys[1] == 'a' }"
+                    },
+                    "deleteLeft",
+                    "modaledit.enterInsert"
+                ],
+                "[,]": [
+                    {
+                        "command": "modaledit.selectBetween",
+                        "args": "{ from: '[', to: ']', inclusive: __keys[1] == 'a' }"
+                    },
+                    "deleteLeft",
+                    "modaledit.enterInsert"
+                ],
+                "&lt;,&gt;": [
+                    {
+                        "command": "modaledit.selectBetween",
+                        "args": "{ from: '&lt;', to: '&gt;', inclusive: __keys[1] == 'a' }"
+                    },
+                    "deleteLeft",
+                    "modaledit.enterInsert"
+                ],
+</code></pre>
+<p>It is also useful to be able to change the current word the cursor is on. You
+can do this by typing <code>ciw</code> (preserves separators) or <code>caw</code>. We use regular
+expressions as the delimiters in this case. The <code>\N</code> regular expression matches
+all non-alphanumeric characters (except underscore). Note the double escaping
+needed to enter the <code>\</code> character. There are other commands we could use to
+implement the operation, but this version works reliably in all scenarios.</p>
+
+<pre class="syntaxhighlight"><code>                "w": [
+                    {
+                        "command": "modaledit.selectBetween",
+                        "args": "{ from: '\\\\W', to: '\\\\W', regex: true, inclusive: __keys[1] == 'a' }"
+                    },
+                    "deleteLeft",
                     "modaledit.enterInsert"
                 ]
             }
         },
 </code></pre>
+<blockquote>
+<p>We could also implement delete commands <code>diw</code>, <code>dt-</code>, etc. in the similar
+fashion. But for the sake of keeping the tutorial short, we'll leave those
+as an exercise.</p>
+</blockquote>
 <p>A shorthand for <code>c$</code> command is <code>C</code>.</p>
 
 <pre class="syntaxhighlight"><code>        "C": [
@@ -535,8 +697,8 @@ changes the whole word under the cursor.</p>
             "modaledit.enterInsert"
         ],
 </code></pre>
-<p><em>Substition</em> commands do  basically same things as change commands; <code>s</code> changes
-the character under cursor, and <code>S</code> is same as <code>cc</code>.</p>
+<p><em>Substitution</em> commands do  basically same things as change commands; <code>s</code>
+changes the character under cursor, and <code>S</code> is same as <code>cc</code>.</p>
 
 <pre class="syntaxhighlight"><code>        "s": [
             "deleteRight",
@@ -621,60 +783,20 @@ jump quickly inside documents. Surprisingly, VS Code does not contain this
 feature out-of-the-box. Since it is easy to implement, ModalEdit fills the gap
 and adds two simple commands: <code>modaledit.defineBookmark</code> and
 <code>modaledit.goToBookmark</code>. Using these we can implement Vim's mark commands.</p>
-<p>You can potentially define dozens of bookmarks but to keep things simple, we
-support only four of them: from <code>a</code> to <code>d</code>. To define a bookmark, you type <code>ma</code>,
-for example, and to jump to that mark, type <code>`a</code>.</p>
+<p>We can define dozens of bookmarks with one definition using the character range.
+To define a bookmark, you type <code>ma</code>, for example, and to jump to that mark,
+type <code>`a</code>.</p>
 
 <pre class="syntaxhighlight"><code>        "m": {
-            "a" : {
+            "a-z": {
                 "command": "modaledit.defineBookmark",
-                "args": {
-                    "bookmark": 0
-                }
-            },
-            "b" : {
-                "command": "modaledit.defineBookmark",
-                "args": {
-                    "bookmark": 1
-                }
-            },
-            "c" : {
-                "command": "modaledit.defineBookmark",
-                "args": {
-                    "bookmark": 2
-                }
-            },
-            "d" : {
-                "command": "modaledit.defineBookmark",
-                "args": {
-                    "bookmark": 3
-                }
+                "args": "{ bookmark: __keys[1] }"
             }
         },
         "`": {
-            "a" : {
+            "a-z": {
                 "command": "modaledit.goToBookmark",
-                "args": {
-                    "bookmark": 0
-                }
-            },
-            "b" : {
-                "command": "modaledit.goToBookmark",
-                "args": {
-                    "bookmark": 1
-                }
-            },
-            "c" : {
-                "command": "modaledit.goToBookmark",
-                "args": {
-                    "bookmark": 2
-                }
-            },
-            "d" : {
-                "command": "modaledit.goToBookmark",
-                "args": {
-                    "bookmark": 3
-                }
+                "args": "{ bookmark: __keys[1] }"
             }
         },
 </code></pre>
@@ -685,15 +807,15 @@ incremental search. <code>?</code> starts a search backwards.</p>
 
 <pre class="syntaxhighlight"><code>        "/": {
             "command": "modaledit.search",
-            "args": { 
-                "caseSensitive": true 
+            "args": {
+                "caseSensitive": true
             }
         },
         "?": {
             "command": "modaledit.search",
-            "args": { 
+            "args": {
                 "caseSensitive": true,
-                "backwards": true 
+                "backwards": true
             }
         },
 </code></pre>

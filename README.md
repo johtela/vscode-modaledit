@@ -15,6 +15,11 @@ sequences. You can define conditional commands that do different things
 based on editor state. Also, you can map these commands to arbitrarily long 
 keyboard sequences.
 
+> Check out the new features in version [1.5][11] and [1.6][12], and the updated 
+> [tutorial][9]. Now you can add even more complex commands than previously,
+> such as commands that you can repeat by prefixing them with a number, and
+> commands that operate on text inside specified characters, 
+
 
 ## Getting Started
 
@@ -107,6 +112,7 @@ strings:
 | `__selection`   | `string`   | Currently selected text.
 | `__selecting`   | `boolean`  | Flag that indicates whether selection is active.
 | `__keySequence` | `string[]` | Array of keys that were pressed to invoke the command. 
+| `__keys`        | `string[]` | Alias to the `__keySequence` variable.
 
 The `repeat` property allows you to run the command multiple times. If the value
 of the property is number, it directly determines the repetition count. If it is
@@ -490,6 +496,38 @@ example runs them both one after another.
 }
 ```
 
+### Selecting Text Between Delimiters
+
+The `selectBetween` command helps implement advanced selection operations. The 
+command takes as arguments two strings/regular expressions that delimit the text 
+to be selected. Both of them are optional, but in order for the command to do 
+anything one of them needs to be defined. If the `from` argument is missing, the 
+selection goes from the cursor position forwards to the `to` string. If the `to` 
+is missing the selection goes backwards till the `from` string. In addition to
+these parameters, the command has four flags:
+
+- If the `regex` flag is on, `from` and `to` strings are treated as regular
+  expressions in the search.
+- The `inclusive` flag tells if the delimiter strings are included in the 
+  selection or not. By default the delimiter strings are not part of the 
+  selection.
+- The `caseSensitive` flag makes the search case-sensitive. When this flag is 
+  missing or false the search is case-insensitive.
+- By default the search scope is the current line. If you want search inside
+  the whole document, set the `docScope` flag.
+
+Below is an example that selects all text inside quotation marks. For more
+advanced examples check the [tutorial][9].
+```js
+{
+    "command": "modaledit.selectBetween",
+    "args": { 
+        "from": "(", 
+        "to": ")"
+    }
+}
+```
+
 ## Acknowledgements
 
 I was using the [Simple Vim][3] extension for a long time, but was never fully 
@@ -521,3 +559,5 @@ great idea and helping me jump start my project.
 [8]: https://kakoune.org/why-kakoune/why-kakoune.html
 [9]: https://johtela.github.io/vscode-modaledit/docs/.vscode/settings.html
 [10]: https://johtela.github.io/vscode-modaledit/docs/src/actions.html
+[11]: https://johtela.github.io/vscode-modaledit/docs/CHANGELOG.html#version-1-5
+[12]: https://johtela.github.io/vscode-modaledit/docs/CHANGELOG.html#version-1-6

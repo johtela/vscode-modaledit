@@ -137,6 +137,12 @@ extensions. You can build complex operations by arranging commands into
 sequences. You can define conditional commands that do different things
 based on editor state. Also, you can map these commands to arbitrarily long
 keyboard sequences.</p>
+<blockquote>
+<p>Check out the new features in version <a href="https://johtela.github.io/vscode-modaledit/docs/CHANGELOG.html#version-1-5">1.5</a> and <a href="https://johtela.github.io/vscode-modaledit/docs/CHANGELOG.html#version-1-6">1.6</a>, and the updated
+<a href="https://johtela.github.io/vscode-modaledit/docs/.vscode/settings.html">tutorial</a>. Now you can add even more complex commands than previously,
+such as commands that you can repeat by prefixing them with a number, and
+commands that operate on text inside specified characters,</p>
+</blockquote>
 <h2 id="getting-started">Getting Started</h2>
 <p>When extension is installed text documents will open in normal mode. The
 current mode is shown in the status bar. You can switch between modes by
@@ -245,6 +251,11 @@ strings:</p>
 <td><code>__keySequence</code></td>
 <td><code>string[]</code></td>
 <td>Array of keys that were pressed to invoke the command.</td>
+</tr>
+<tr>
+<td><code>__keys</code></td>
+<td><code>string[]</code></td>
+<td>Alias to the <code>__keySequence</code> variable.</td>
 </tr>
 </tbody>
 </table>
@@ -642,6 +653,36 @@ example runs them both one after another.</p>
     <span class="string">"command"</span>: <span class="string">"modaledit.typeNormalKeys"</span>,
     <span class="string">"args"</span>: {
         <span class="string">"keys"</span>: <span class="string">"ku"</span>
+    }
+}
+</code></pre>
+<h3 id="selecting-text-between-delimiters">Selecting Text Between Delimiters</h3>
+<p>The <code>selectBetween</code> command helps implement advanced selection operations. The
+command takes as arguments two strings/regular expressions that delimit the text
+to be selected. Both of them are optional, but in order for the command to do
+anything one of them needs to be defined. If the <code>from</code> argument is missing, the
+selection goes from the cursor position forwards to the <code>to</code> string. If the <code>to</code>
+is missing the selection goes backwards till the <code>from</code> string. In addition to
+these parameters, the command has four flags:</p>
+<ul>
+<li>If the <code>regex</code> flag is on, <code>from</code> and <code>to</code> strings are treated as regular
+expressions in the search.</li>
+<li>The <code>inclusive</code> flag tells if the delimiter strings are included in the
+selection or not. By default the delimiter strings are not part of the
+selection.</li>
+<li>The <code>caseSensitive</code> flag makes the search case-sensitive. When this flag is
+missing or false the search is case-insensitive.</li>
+<li>By default the search scope is the current line. If you want search inside
+the whole document, set the <code>docScope</code> flag.</li>
+</ul>
+<p>Below is an example that selects all text inside quotation marks. For more
+advanced examples check the <a href="https://johtela.github.io/vscode-modaledit/docs/.vscode/settings.html">tutorial</a>.</p>
+
+<pre class="syntaxhighlight"><code>{
+    <span class="string">"command"</span>: <span class="string">"modaledit.selectBetween"</span>,
+    <span class="string">"args"</span>: { 
+        <span class="string">"from"</span>: <span class="string">"("</span>, 
+        <span class="string">"to"</span>: <span class="string">")"</span>
     }
 }
 </code></pre>

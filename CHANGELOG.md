@@ -49,3 +49,11 @@ Contains multiple new features:
   bar when the associated keymap is active.
 - Added ModalEdit log to [output window](https://johtela.github.io/vscode-modaledit/docs/README.html#debugging-keybindings).
 - Semi-large refactoring of type definitions in the [actions module](https://johtela.github.io/vscode-modaledit/docs/src/actions.html).
+
+## Version 1.6
+
+- [New command `modaledit.selectBetween`](https://johtela.github.io/vscode-modaledit/docs/README.html#selecting-text-between-delimiters) 
+  selects text between two delimiter strings. Especially useful when combined 
+  with the key ranges and recursive keymaps introduced in version 1.5.
+- Added a shorter alias `__keys` to the `__keySequence` variable available in
+  JS expressions.
