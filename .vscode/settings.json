@@ -707,7 +707,7 @@ feature out-of-the-box. Since it is easy to implement, ModalEdit fills the gap
 and adds two simple commands: `modaledit.defineBookmark` and 
 `modaledit.goToBookmark`. Using these we can implement Vim's mark commands.
 
-We can define dozens of bookmarks with one definition using the character range.
+We can support dozens of bookmarks with one mapping using a character range.
 To define a bookmark, you type `ma`, for example, and to jump to that mark, 
 type `` `a``.
 */
