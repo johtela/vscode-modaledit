@@ -16,10 +16,9 @@ based on editor state. Also, you can map these commands to arbitrarily long
 keyboard sequences.
 
 > Check out the new features in version [1.5][11] and [1.6][12], and the updated 
-> [tutorial][9]. Now you can add even more complex commands than previously,
-> such as commands that you can repeat by prefixing them with a number, and
-> commands that operate on text inside specified characters, 
-
+> [tutorial][9]. Now you can create even more complex commands than previously.
+> For example, commands that you can repeat by prefixing them with a number, and
+> commands that operate on text inside specified delimiters. 
 
 ## Getting Started
 
