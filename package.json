@@ -5,7 +5,7 @@
 	"version": "1.6.0",
 	"publisher": "johtela",
 	"engines": {
-		"vscode": "^1.41.0"
+		"vscode": "^1.43.0"
 	},
 	"repository": {
 		"url": "https://github.com/johtela/vscode-modaledit"
