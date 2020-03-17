@@ -256,7 +256,7 @@ open a block for all commands beginning with `g`.
                 "command": "cursorMove",
                 "args": "{ to: 'wrappedLineLastNonWhitespaceCharacter', select: __selecting }"
             },
-    /**
+/**
 ### Jumping to Start/End of Document
 
 Another command beginning with `g` is `gg` which jumps to the beginning of the
@@ -422,16 +422,15 @@ array and pass it to the `modaledit.typeNormalKeys` which runs the command
 mapped to the key.
 */
         "1-9": {
-            "1-9": {
-                "id": 1,
-                "help": "Enter count followed by [h,j,k,l,w,b,e]",
-                "0-9": 1,
-                "h,j,k,l,w,b,e": {
-                    "command": "modaledit.typeNormalKeys",
-                    "args": "{ keys: __keys[__keys.length - 1] }",
-                    "repeat": "Number(__keys.slice(0, -1).join(''))"
-                },
-        /**
+            "id": 1,
+            "help": "Enter count followed by [h,j,k,l,w,b,e]",
+            "0-9": 1,
+            "h,j,k,l,w,b,e": {
+                "command": "modaledit.typeNormalKeys",
+                "args": "{ keys: __keys[__keys.length - 1] }",
+                "repeat": "Number(__keys.slice(0, -1).join(''))"
+            },
+/**
 With this one reletively simply mapping we can implement the repeating 
 functionality for any command that we have already defined.
 
@@ -445,19 +444,18 @@ screen, and then we move the cursor to the same line. Unfortunately the
 built-in command `workbench.action.gotoLine` does not take any arguments , so 
 we have to reinvent the wheel.
 */
-                "G": [
-                    {
-                        "command": "revealLine",
-                        "args": "{ lineNumber: Number(__keys.slice(0, -1).join('')) - 1, at: 'top' }"
-                    },
-                    {
-                        "command": "cursorMove",
-                        "args": {
-                            "to": "viewPortTop"
-                        }
+            "G": [
+                {
+                    "command": "revealLine",
+                    "args": "{ lineNumber: Number(__keys.slice(0, -1).join('')) - 1, at: 'top' }"
+                },
+                {
+                    "command": "cursorMove",
+                    "args": {
+                        "to": "viewPortTop"
                     }
-                ]
-            }
+                }
+            ]
         },
 /**
 ## Editing

@@ -515,15 +515,14 @@ array and pass it to the <code>modaledit.typeNormalKeys</code> which runs the co
 mapped to the key.</p>
 
 <pre class="syntaxhighlight"><code>        "1-9": {
-            "1-9": {
-                "id": 1,
-                "help": "Enter count followed by [h,j,k,l,w,b,e]",
-                "0-9": 1,
-                "h,j,k,l,w,b,e": {
-                    "command": "modaledit.typeNormalKeys",
-                    "args": "{ keys: __keys[__keys.length - 1] }",
-                    "repeat": "Number(__keys.slice(0, -1).join(''))"
-                },
+            "id": 1,
+            "help": "Enter count followed by [h,j,k,l,w,b,e]",
+            "0-9": 1,
+            "h,j,k,l,w,b,e": {
+                "command": "modaledit.typeNormalKeys",
+                "args": "{ keys: __keys[__keys.length - 1] }",
+                "repeat": "Number(__keys.slice(0, -1).join(''))"
+            },
 </code></pre>
 <p>With this one reletively simply mapping we can implement the repeating
 functionality for any command that we have already defined.</p>
@@ -536,19 +535,18 @@ screen, and then we move the cursor to the same line. Unfortunately the
 built-in command <code>workbench.action.gotoLine</code> does not take any arguments , so
 we have to reinvent the wheel.</p>
 
-<pre class="syntaxhighlight"><code>                "G": [
-                    {
-                        "command": "revealLine",
-                        "args": "{ lineNumber: Number(__keys.slice(0, -1).join('')) - 1, at: 'top' }"
-                    },
-                    {
-                        "command": "cursorMove",
-                        "args": {
-                            "to": "viewPortTop"
-                        }
+<pre class="syntaxhighlight"><code>            "G": [
+                {
+                    "command": "revealLine",
+                    "args": "{ lineNumber: Number(__keys.slice(0, -1).join('')) - 1, at: 'top' }"
+                },
+                {
+                    "command": "cursorMove",
+                    "args": {
+                        "to": "viewPortTop"
                     }
-                ]
-            }
+                }
+            ]
         },
 </code></pre>
 <h2 id="editing">Editing</h2>
