@@ -532,7 +532,7 @@ you want to jump to. Let's add that as well in the same keymap. While the
 mapping is trivial the command itself is a bit involved, because we need to use
 two commands to do the jumping. First we move the target line to the top of the
 screen, and then we move the cursor to the same line. Unfortunately the
-built-in command <code>workbench.action.gotoLine</code> does not take any arguments , so
+built-in command <code>workbench.action.gotoLine</code> does not take any arguments, so
 we have to reinvent the wheel.</p>
 
 <pre class="syntaxhighlight"><code>            "G": [
@@ -580,7 +580,7 @@ changes the whole word under the cursor.</p>
 </code></pre>
 <h3 id="change-until-around-inside">Change Until/Around/Inside</h3>
 <p>Very useful variants of change commands are those which allow changing text
-upto a given chracter or between given characters. For example, <code>ct_</code> changes
+upto a given character or between given characters. For example, <code>ct_</code> changes
 the text until next underscore, and <code>ci&quot;</code> changes the text inside quotation
 marks. The cursor can be anywhere inside the quotation marks and the command
 still works.</p>

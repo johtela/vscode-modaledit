@@ -441,7 +441,7 @@ you want to jump to. Let's add that as well in the same keymap. While the
 mapping is trivial the command itself is a bit involved, because we need to use
 two commands to do the jumping. First we move the target line to the top of the
 screen, and then we move the cursor to the same line. Unfortunately the 
-built-in command `workbench.action.gotoLine` does not take any arguments , so 
+built-in command `workbench.action.gotoLine` does not take any arguments, so 
 we have to reinvent the wheel.
 */
             "G": [
@@ -494,7 +494,7 @@ changes the whole word under the cursor.
 ### Change Until/Around/Inside
 
 Very useful variants of change commands are those which allow changing text
-upto a given chracter or between given characters. For example, `ct_` changes 
+upto a given character or between given characters. For example, `ct_` changes 
 the text until next underscore, and `ci"` changes the text inside quotation 
 marks. The cursor can be anywhere inside the quotation marks and the command 
 still works.
