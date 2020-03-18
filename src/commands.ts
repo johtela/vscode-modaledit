@@ -674,7 +674,7 @@ async function selectBetween(args: SelectBetweenArgs): Promise<void> {
     }
     else {
         let text = doc.getText(new vscode.Range(startPos, endPos))
-        if (args.caseSensitive)
+        if (!args.caseSensitive)
             text = text.toLowerCase()
         if (args.from) {
             fromOffs = text.lastIndexOf(args.caseSensitive ?
