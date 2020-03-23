@@ -360,7 +360,6 @@ async function executeVSCommand(command: string, ...rest: any[]): Promise<void> 
     catch (error) {
         vscode.window.showErrorMessage(error.message)
     }
-    keySequence = []
 }
 /**
  * `evalString` function evaluates JavaScript expressions. Before doing so, it
@@ -475,8 +474,11 @@ export async function handleKey(key: string, selecting: boolean,
     keySequence.push(key)
     if (capture && lastCommand)
         executeVSCommand(lastCommand, key)
-    else if (keymap && keymap[key])
+    else if (keymap && keymap[key]) {
         await execute(keymap[key], selecting)
+        if (keymap == rootKeymap)
+           keySequence = []
+    }
     else {
         vscode.window.showWarningMessage("ModalEdit: Undefined key binding: " +
             keySequence.join(" - "))
