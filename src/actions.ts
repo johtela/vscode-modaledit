@@ -185,7 +185,7 @@ export function updateFromConfig(): void {
             log(`Found ${errors} error${errors > 1 ? "s" : ""}. ` +
                 "Keybindings might not work correctly.")
         else
-            log("Validation completed succesfully.")
+            log("Validation completed successfully.")
     }
     else if (keybindings)
         log("ERROR: Invalid configuration structure. Keybindings not updated.")
