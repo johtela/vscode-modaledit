@@ -36,7 +36,8 @@ export function activate(context: vscode.ExtensionContext) {
 		vscode.window.onDidChangeVisibleTextEditors(editors =>
 			editors.forEach(commands.updateCursorAndStatusBar)),
 		vscode.window.onDidChangeTextEditorSelection(e =>
-			commands.updateStatusBar(e.textEditor)))
+			commands.updateStatusBar(e.textEditor)),
+		vscode.workspace.onDidChangeTextDocument(commands.onTextChanged))
 	/**
 	 * Next we update the active settings from the config file, and at last, 
 	 * we enter into normal or edit mode depending on the settings.

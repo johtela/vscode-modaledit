@@ -50,7 +50,7 @@ block for key bindings. We'll use the [Vim Cheat Sheet][] as our specification
 for key bindings to be added.
 */
 {
-    "modaledit.keybindings": {
+    "odaledit.keybindings": {
 /**
 ## Switching Between Modes
 

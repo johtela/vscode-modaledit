@@ -135,6 +135,10 @@ let bookmarks: Bookmark[] = []
  * Quick snippets are simply stored in an array of strings.
  */
 let quickSnippets: string[] = []
+
+let textChanged = false
+let currentChange: string[] = []
+let lastChange: string[] = []
 /**
  * ## Command Names
  * 
@@ -157,6 +161,7 @@ const defineQuickSnippetId = "modaledit.defineQuickSnippet"
 const insertQuickSnippetId = "modaledit.insertQuickSnippet"
 const typeNormalKeysId = "modaledit.typeNormalKeys"
 const selectBetweenId = "modaledit.selectBetween"
+const repeatLastChangeId = "modaledit.repeatLastChange"
 /**
  * ## Registering Commands
  * 
@@ -182,11 +187,16 @@ export function register(context: vscode.ExtensionContext) {
         vscode.commands.registerCommand(defineQuickSnippetId, defineQuickSnippet),
         vscode.commands.registerCommand(insertQuickSnippetId, insertQuickSnippet),
         vscode.commands.registerCommand(typeNormalKeysId, typeNormalKeys),
-        vscode.commands.registerCommand(selectBetweenId, selectBetween)
+        vscode.commands.registerCommand(selectBetweenId, selectBetween),
+        vscode.commands.registerCommand(repeatLastChangeId, repeatLastChange)
     )
     statusBarItem = vscode.window.createStatusBarItem(
         vscode.StatusBarAlignment.Left);
     statusBarItem.command = toggleId;
+}
+
+export function onTextChanged() {
+    textChanged = true
 }
 /**
  * ## Keyboard Event Handler
@@ -197,8 +207,18 @@ export function register(context: vscode.ExtensionContext) {
  * if we have an active selection, or if search mode is on (we use the key 
  * capture then). 
  */
-async function onType(event: { text: string }): Promise<void> {
-    await actions.handleKey(event.text, isSelecting(), searching)
+async function onType(event: { text: string }) {
+    if (textChanged) {
+        lastChange = currentChange
+        currentChange = []
+        textChanged = false
+    }
+    currentChange.push(event.text)
+    await runKeyAction(event.text)
+}
+
+async function runKeyAction(key: string) {
+    await actions.handleKey(key, isSelecting(), searching)
     updateStatusBar(vscode.window.activeTextEditor, actions.getHelp())
 }
 /**
@@ -627,7 +647,7 @@ async function typeNormalKeys(args: TypeNormalKeysArgs): Promise<void> {
     if (typeof args !== 'object' || typeof (args.keys) !== 'string')
         throw Error(`${typeNormalKeysId}: Invalid args: ${JSON.stringify(args)}`)
     for (let i = 0; i < args.keys.length; i++)
-        await onType({ text: args.keys[i] })
+        await runKeyAction(args.keys[i])
 }
 /**
  * ## Advanced Selection Command
@@ -690,4 +710,12 @@ async function selectBetween(args: SelectBetweenArgs): Promise<void> {
         }
     }
     changeSelection(editor, doc.positionAt(fromOffs), doc.positionAt(toOffs))
+}
+/**
+ * ## Repeat Last Change Command
+ */
+async function repeatLastChange(): Promise<void> {
+    for (let i = 0; i < lastChange.length; i++)
+        await runKeyAction(lastChange[i])
+    currentChange = lastChange
 }
