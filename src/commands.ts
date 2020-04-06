@@ -135,9 +135,14 @@ let bookmarks: Bookmark[] = []
  * Quick snippets are simply stored in an array of strings.
  */
 let quickSnippets: string[] = []
-
+/**
+ * "Repeat last change" command needs to know when text in editor has changed.
+ * It also needs to save the current and last command key sequence, as well as
+ * the last sequence that caused text to change.
+ */
 let textChanged = false
-let currentChange: string[] = []
+let currentKeySequence: string[] = []
+let lastKeySequence: string[] = []
 let lastChange: string[] = []
 /**
  * ## Command Names
@@ -194,32 +199,44 @@ export function register(context: vscode.ExtensionContext) {
         vscode.StatusBarAlignment.Left);
     statusBarItem.command = toggleId;
 }
-
-export function onTextChanged() {
-    textChanged = true
-}
 /**
  * ## Keyboard Event Handler
  * 
  * When the user types in normal mode, `onType` handler gets each typed 
- * character one at a time. It delegates the command invocation to the 
- * `handleKey` function in the `actions` module. It passes the information about 
- * if we have an active selection, or if search mode is on (we use the key 
- * capture then). 
+ * character one at a time. It calls the `runActionForKey` subroutine to invoke
+ * the action bound to the typed key. In addition, it updates the state 
+ * variables needed by the `repeatLastChange` command and the status bar.
  */
 async function onType(event: { text: string }) {
     if (textChanged) {
-        lastChange = currentChange
-        currentChange = []
+        lastChange = lastKeySequence
         textChanged = false
     }
-    currentChange.push(event.text)
-    await runKeyAction(event.text)
-}
-
-async function runKeyAction(key: string) {
-    await actions.handleKey(key, isSelecting(), searching)
+    currentKeySequence.push(event.text)
+    if (await runActionForKey(event.text)) {
+        lastKeySequence = currentKeySequence
+        currentKeySequence = []
+    }
     updateStatusBar(vscode.window.activeTextEditor, actions.getHelp())
+}
+/**
+ * Whenever text changes in an active editor, we set a flag. This flag is
+ * examined in the `onType` handler above, and the `lastChange` variable is set 
+ * to indicate that the last command that changed editor text.
+ */
+export function onTextChanged() {
+    textChanged = true
+}
+/**
+ * This helper function just calls the `handleKey` function in the `actions` 
+ * module. It checks if we have an active selection or search mode on, and
+ * passes that information to the function. `handleKey` returns `true` if the 
+ * key actually invoked a command, or `false` if it was a part of incomplete 
+ * key sequence that did not (yet) cause any commands to run. This information 
+ * is needed to decide whether the `lastKeySequence` variable is updated.
+ */
+async function runActionForKey(key: string): Promise<boolean> {
+    return await actions.handleKey(key, isSelecting(), searching)
 }
 /**
  * ## Mode Switching  Commands
@@ -529,7 +546,7 @@ async function cancelSearch(): Promise<void> {
  * }
  * ```
  */
-async function deleteCharFromSearch(): Promise<void> {
+function deleteCharFromSearch() {
     let editor = vscode.window.activeTextEditor
     if (editor && searching && searchString.length > 0)
         highlightNextMatch(editor, searchStartPos,
@@ -576,7 +593,7 @@ async function previousMatch(): Promise<void> {
  * Defining a bookmark is simple. We just store the cursor location and file in
  * a `Bookmark` object, and store it in the `bookmarks` array.
  */
-async function defineBookmark(args?: BookmarkArgs): Promise<void> {
+function defineBookmark(args?: BookmarkArgs) {
     let editor = vscode.window.activeTextEditor
     if (editor) {
         let document = editor.document
@@ -618,7 +635,7 @@ async function fillSnippetArgs(): Promise<void> {
 /**
  * Defining a snippet just puts the selection into an array.
  */
-async function defineQuickSnippet(args?: QuickSnippetArgs): Promise<void> {
+function defineQuickSnippet(args?: QuickSnippetArgs) {
     let editor = vscode.window.activeTextEditor
     if (editor)
         quickSnippets[args?.snippet || 0] =
@@ -647,7 +664,7 @@ async function typeNormalKeys(args: TypeNormalKeysArgs): Promise<void> {
     if (typeof args !== 'object' || typeof (args.keys) !== 'string')
         throw Error(`${typeNormalKeysId}: Invalid args: ${JSON.stringify(args)}`)
     for (let i = 0; i < args.keys.length; i++)
-        await runKeyAction(args.keys[i])
+        await runActionForKey(args.keys[i])
 }
 /**
  * ## Advanced Selection Command
@@ -655,7 +672,7 @@ async function typeNormalKeys(args: TypeNormalKeysArgs): Promise<void> {
  * For selecting ranges of text between two characters (inside parenthesis, for
  * ecample) we add the `modaledit.selectBetween` command. 
  */
-async function selectBetween(args: SelectBetweenArgs): Promise<void> {
+function selectBetween(args: SelectBetweenArgs) {
     let editor = vscode.window.activeTextEditor
     if (!editor)
         return
@@ -667,7 +684,7 @@ async function selectBetween(args: SelectBetweenArgs): Promise<void> {
     let endPos = doc.lineAt(args.docScope ? doc.lineCount - 1 : cursorPos.line)
         .range.end
     let cursorOffs = doc.offsetAt(cursorPos)
-    let startOffs = doc.offsetAt(startPos) 
+    let startOffs = doc.offsetAt(startPos)
     let endOffs = doc.offsetAt(endPos)
     let fromOffs = cursorOffs
     let toOffs = cursorOffs
@@ -713,9 +730,15 @@ async function selectBetween(args: SelectBetweenArgs): Promise<void> {
 }
 /**
  * ## Repeat Last Change Command
+ * 
+ * The `repeatLastChange` command runs the key sequence stored in `lastChange` 
+ * variable. Since the command inevitably causes text in the editor to change 
+ * (which causes the `textChanged` flag to go high), it has to reset the current 
+ * key sequence to prevent the `lastChange` variable from being overwritten next 
+ * time the user presses a key.
  */
 async function repeatLastChange(): Promise<void> {
     for (let i = 0; i < lastChange.length; i++)
-        await runKeyAction(lastChange[i])
-    currentChange = lastChange
+        await runActionForKey(lastChange[i])
+    currentKeySequence = lastChange
 }

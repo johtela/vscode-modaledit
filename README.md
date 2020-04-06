@@ -112,6 +112,7 @@ strings:
 | `__selecting`   | `boolean`  | Flag that indicates whether selection is active.
 | `__keySequence` | `string[]` | Array of keys that were pressed to invoke the command. 
 | `__keys`        | `string[]` | Alias to the `__keySequence` variable.
+| `__rkeys`       | `string[]` | Contains the `__keys` array reversed. This is handy when you want to access the last characters of the array as they will be first in `__rkeys`.
 
 The `repeat` property allows you to run the command multiple times. If the value
 of the property is number, it directly determines the repetition count. If it is
@@ -255,8 +256,8 @@ repeat the command.
             "0-9": 1,
             "w,b": {
                 "command": "modaledit.typeNormalKeys",
-                "args": "{ keys: __keySequence[__keySequence.length - 1] }",
-                "repeat": "Number(__keySequence.slice(0, -1).join(''))"
+                "args": "{ keys: __rkeys[0] }",
+                "repeat": "Number(__keys.slice(0, -1).join(''))"
             }
         }
 ```
@@ -265,10 +266,13 @@ is active pressing key `0-9` will "jump" back to the same keymap. That is
 designated by the number `1` in the key binding. Only when the user presses 
 some other key we get out of this keymap. If the user presses `w` or `b`, we 
 run the command bound to the respective key. We get the repetition count by 
-slicing the all but last character from the `__keySequence` array and 
-converting that to number. The command key is the last item of the 
-`__keySequence`. The picture below illustrates how keymap and command objects 
-are stored in memory.
+slicing the all but last character from the `__keys` array and converting that 
+to a number. The command key is the last item of the `__keys` array. We can
+access it more easily using the reversed `__rkeys` array. The item is first in
+that array. 
+
+The picture below illustrates how keymap and command objects are stored in 
+memory.
 
 ![recursive keymap](images/recursive-keymap-example.png)
 
@@ -497,13 +501,13 @@ example runs them both one after another.
 
 ### Selecting Text Between Delimiters
 
-The `selectBetween` command helps implement advanced selection operations. The 
-command takes as arguments two strings/regular expressions that delimit the text 
-to be selected. Both of them are optional, but in order for the command to do 
-anything one of them needs to be defined. If the `from` argument is missing, the 
-selection goes from the cursor position forwards to the `to` string. If the `to` 
-is missing the selection goes backwards till the `from` string. In addition to
-these parameters, the command has four flags:
+The `modaledit.selectBetween` command helps implement advanced selection 
+operations. The command takes as arguments two strings/regular expressions that 
+delimit the text to be selected. Both of them are optional, but in order for the 
+command to do anything one of them needs to be defined. If the `from` argument 
+is missing, the selection goes from the cursor position forwards to the `to` 
+string. If the `to` is missing the selection goes backwards till the `from` 
+string. In addition to these parameters, the command has four flags:
 
 - If the `regex` flag is on, `from` and `to` strings are treated as regular
   expressions in the search.
@@ -526,6 +530,12 @@ advanced examples check the [tutorial][9].
     }
 }
 ```
+
+### Repeat Last Change
+
+`modaledit.repeatLastChange` command repeats the last command (sequence) that 
+caused text in the editor to change. It corresponds to the [dot `.` command][13] 
+in Vim. The command takes no arguments.
 
 ## Acknowledgements
 
@@ -560,3 +570,4 @@ great idea and helping me jump start my project.
 [10]: https://johtela.github.io/vscode-modaledit/docs/src/actions.html
 [11]: https://johtela.github.io/vscode-modaledit/docs/CHANGELOG.html#version-1-5
 [12]: https://johtela.github.io/vscode-modaledit/docs/CHANGELOG.html#version-1-6
+[13]: https://vim.fandom.com/wiki/Repeat_last_change

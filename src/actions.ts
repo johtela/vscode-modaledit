@@ -373,6 +373,7 @@ function evalString(str: string, __selecting: boolean): any {
     let __selection = undefined
     let __keySequence = keySequence
     let __keys = keySequence
+    let __rkeys = keySequence.slice().reverse()
     let editor = vscode.window.activeTextEditor
     if (editor) {
         let cursor = editor.selection.active
@@ -468,9 +469,13 @@ async function execute(action: Action, selecting: boolean): Promise<void> {
  * 
  * Otherwise we just check if the current keymap contains binding for the key
  * pressed, and execute the action. If not, we present an error to the user.
+ * 
+ * As a last step the function returns `true`, if the handled key caused the 
+ * `keySequence` to be cleared. This indicates that the key invoked a command
+ * instead of just changing the active keymap.
  */
 export async function handleKey(key: string, selecting: boolean,
-    capture: boolean) {
+    capture: boolean): Promise<boolean> {
     keySequence.push(key)
     if (capture && lastCommand)
         executeVSCommand(lastCommand, key)
@@ -485,6 +490,7 @@ export async function handleKey(key: string, selecting: boolean,
         keySequence = []
         keymap = rootKeymap
     }
+    return (keySequence.length == 0)
 }
 /**
  * ## Keymap Help
