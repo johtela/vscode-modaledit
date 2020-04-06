@@ -257,6 +257,11 @@ strings:</p>
 <td><code>string[]</code></td>
 <td>Alias to the <code>__keySequence</code> variable.</td>
 </tr>
+<tr>
+<td><code>__rkeys</code></td>
+<td><code>string[]</code></td>
+<td>Contains the <code>__keys</code> array reversed. This is handy when you want to access the last characters of the array as they will be first in <code>__rkeys</code>.</td>
+</tr>
 </tbody>
 </table>
 </div><p>The <code>repeat</code> property allows you to run the command multiple times. If the value
@@ -386,8 +391,8 @@ repeat the command.</p>
             <span class="string">"0-9"</span>: <span class="number">1</span>,
             <span class="string">"w,b"</span>: {
                 <span class="string">"command"</span>: <span class="string">"modaledit.typeNormalKeys"</span>,
-                <span class="string">"args"</span>: <span class="string">"{ keys: __keySequence[__keySequence.length - 1] }"</span>,
-                <span class="string">"repeat"</span>: <span class="string">"Number(__keySequence.slice(0, -1).join(''))"</span>
+                <span class="string">"args"</span>: <span class="string">"{ keys: __rkeys[0] }"</span>,
+                <span class="string">"repeat"</span>: <span class="string">"Number(__keys.slice(0, -1).join(''))"</span>
             }
         }
 </code></pre>
@@ -396,10 +401,12 @@ is active pressing key <code>0-9</code> will &quot;jump&quot; back to the same k
 designated by the number <code>1</code> in the key binding. Only when the user presses
 some other key we get out of this keymap. If the user presses <code>w</code> or <code>b</code>, we
 run the command bound to the respective key. We get the repetition count by
-slicing the all but last character from the <code>__keySequence</code> array and
-converting that to number. The command key is the last item of the
-<code>__keySequence</code>. The picture below illustrates how keymap and command objects
-are stored in memory.</p>
+slicing the all but last character from the <code>__keys</code> array and converting that
+to a number. The command key is the last item of the <code>__keys</code> array. We can
+access it more easily using the reversed <code>__rkeys</code> array. The item is first in
+that array.</p>
+<p>The picture below illustrates how keymap and command objects are stored in
+memory.</p>
 <p><img src="images/recursive-keymap-example.png" alt="recursive keymap"></p>
 <p>It is also possible to jump to another keymap, which enables even more
 complicated keyboard sequences. The only restriction is that you can only jump
@@ -657,13 +664,13 @@ example runs them both one after another.</p>
 }
 </code></pre>
 <h3 id="selecting-text-between-delimiters">Selecting Text Between Delimiters</h3>
-<p>The <code>selectBetween</code> command helps implement advanced selection operations. The
-command takes as arguments two strings/regular expressions that delimit the text
-to be selected. Both of them are optional, but in order for the command to do
-anything one of them needs to be defined. If the <code>from</code> argument is missing, the
-selection goes from the cursor position forwards to the <code>to</code> string. If the <code>to</code>
-is missing the selection goes backwards till the <code>from</code> string. In addition to
-these parameters, the command has four flags:</p>
+<p>The <code>modaledit.selectBetween</code> command helps implement advanced selection
+operations. The command takes as arguments two strings/regular expressions that
+delimit the text to be selected. Both of them are optional, but in order for the
+command to do anything one of them needs to be defined. If the <code>from</code> argument
+is missing, the selection goes from the cursor position forwards to the <code>to</code>
+string. If the <code>to</code> is missing the selection goes backwards till the <code>from</code>
+string. In addition to these parameters, the command has four flags:</p>
 <ul>
 <li>If the <code>regex</code> flag is on, <code>from</code> and <code>to</code> strings are treated as regular
 expressions in the search.</li>
@@ -686,6 +693,10 @@ advanced examples check the <a href="https://johtela.github.io/vscode-modaledit/
     }
 }
 </code></pre>
+<h3 id="repeat-last-change">Repeat Last Change</h3>
+<p><code>modaledit.repeatLastChange</code> command repeats the last command (sequence) that
+caused text in the editor to change. It corresponds to the <a href="https://vim.fandom.com/wiki/Repeat_last_change">dot <code>.</code> command</a>
+in Vim. The command takes no arguments.</p>
 <h2 id="acknowledgements">Acknowledgements</h2>
 <p>I was using the <a href="https://marketplace.visualstudio.com/items?itemName=jpotterm.simple-vim">Simple Vim</a> extension for a long time, but was never fully
 happy with it. It shares the idea of being a simple extension reusing VS Code's
