@@ -58,7 +58,7 @@ Contains multiple new features:
 - Added a shorter alias `__keys` to the `__keySequence` variable available in
   JS expressions.
 
-## Versions 1.7
+## Version 1.7
 
 Two "repeat" related bigger improvements:
 
