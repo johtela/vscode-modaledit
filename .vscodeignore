@@ -11,3 +11,5 @@ src/**
 **/*.less
 webpack.config.js
 .nojekyll
+images/**
+!images/normal.jpg
