@@ -115,9 +115,15 @@ strings:
 | `__rkeys`       | `string[]` | Contains the `__keys` array reversed. This is handy when you want to access the last characters of the array as they will be first in `__rkeys`.
 
 The `repeat` property allows you to run the command multiple times. If the value
-of the property is number, it directly determines the repetition count. If it is
-a string, ModalEdit evaluates it as JS expression and checks if the result is a
-number. If not, the command is run once as by default. 
+of the property is a number, it directly determines the repetition count. If it 
+isa string, ModalEdit evaluates it as JS expression and checks if the result is 
+a number. In that case the returned number is used as the repeat count. Note 
+that numbers smaller than 1 will be ignored, and the command is always run at 
+least once.
+
+If returned value is not a number, the expression is treated as a condition that 
+is evaluated after the command has run. The command is repeated as long as the 
+expression returns a truthy value.
 
 Below is an example that maps key `o` to a command that moves the cursor to the 
 end of line. It also selects the jumped range, if we have selection active.

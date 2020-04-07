@@ -39,7 +39,9 @@ export interface Conditional {
  * is assumed to contain a valid JS expression. Additionally, you can specify 
  * that the command is run multiple times by setting the `repeat` property. The 
  * property must be either a number, or a JS expression that evaluates to a 
- * number. If these conditions are not true, the command is executed once. 
+ * number. If it evaluates to some other type, the expression is used as a 
+ * condition that is evaluated after the command is run. If the expression
+ * returns a truthy value, the command is repeated.
  */
 export interface Parameterized {
     command: string
@@ -246,7 +248,7 @@ function validateAndResolveKeymaps(keybindings: Keymap) {
                     if (key[i] == '-') {
                         let first = key.charCodeAt(i - 1)
                         let last = key.charCodeAt(i + 1)
-                            if (first > last)
+                        if (first > last)
                             error(`Invalid key range: "${key}"`)
                         else
                             for (let i = first; i <= last; i++)
@@ -408,33 +410,44 @@ async function executeConditional(cond: Conditional, selecting: boolean):
  * that is evaluated to get the actual arguments, or as an object. Before 
  * executing the command, we inspect the `repeat` property. If it is string
  * we evaluate it, and check if the result is a number. If so, we update the 
- * `repeat` variable that designates repetition count. If not, we leave it as 
- * default (1). The sub-function `exec` runs the command `repeat` times. 
+ * `repeat` variable that designates repetition count. If not, we treate it as
+ * a continue condition. The subroutine `exec` runs the command either `repeat` 
+ * times or as long as the expression in the `repeat` property returns a truthy 
+ * value. 
  */
 async function executeParameterized(action: Parameterized, selecting: boolean) {
-    let repeat = 1
-    async function exec(command: string, args?: any) {
-        for (let i = 0; i < repeat; i++)
-            await executeVSCommand(action.command, args)
+    let repeat: string | number = 1
+    async function exec(args?: any) {
+        let cont = true
+        if (isString(repeat))
+            do {
+                await executeVSCommand(action.command, args)
+                cont = evalString(repeat, selecting)
+            }
+            while (cont)
+        else
+            for (let i = 0; i < repeat; i++)
+                await executeVSCommand(action.command, args)
     }
     if (action.repeat) {
         if (isString(action.repeat)) {
             let val = evalString(action.repeat, selecting)
-            if (isNumber(val))
-                repeat = val
+            if (typeof val === 'number')
+                repeat = Math.max(1, val)
+            else 
+                repeat = action.repeat
         }
         else
-            repeat = action.repeat
+            repeat = Math.max(1, action.repeat)
     }
     if (action.args) {
         if (typeof action.args === 'string')
-            await exec(action.command,
-                evalString(action.args, selecting))
+            await exec(evalString(action.args, selecting))
         else
-            await exec(action.command, action.args)
+            await exec(action.args)
     }
     else
-        await exec(action.command)
+        await exec()
 }
 /**
  * ## Executing Actions
@@ -482,7 +495,7 @@ export async function handleKey(key: string, selecting: boolean,
     else if (keymap && keymap[key]) {
         await execute(keymap[key], selecting)
         if (keymap == rootKeymap)
-           keySequence = []
+            keySequence = []
     }
     else {
         vscode.window.showWarningMessage("ModalEdit: Undefined key binding: " +
