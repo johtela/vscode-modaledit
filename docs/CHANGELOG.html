@@ -179,6 +179,26 @@ with the key ranges and recursive keymaps introduced in version 1.5.</li>
 <li>Added a shorter alias <code>__keys</code> to the <code>__keySequence</code> variable available in
 JS expressions.</li>
 </ul>
+<h2 id="versions-1-7">Versions 1.7</h2>
+<p>Two &quot;repeat&quot; related bigger improvements:</p>
+<ul>
+<li>New <a href="https://johtela.github.io/vscode-modaledit/docs/README.html#repeat-last-change"><code>modaledit.repeatLastChange</code> command</a>
+emulates Vim's dot <code>.</code> command quite faithfully.</li>
+<li>The <code>repeat</code> property used in context with
+<a href="https://johtela.github.io/vscode-modaledit/docs/README.html#commands-with-arguments">commands taking arguments</a> can now also contain a JS expression that
+returns a boolean value. In this case, the value is used as a condition that
+tells if the command should be repeated. The command is repeated as long as
+the expression returns a truthy value.</li>
+</ul>
+<p>And some minor changes:</p>
+<ul>
+<li>New variable <code>__rkeys</code> available for use in JS expressions. It contains the
+keys pressed to invoke a command in reverse order. This is handy if you need
+to access the last keys in the sequence. They are conveniently the first ones
+in <code>__rkeys</code>.</li>
+<li>Removed unneeded images from the extension package. The package is now 3 MBs
+smaller.</li>
+</ul>
 
         
     </div>
