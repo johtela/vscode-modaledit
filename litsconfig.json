@@ -5,6 +5,7 @@
         "projectName": "ModalEdit",
         "repository": "https://github.com/johtela/vscode-modaledit",
         "download": "https://marketplace.visualstudio.com/items?itemName=johtela.vscode-modaledit",
+        "license": "LICENSE.html",
         "footer": "Copyright © 2020 Tommi Johtela",
         "logo": "images/escape.svg",
         "userTheme": "./user-theme.less",
