@@ -1,205 +1,205 @@
 {
-	"name": "vscode-modaledit",
-	"displayName": "ModalEdit",
-	"description": "DIY Vim emulation",
-	"version": "1.7.0",
-	"publisher": "johtela",
-	"engines": {
-		"vscode": "^1.43.0"
-	},
-	"repository": {
-		"url": "https://github.com/johtela/vscode-modaledit"
-	},
-	"license": "MPL-2.0",
-	"categories": [
-		"Keymaps",
-		"Other"
-	],
-	"homepage": "https://johtela.github.io/vscode-modaledit",
-	"activationEvents": [
-		"*"
-	],
-	"icon": "images/normal.jpg",
-	"main": "./dist/extension.js",
-	"contributes": {
-		"configuration": {
-			"type": "object",
-			"title": "ModalEdit",
-			"properties": {
-				"modaledit.keybindings": {
-					"type": "object",
-					"description": "Keybindings map, key → VS Code actions/commands",
-					"default": {},
-					"patternProperties": {
-						"^.([\\-,].)*$": {
-							"anyOf": [
-								{
-									"type": "string",
-									"description": "VS Code command"
-								},
-								{
-									"type": "array",
-									"description": "Sequence of commands",
-									"items": {
-										"anyOf": [
-											{
-												"type": "object",
-												"description": "Action"
-											},
-											{
-												"type": "string",
-												"description": "VS Code command"
-											}
-										]
-									}
-								},
-								{
-									"type": "object",
-									"description": "VS Code command with arguments",
-									"properties": {
-										"command": {
-											"type": "string",
-											"description": "VS Code command"
-										},
-										"args": {
-											"description": "Command arguments",
-											"anyOf": [
-												{
-													"type": "object"
-												},
-												{
-													"type": "string"
-												}
-											]
-										}
-									}
-								},
-								{
-									"type": "object",
-									"description": "Conditional command",
-									"properties": {
-										"condition": {
-											"type": "string",
-											"description": "JavaScript expression that is evaluated"
-										}
-									}
-								},
-								{
-									"type": "number",
-									"description": "Keymap id"
-								}
-							]
-						}
-					}
-				},
-				"modaledit.insertCursorStyle": {
-					"type": "string",
-					"enum": [
-						"block",
-						"block-outline",
-						"line",
-						"line-thin",
-						"underline",
-						"underline-thin"
-					],
-					"default": "line",
-					"description": "Shape of the cursor when in insert mode."
-				},
-				"modaledit.normalCursorStyle": {
-					"type": "string",
-					"enum": [
-						"block",
-						"block-outline",
-						"line",
-						"line-thin",
-						"underline",
-						"underline-thin"
-					],
-					"default": "block",
-					"description": "Shape of the cursor when in normal mode."
-				},
-				"modaledit.searchCursorStyle": {
-					"type": "string",
-					"enum": [
-						"block",
-						"block-outline",
-						"line",
-						"line-thin",
-						"underline",
-						"underline-thin"
-					],
-					"default": "underline",
-					"description": "Shape of the cursor when incremental search is active."
-				},
-				"modaledit.startInNormalMode": {
-					"type": "boolean",
-					"default": true,
-					"description": "Is editor initially in normal mode?"
-				}
-			}
-		},
-		"commands": [
-			{
-				"command": "modaledit.toggle",
-				"title": "ModalEdit: Toggle normal / insert mode"
-			},
-			{
-				"command": "modaledit.enterNormal",
-				"title": "ModalEdit: Normal mode"
-			},
-			{
-				"command": "modaledit.enterInsert",
-				"title": "ModalEdit: Insert mode"
-			},
-			{
-				"command": "modaledit.defineBookmark",
-				"title": "ModalEdit: Define bookmark"
-			},
-			{
-				"command": "modaledit.goToBookmark",
-				"title": "ModalEdit: Go to bookmark"
-			},
-			{
-				"command": "modaledit.cancelSearch",
-				"title": "ModalEdit: Canel search mode"
-			},
-			{
-				"command": "modaledit.deleteCharFromSearch",
-				"title": "ModalEdit: Delete the last search character"
-			}
-		],
-		"keybindings": [
-			{
-				"key": "Escape",
-				"command": "modaledit.enterNormal",
-				"when": "editorTextFocus && !suggestWidgetMultipleSuggestions && !suggestWidgetVisible"
-			},
-			{
-				"key": "Escape",
-				"command": "modaledit.cancelSearch",
-				"when": "editorTextFocus && modaledit.searching"
-			},
-			{
-				"key": "Backspace",
-				"command": "modaledit.deleteCharFromSearch",
-				"when": "editorTextFocus && modaledit.searching"
-			}
-		]
-	},
-	"scripts": {
-		"vscode:prepublish": "webpack --mode production",
-		"webpack": "webpack --mode development",
-		"webpack-dev": "webpack --mode development --watch",
-		"compile": "tsc -p ./",
-		"watch": "tsc -watch -p ./"
-	},
-	"devDependencies": {
-		"@types/node": "^13.9.3",
-		"@types/vscode": "^1.43.0",
-		"ts-loader": "^6.2.2",
-		"typescript": "^3.8.3",
-		"webpack": "^4.42.0",
-		"webpack-cli": "^3.3.11"
-	},
-	"dependencies": {}
+    "name": "vscode-modaledit",
+    "displayName": "ModalEdit",
+    "description": "DIY Vim emulation",
+    "version": "1.7.0",
+    "publisher": "johtela",
+    "engines": {
+        "vscode": "^1.43.0"
+    },
+    "repository": {
+        "url": "https://github.com/johtela/vscode-modaledit"
+    },
+    "license": "MPL-2.0",
+    "categories": [
+        "Keymaps",
+        "Other"
+    ],
+    "homepage": "https://johtela.github.io/vscode-modaledit",
+    "activationEvents": [
+        "*"
+    ],
+    "icon": "images/normal.jpg",
+    "main": "./dist/extension.js",
+    "contributes": {
+        "configuration": {
+            "type": "object",
+            "title": "ModalEdit",
+            "properties": {
+                "modaledit.keybindings": {
+                    "type": "object",
+                    "description": "Keybindings map, key → VS Code actions/commands",
+                    "default": {},
+                    "patternProperties": {
+                        "^.([\\-,].)*$": {
+                            "anyOf": [
+                                {
+                                    "type": "string",
+                                    "description": "VS Code command"
+                                },
+                                {
+                                    "type": "array",
+                                    "description": "Sequence of commands",
+                                    "items": {
+                                        "anyOf": [
+                                            {
+                                                "type": "object",
+                                                "description": "Action"
+                                            },
+                                            {
+                                                "type": "string",
+                                                "description": "VS Code command"
+                                            }
+                                        ]
+                                    }
+                                },
+                                {
+                                    "type": "object",
+                                    "description": "VS Code command with arguments",
+                                    "properties": {
+                                        "command": {
+                                            "type": "string",
+                                            "description": "VS Code command"
+                                        },
+                                        "args": {
+                                            "description": "Command arguments",
+                                            "anyOf": [
+                                                {
+                                                    "type": "object"
+                                                },
+                                                {
+                                                    "type": "string"
+                                                }
+                                            ]
+                                        }
+                                    }
+                                },
+                                {
+                                    "type": "object",
+                                    "description": "Conditional command",
+                                    "properties": {
+                                        "condition": {
+                                            "type": "string",
+                                            "description": "JavaScript expression that is evaluated"
+                                        }
+                                    }
+                                },
+                                {
+                                    "type": "number",
+                                    "description": "Keymap id"
+                                }
+                            ]
+                        }
+                    }
+                },
+                "modaledit.insertCursorStyle": {
+                    "type": "string",
+                    "enum": [
+                        "block",
+                        "block-outline",
+                        "line",
+                        "line-thin",
+                        "underline",
+                        "underline-thin"
+                    ],
+                    "default": "line",
+                    "description": "Shape of the cursor when in insert mode."
+                },
+                "modaledit.normalCursorStyle": {
+                    "type": "string",
+                    "enum": [
+                        "block",
+                        "block-outline",
+                        "line",
+                        "line-thin",
+                        "underline",
+                        "underline-thin"
+                    ],
+                    "default": "block",
+                    "description": "Shape of the cursor when in normal mode."
+                },
+                "modaledit.searchCursorStyle": {
+                    "type": "string",
+                    "enum": [
+                        "block",
+                        "block-outline",
+                        "line",
+                        "line-thin",
+                        "underline",
+                        "underline-thin"
+                    ],
+                    "default": "underline",
+                    "description": "Shape of the cursor when incremental search is active."
+                },
+                "modaledit.startInNormalMode": {
+                    "type": "boolean",
+                    "default": true,
+                    "description": "Is editor initially in normal mode?"
+                }
+            }
+        },
+        "commands": [
+            {
+                "command": "modaledit.toggle",
+                "title": "ModalEdit: Toggle normal / insert mode"
+            },
+            {
+                "command": "modaledit.enterNormal",
+                "title": "ModalEdit: Normal mode"
+            },
+            {
+                "command": "modaledit.enterInsert",
+                "title": "ModalEdit: Insert mode"
+            },
+            {
+                "command": "modaledit.defineBookmark",
+                "title": "ModalEdit: Define bookmark"
+            },
+            {
+                "command": "modaledit.goToBookmark",
+                "title": "ModalEdit: Go to bookmark"
+            },
+            {
+                "command": "modaledit.cancelSearch",
+                "title": "ModalEdit: Canel search mode"
+            },
+            {
+                "command": "modaledit.deleteCharFromSearch",
+                "title": "ModalEdit: Delete the last search character"
+            }
+        ],
+        "keybindings": [
+            {
+                "key": "Escape",
+                "command": "modaledit.enterNormal",
+                "when": "editorTextFocus && !suggestWidgetMultipleSuggestions && !suggestWidgetVisible"
+            },
+            {
+                "key": "Escape",
+                "command": "modaledit.cancelSearch",
+                "when": "editorTextFocus && modaledit.searching"
+            },
+            {
+                "key": "Backspace",
+                "command": "modaledit.deleteCharFromSearch",
+                "when": "editorTextFocus && modaledit.searching"
+            }
+        ]
+    },
+    "scripts": {
+        "vscode:prepublish": "webpack --mode production",
+        "webpack": "webpack --mode development",
+        "webpack-dev": "webpack --mode development --watch",
+        "compile": "tsc -p ./",
+        "watch": "tsc -watch -p ./"
+    },
+    "devDependencies": {
+        "@types/node": "^13.9.3",
+        "@types/vscode": "^1.43.0",
+        "ts-loader": "^6.2.2",
+        "typescript": "^3.8.3",
+        "webpack": "^4.42.0",
+        "webpack-cli": "^3.3.11"
+    },
+    "dependencies": {}
 }

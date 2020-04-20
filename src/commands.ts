@@ -1,6 +1,6 @@
 /**
  * # Commands and State
- * 
+ *
  * This module implements the new commands provided by ModalEdit. It also stores
  * the extension state; which mode we are in, search parameters, bookmarks,
  * quick snippets, etc.
@@ -11,13 +11,13 @@ import * as actions from './actions'
 //#endregion
 /**
  * ## Command Arguments
- * 
- * Most commands provided by ModalEdit take arguments. Since command arguments 
+ *
+ * Most commands provided by ModalEdit take arguments. Since command arguments
  * are stored in objects by-design, we define them as interfaces.
- * 
+ *
  * ### Search Arguments
- * 
- * Search arguments are documented in the 
+ *
+ * Search arguments are documented in the
  * [README](../README.html#code-modaledit-search-code).
  */
 interface SearchArgs {
@@ -29,9 +29,9 @@ interface SearchArgs {
 }
 /**
  * ### Bookmark Arguments
- * 
- * [Bookmark](../README.html#bookmarks) ID is just an index in an array. The 
- * actual positions are stored in an object that conforms to the `Bookmark` 
+ *
+ * [Bookmark](../README.html#bookmarks) ID is just an index in an array. The
+ * actual positions are stored in an object that conforms to the `Bookmark`
  * interface in the `bookmarks` array.
  */
 interface BookmarkArgs {
@@ -44,7 +44,7 @@ interface Bookmark {
 }
 /**
  * ### Quick Snippet Arguments
- * 
+ *
  * [Quick snippets](../README.html#quick-snippets) are also stored in an array.
  * So their IDs are indexes as well.
  */
@@ -53,8 +53,8 @@ interface QuickSnippetArgs {
 }
 /**
  * ### Type Normal Keys Arguments
- * 
- * The [`typeNormalKeys` command](../README.html#invoking-key-bindings) gets the 
+ *
+ * The [`typeNormalKeys` command](../README.html#invoking-key-bindings) gets the
  * entered keys as a string.
  */
 interface TypeNormalKeysArgs {
@@ -62,22 +62,22 @@ interface TypeNormalKeysArgs {
 }
 /**
  * ### Select Between Arguments
- * 
- * The `selectBetween` command takes as arguments the strings/regular 
- * expressions which delimit the text to be selected. Both of them are optional, 
- * but in order for the command to do anything one of them needs to be defined. 
- * If the `from` argument is missing, the selection goes from the cursor 
- * position forwards to the `to` string. If the `to` is missing the selection 
- * goes backwards till the `from` string. 
- * 
+ *
+ * The `selectBetween` command takes as arguments the strings/regular
+ * expressions which delimit the text to be selected. Both of them are optional,
+ * but in order for the command to do anything one of them needs to be defined.
+ * If the `from` argument is missing, the selection goes from the cursor
+ * position forwards to the `to` string. If the `to` is missing the selection
+ * goes backwards till the `from` string.
+ *
  * If the `regex` flag is on, `from` and `to` strings are treated as regular
  * expressions in the search.
- * 
- * The `inclusive` flag tells if the delimiter strings are included in the 
- * selection or not. By default the delimiter strings are not part of the 
- * selection. Last, the `caseSensitive` flag makes the search case sensitive. 
+ *
+ * The `inclusive` flag tells if the delimiter strings are included in the
+ * selection or not. By default the delimiter strings are not part of the
+ * selection. Last, the `caseSensitive` flag makes the search case sensitive.
  * When this flag is missing or false the search is case insensitive.
- * 
+ *
  * By default the search scope is the current line. If you want search inside
  * the whole document, set the `docScope` flag.
  */
@@ -91,9 +91,9 @@ interface SelectBetweenArgs {
 }
 /**
  * ## State Variables
- * 
+ *
  * The enabler for modal editing is the `type` event that VS Code provides. It
- * reroutes the user's key presses to our extension. We store the handler to 
+ * reroutes the user's key presses to our extension. We store the handler to
  * this event in the `typeSubscription` variable.
  */
 let typeSubscription: vscode.Disposable | undefined
@@ -103,7 +103,7 @@ let typeSubscription: vscode.Disposable | undefined
  */
 let statusBarItem: vscode.StatusBarItem
 /**
- * This is the main mode flag that tells if we are in normal mode or insert 
+ * This is the main mode flag that tells if we are in normal mode or insert
  * mode.
  */
 let normalMode = true
@@ -112,8 +112,8 @@ let normalMode = true
  * it is not the only indicator that tells whether a selection is active.
  */
 let selecting = false
-/** 
- * The `searching` flag tells if `modaledit.search` command is in operation. 
+/**
+ * The `searching` flag tells if `modaledit.search` command is in operation.
  */
 let searching = false
 /**
@@ -146,7 +146,7 @@ let lastKeySequence: string[] = []
 let lastChange: string[] = []
 /**
  * ## Command Names
- * 
+ *
  * Since command names are easy to misspell, we define them as constants.
  */
 const toggleId = "modaledit.toggle"
@@ -169,7 +169,7 @@ const selectBetweenId = "modaledit.selectBetween"
 const repeatLastChangeId = "modaledit.repeatLastChange"
 /**
  * ## Registering Commands
- * 
+ *
  * The commands are registered when the extension is activated (main entry point
  * calls this function). We also create the status bar item.
  */
@@ -201,10 +201,10 @@ export function register(context: vscode.ExtensionContext) {
 }
 /**
  * ## Keyboard Event Handler
- * 
- * When the user types in normal mode, `onType` handler gets each typed 
+ *
+ * When the user types in normal mode, `onType` handler gets each typed
  * character one at a time. It calls the `runActionForKey` subroutine to invoke
- * the action bound to the typed key. In addition, it updates the state 
+ * the action bound to the typed key. In addition, it updates the state
  * variables needed by the `repeatLastChange` command and the status bar.
  */
 async function onType(event: { text: string }) {
@@ -221,18 +221,18 @@ async function onType(event: { text: string }) {
 }
 /**
  * Whenever text changes in an active editor, we set a flag. This flag is
- * examined in the `onType` handler above, and the `lastChange` variable is set 
+ * examined in the `onType` handler above, and the `lastChange` variable is set
  * to indicate that the last command that changed editor text.
  */
 export function onTextChanged() {
     textChanged = true
 }
 /**
- * This helper function just calls the `handleKey` function in the `actions` 
+ * This helper function just calls the `handleKey` function in the `actions`
  * module. It checks if we have an active selection or search mode on, and
- * passes that information to the function. `handleKey` returns `true` if the 
- * key actually invoked a command, or `false` if it was a part of incomplete 
- * key sequence that did not (yet) cause any commands to run. This information 
+ * passes that information to the function. `handleKey` returns `true` if the
+ * key actually invoked a command, or `false` if it was a part of incomplete
+ * key sequence that did not (yet) cause any commands to run. This information
  * is needed to decide whether the `lastKeySequence` variable is updated.
  */
 async function runActionForKey(key: string): Promise<boolean> {
@@ -240,7 +240,7 @@ async function runActionForKey(key: string): Promise<boolean> {
 }
 /**
  * ## Mode Switching  Commands
- * 
+ *
  * `toggle` switches between normal and insert mode.
  */
 export function toggle() {
@@ -251,11 +251,11 @@ export function toggle() {
 }
 /**
  * When entering normal mode, we:
- * 
+ *
  * 1. cancel the search, if it is on,
  * 2. subscribe to the `type` event,
  * 3. handle the rest of the mode setup with `setNormalMode` function, and
- * 4. clear the selection. 
+ * 4. clear the selection.
  */
 export function enterNormal() {
     cancelSearch()
@@ -266,13 +266,13 @@ export function enterNormal() {
 }
 /**
  * Conversely, when entering insert mode, we:
- * 
+ *
  * 1. cancel the search, if it is on (yes, you can use it in insert mode, too),
  * 2. unsubscribe to the `type` event,
  * 3. handle the rest of the mode setup with `setNormalMode` function.
- * 
+ *
  * Note that we specifically don't clear the selection. This allows the user
- * to easily surround selected text with hyphens `'`, parenthesis `(` and `)`, 
+ * to easily surround selected text with hyphens `'`, parenthesis `(` and `)`,
  * brackets `[` and `]`, etc.
  */
 export function enterInsert() {
@@ -285,8 +285,8 @@ export function enterInsert() {
 }
 /**
  * The rest of the state handling is delegated to subroutines that do specific
- * things. `setNormalMode` sets or resets the VS Code `modaledit.normal` context. 
- * This can be used in "standard" key bindings. Then it sets the `normalMode` 
+ * things. `setNormalMode` sets or resets the VS Code `modaledit.normal` context.
+ * This can be used in "standard" key bindings. Then it sets the `normalMode`
  * variable and calls the next subroutine which updates cursor and status bar.
  */
 async function setNormalMode(value: boolean): Promise<void> {
@@ -312,7 +312,7 @@ export function updateCursorAndStatusBar(editor: vscode.TextEditor | undefined) 
 }
 /**
  * The last function updates the status bar text according to the mode. It also
- * indicates if selection is active or if search mode on. If so, it shows the 
+ * indicates if selection is active or if search mode on. If so, it shows the
  * search parameters. If no editor is active, we hide the status bar item.
  */
 export function updateStatusBar(editor: vscode.TextEditor | undefined,
@@ -336,11 +336,11 @@ export function updateStatusBar(editor: vscode.TextEditor | undefined,
 }
 /**
  * ## Selection Commands
- * 
+ *
  * `modaledit.cancelSelection` command clears the selection using ths standard
  * `cancelSelection` command, but also sets the `selecting` flag to false, and
  * updates the status bar. It is advisable to use this command instead of the
- * standard version to keep the state in sync. 
+ * standard version to keep the state in sync.
  */
 async function cancelSelection(): Promise<void> {
     await vscode.commands.executeCommand("cancelSelection")
@@ -349,7 +349,7 @@ async function cancelSelection(): Promise<void> {
 }
 /**
  * `modaledit.toggleSelection` toggles the selection mode on and off. It sets
- * the selection mode flag and updates the status bar, but also clears the 
+ * the selection mode flag and updates the status bar, but also clears the
  * selection.
  */
 async function toggleSelection(): Promise<void> {
@@ -360,7 +360,7 @@ async function toggleSelection(): Promise<void> {
 }
 /**
  * The following helper function actually determines, if a selection is active.
- * It checks not only the `selecting` flag but also if there is any text 
+ * It checks not only the `selecting` flag but also if there is any text
  * selected in the active editor.
  */
 function isSelecting(): boolean {
@@ -370,12 +370,12 @@ function isSelecting(): boolean {
 }
 /**
  * ## Search Commands
- * 
+ *
  * Incremental search is by far the most complicated part of this extension.
  * Searching overrides both normal and insert modes, and captures the keyboard
- * until it is done. The following subroutine sets the associated state 
+ * until it is done. The following subroutine sets the associated state
  * variable, the VS Code `modaledit.searching` context, and the status bar.
- * Since search mode also puts the editor implicitly in the normal mode, we 
+ * Since search mode also puts the editor implicitly in the normal mode, we
  * need to check what was the state when we initiated the search. If we were in
  * insert mode, we return also there.
  */
@@ -458,8 +458,8 @@ function highlightNextMatch(editor: vscode.TextEditor, startPos: vscode.Position
     }
     else {
         /**
-         * Otherwise we first map the cursor position to the starting offset 
-         * from the begining of the file. We add the delta argument to the 
+         * Otherwise we first map the cursor position to the starting offset
+         * from the begining of the file. We add the delta argument to the
          * offset.
          */
         let doc = editor.document
@@ -477,7 +477,7 @@ function highlightNextMatch(editor: vscode.TextEditor, startPos: vscode.Position
         let target = searchCaseSensitive ?
             newSearchString : newSearchString.toLowerCase()
         /**
-         * This is the actual search. Depending on the search direction we 
+         * This is the actual search. Depending on the search direction we
          * find either the first or the last match from the start offset.
          */
         let offs = searchBackwards ?
@@ -502,8 +502,8 @@ function highlightNextMatch(editor: vscode.TextEditor, startPos: vscode.Position
 }
 /**
  * ### Accepting Search
- * 
- * Accepting the search resets the mode variables. Additionally, if 
+ *
+ * Accepting the search resets the mode variables. Additionally, if
  * `typeAfterAccept` argument is set we run the given normal mode commands.
  */
 async function acceptSearch() {
@@ -517,7 +517,7 @@ async function typeAfterMatch() {
 }
 /**
  * ### Canceling Search
- * 
+ *
  * Canceling search just resets state, and moves the cursor back to the starting
  * position.
  */
@@ -531,7 +531,7 @@ async function cancelSearch(): Promise<void> {
 }
 /**
  * ### Modifying Search String
- * 
+ *
  * Since we cannot capture the backspace character in normal mode, we have to
  * hook it another way. We define a command `modaledit.deleteCharFromSearch`
  * which deletes the last character from the search string. This command can
@@ -554,11 +554,11 @@ function deleteCharFromSearch() {
 }
 /**
  * ### Finding Previous and Next Match
- * 
- * Given all the code we already have for searching, finding next and previous 
- * match is a relatively simple task. We basically just calculate the new 
- * starting position and restart the search. The selection is what determines 
- * where the search starts, but we need to adjust the starting position slightly 
+ *
+ * Given all the code we already have for searching, finding next and previous
+ * match is a relatively simple task. We basically just calculate the new
+ * starting position and restart the search. The selection is what determines
+ * where the search starts, but we need to adjust the starting position slightly
  * depending on the search direction and other parameters.
  */
 async function nextMatch(): Promise<void> {
@@ -589,7 +589,7 @@ async function previousMatch(): Promise<void> {
 }
 /**
  * ## Bookmarks
- * 
+ *
  * Defining a bookmark is simple. We just store the cursor location and file in
  * a `Bookmark` object, and store it in the `bookmarks` array.
  */
@@ -617,7 +617,7 @@ async function goToBookmark(args?: BookmarkArgs): Promise<void> {
 }
 /**
  * ## Quick Snippets
- * 
+ *
  * Supporting quick snippets is also a pleasantly simple job. First we implement
  * the `modaledit.fillSnippetArgs` command, which replaces (multi-)selection
  * ranges with `$1`, `$2`, ...
@@ -642,7 +642,7 @@ function defineQuickSnippet(args?: QuickSnippetArgs) {
             editor.document.getText(editor.selection)
 }
 /**
- * Inserting a snippet is done as easily with the built-in command. We enter 
+ * Inserting a snippet is done as easily with the built-in command. We enter
  * insert mode automatically before snippet is expanded.
  */
 async function insertQuickSnippet(args?: QuickSnippetArgs): Promise<void> {
@@ -656,8 +656,8 @@ async function insertQuickSnippet(args?: QuickSnippetArgs): Promise<void> {
 }
 /**
  * ## Invoking Commands via Key Bindings
- * 
- * The last command runs normal mode commands throught their key bindings. 
+ *
+ * The last command runs normal mode commands throught their key bindings.
  * Implementing that is as easy as calling the keyboard handler.
  */
 async function typeNormalKeys(args: TypeNormalKeysArgs): Promise<void> {
@@ -668,9 +668,9 @@ async function typeNormalKeys(args: TypeNormalKeysArgs): Promise<void> {
 }
 /**
  * ## Advanced Selection Command
- * 
+ *
  * For selecting ranges of text between two characters (inside parenthesis, for
- * ecample) we add the `modaledit.selectBetween` command. 
+ * ecample) we add the `modaledit.selectBetween` command.
  */
 function selectBetween(args: SelectBetweenArgs) {
     let editor = vscode.window.activeTextEditor
@@ -730,11 +730,11 @@ function selectBetween(args: SelectBetweenArgs) {
 }
 /**
  * ## Repeat Last Change Command
- * 
- * The `repeatLastChange` command runs the key sequence stored in `lastChange` 
- * variable. Since the command inevitably causes text in the editor to change 
- * (which causes the `textChanged` flag to go high), it has to reset the current 
- * key sequence to prevent the `lastChange` variable from being overwritten next 
+ *
+ * The `repeatLastChange` command runs the key sequence stored in `lastChange`
+ * variable. Since the command inevitably causes text in the editor to change
+ * (which causes the `textChanged` flag to go high), it has to reset the current
+ * key sequence to prevent the `lastChange` variable from being overwritten next
  * time the user presses a key.
  */
 async function repeatLastChange(): Promise<void> {
