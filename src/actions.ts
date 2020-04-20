@@ -176,7 +176,7 @@ export function log(message: string) {
 export function updateFromConfig(): void {
     const config = vscode.workspace.getConfiguration("modaledit")
     const keybindings = config.get<object>("keybindings")
-    log("Validating keybindings in 'settings.json'...")
+    log("DEBUG: Validating keybindings in 'settings.json'...")
     if (isKeymap(keybindings)) {
         rootKeymap = keybindings
         keymap = rootKeymap

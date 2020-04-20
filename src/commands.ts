@@ -8,6 +8,7 @@
 //#region -c commands.ts imports
 import * as vscode from 'vscode'
 import * as actions from './actions'
+import { Recoverable } from 'repl'
 //#endregion
 /**
  * ## Command Arguments
@@ -144,6 +145,29 @@ let textChanged = false
 let currentKeySequence: string[] = []
 let lastKeySequence: string[] = []
 let lastChange: string[] = []
+
+/**
+ * Commands for recording and playing back key sequences (macros)
+ * need to store old key sequences in a registry by named register.
+ * A catch is that a recording macro should not overwrite the previously
+ * stored seqeunce until recording completes succesfully. If it's canceled
+ * the old sequence remains in place.
+ */
+interface IHash<T> {
+    [details: string] : T;
+}
+interface IRecord {
+    reqSeq: string[][];
+    seq: string[][];
+    recording: boolean;
+    replaying: boolean;
+}
+let keySeqRegistry: IHash<IRecord> = {};
+
+interface RegisterArgs{
+    register: string;
+}
+
 /**
  * ## Command Names
  *
@@ -167,6 +191,12 @@ const insertQuickSnippetId = "modaledit.insertQuickSnippet"
 const typeNormalKeysId = "modaledit.typeNormalKeys"
 const selectBetweenId = "modaledit.selectBetween"
 const repeatLastChangeId = "modaledit.repeatLastChange"
+const startRecordingKeysId = "modaledit.startRecordingKeys"
+const toggleRecordingKeysId = "modaledit.toggleRecordingKeys"
+const cancelRecordingKeysId = "modaledit.cancelRecordingKeys"
+const stopRecordingKeysId = "modaledit.stopRecordingKeys"
+const replayRecordedKeysId = "modaledit.replayRecordedKeys"
+
 /**
  * ## Registering Commands
  *
@@ -193,7 +223,12 @@ export function register(context: vscode.ExtensionContext) {
         vscode.commands.registerCommand(insertQuickSnippetId, insertQuickSnippet),
         vscode.commands.registerCommand(typeNormalKeysId, typeNormalKeys),
         vscode.commands.registerCommand(selectBetweenId, selectBetween),
-        vscode.commands.registerCommand(repeatLastChangeId, repeatLastChange)
+        vscode.commands.registerCommand(repeatLastChangeId, repeatLastChange),
+        vscode.commands.registerCommand(startRecordingKeysId, startRecordingKeys),
+        vscode.commands.registerCommand(toggleRecordingKeysId, toggleRecordingKeys),
+        vscode.commands.registerCommand(cancelRecordingKeysId, cancelRecordingKeys),
+        vscode.commands.registerCommand(stopRecordingKeysId, stopRecordingKeys),
+        vscode.commands.registerCommand(replayRecordedKeysId, replayRecordedKeys)
     )
     statusBarItem = vscode.window.createStatusBarItem(
         vscode.StatusBarAlignment.Left);
@@ -216,6 +251,11 @@ async function onType(event: { text: string }) {
     if (await runActionForKey(event.text)) {
         lastKeySequence = currentKeySequence
         currentKeySequence = []
+        for(let label in keySeqRegistry){
+            if (keySeqRegistry[label].recording){
+                keySeqRegistry[label].reqSeq.push(lastKeySequence)
+            }
+        }
     }
     updateStatusBar(vscode.window.activeTextEditor, actions.getHelp())
 }
@@ -741,4 +781,93 @@ async function repeatLastChange(): Promise<void> {
     for (let i = 0; i < lastChange.length; i++)
         await runActionForKey(lastChange[i])
     currentKeySequence = lastChange
+}
+
+function getRegister(register: string){
+    if(!keySeqRegistry.hasOwnProperty(register)){
+        let record = {
+            seq: [],
+            reqSeq: [],
+            recording: false,
+            replaying: false
+        }
+        keySeqRegistry[register] = record;
+        return record;
+    }else{
+        return keySeqRegistry[register];
+    }
+}
+
+/**
+ * ## Macros
+ *
+ * These commands can be used to record and replay normal-mode key sequences.
+ *
+ * The `startRecordingKeys` command starts the storing of key presses
+ * into a given key sequence register.
+ */
+function startRecordingKeys(args: RegisterArgs){
+    actions.log("start recording...")
+    let register = getRegister(args.register)
+    if(!register.replaying){
+        register.reqSeq = [];
+        register.recording = true;
+    }
+}
+
+function toggleRecordingKeys(args: RegisterArgs){
+    let register = getRegister(args.register);
+    if(!register.replaying){
+        if(register.recording){
+            stopRecordingKeys(args)
+        }else{
+            startRecordingKeys(args)
+        }
+    }
+}
+/**
+ * `cancelRecordingKeys` stops recording, and does not overwrite the current
+ * sequence for a given register.
+ */
+function cancelRecordingKeys(args: RegisterArgs){
+    let register = getRegister(args.register)
+    if(!register.replaying){
+        keySeqRegistry[args.register].reqSeq = [];
+        keySeqRegistry[args.register].recording = false;
+    }
+}
+
+/**
+ * `stopRecordingKeys` stops recording, and overwrites the registry
+ * with the newly recorded sequence.
+ */
+function stopRecordingKeys(args: RegisterArgs){
+    actions.log("stop recording...")
+
+    let register = getRegister(args.register)
+    if(!register.replaying){
+        keySeqRegistry[args.register].seq = keySeqRegistry[args.register].reqSeq;
+        keySeqRegistry[args.register].reqSeq = [];
+        keySeqRegistry[args.register].recording = false;
+
+        actions.log("key sequence: ")
+        for(let i=0;i<keySeqRegistry[args.register].seq.length;i++){
+            actions.log("action: "+keySeqRegistry[args.register].seq[i].join());
+        }
+    }
+}
+
+/**
+ * `replayRecordedKeys` re-runs the key sequence in a given register.
+ */
+async function replayRecordedKeys(args: RegisterArgs){
+    let register = getRegister(args.register)
+    register.replaying = true;
+    let seq = register.seq;
+    for(let i = 0; i < seq.length; i++){
+        for(let j = 0; j < seq[i].length; j++){
+            await runActionForKey(seq[i][j])
+        }
+    }
+    register.replaying = false;
 }
