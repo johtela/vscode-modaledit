@@ -2,7 +2,7 @@
     "name": "vscode-modaledit",
     "displayName": "ModalEdit",
     "description": "DIY Vim emulation",
-    "version": "1.7.0",
+    "version": "1.8.1",
     "publisher": "johtela",
     "engines": {
         "vscode": "^1.43.0"
@@ -190,8 +190,8 @@
         "vscode:prepublish": "webpack --mode production",
         "webpack": "webpack --mode development",
         "webpack-dev": "webpack --mode development --watch",
-        "compile": "tsc -p ./",
-        "watch": "tsc -watch -p ./"
+        "compile": "tsc -p ./ --outDir dist",
+        "watch": "tsc -watch -p ./ --outDir dist"
     },
     "devDependencies": {
         "@types/node": "^13.9.3",

@@ -1,0 +1,681 @@
+{
+    ///////////////////////////////////
+    // Basic selection operators, reset or extend selection
+
+    // single characters
+    "h": [
+        {
+            "condition": "editor.selection.isEmpty",
+            "true": {
+                "command": "cursorMove",
+                "args": "{ to: 'left', select: false }"
+            },
+            "false": {
+                "condition": "!editor.selection.isReversed",
+                "true": [
+                    {
+                        "command": "cursorMove",
+                        "args":"{ to: 'right', select: false, value: 0 }"
+                    },
+                    {
+                        "command": "cursorMove",
+                        "args": "{ to: 'left', select: false }"
+                    }
+                ],
+                "false": [
+                    {
+                        "command": "cursorMove",
+                        "args":"{ to: 'left', select: false, value: 0 }"
+                    },
+                    {
+                        "command": "cursorMove",
+                        "args": "{ to: 'left', select: false }"
+                    }
+                ],
+            }
+        }
+    ],
+    "H": [
+        {
+            "command": "cursorMove",
+            "args": "{ to: 'left', select: true }"
+        },
+    ],
+
+    "j": [
+        {
+            "command": "cursorMove",
+            "args": "{ to: 'down', select: false }"
+        }
+    ],
+    "J": {
+        "command": "cursorMove",
+        "args": "{ to: 'down', select: true }"
+    },
+
+    "k": [
+        {
+            "command": "cursorMove",
+            "args": "{ to: 'up', select: false }"
+        }
+    ],
+    "K": {
+        "command": "cursorMove",
+        "args": "{ to: 'up', select: true }"
+    },
+
+    "l": {
+        "condition": "editor.selection.isEmpty",
+        "true": {
+            "command": "cursorMove",
+            "args": "{ to: 'right', select: false }"
+        },
+        "false": {
+            "condition": "editor.selection.isReversed",
+            "true": [
+                {
+                    "command": "cursorMove",
+                    "args":"{ to: 'left', select: false, value: 0 }"
+                },
+                {
+                    "command": "cursorMove",
+                    "args": "{ to: 'right', select: false }"
+                }
+            ],
+            "false": [
+                {
+                    "command": "cursorMove",
+                    "args":"{ to: 'right', select: false, value: 0 }"
+                },
+                {
+                    "command": "cursorMove",
+                    "args": "{ to: 'right', select: false }"
+                }
+            ],
+        }
+    },
+    "L": {
+        "command": "cursorMove",
+        "args": "{ to: 'right', select: true }"
+    },
+
+    // word-like
+    "w": [
+        "cursorWordPartRight",
+        "cursorWordPartLeft",
+        "cursorWordPartRightSelect",
+    ],
+    "b": [
+        "cursorWordPartLeft",
+        "cursorWordPartRight",
+        "cursorWordPartLeftSelect"
+    ],
+    "W": "cursorWordPartRightSelect",
+    "B": "cursorWordPartLeftSelect",
+
+    // TODO: E for WORD (ala vim)
+
+    ///////////////////////
+    // line related operators
+    "t": {
+        "condition": "editor.selection.isSingleLine",
+        "true": [
+            {
+                "command": "cursorMove",
+                "args": "{ to: 'down', select: true }"
+            },
+            {
+                "command": "cursorMove",
+                "args": "{ to: 'wrappedLineStart', select: false }"
+            },
+            {
+                "command": "cursorMove",
+                "args": "{ to: 'up', select: true, value: 2 }"
+            },
+            {
+                "command": "cursorMove",
+                "args": "{ to: 'wrappedLineStart', select: true }"
+            },
+        ],
+        "false": [
+            {
+                "command": "cursorMove",
+                "args": "{ to: 'up', select: true }"
+            },
+            {
+                "command": "cursorMove",
+                "args": "{ to: 'wrappedLineStart', select: true }"
+            },
+        ],
+    },
+
+    // TODO: handle last line of document specially
+    "y": {
+        "condition": "editor.selection.isSingleLine",
+        "true": [
+            {
+                "command": "cursorMove",
+                "args": "{ to: 'wrappedLineStart', select: false }"
+            },
+            {
+                "command": "cursorMove",
+                "args": "{ to: 'down', select: true, value: 2 }"
+            },
+            {
+                "command": "cursorMove",
+                "args": "{ to: 'wrappedLineStart', select: true }"
+            },
+        ],
+        "false": [
+            {
+                "command": "cursorMove",
+                "args": "{ to: 'down', select: true }"
+            },
+            {
+                "command": "cursorMove",
+                "args": "{ to: 'wrappedLineStart', select: true }"
+            },
+        ],
+    },
+
+    // paragraph related
+    "p": [
+        {
+            "command": "cursorMove",
+            "args": "{ to: 'down', select: false }"
+        },
+        "block-travel.jumpUp",
+        "block-travel.selectDown",
+    ],
+    "P": "block-travel.selectDown",
+
+    // paragraph related
+    "o": [
+        {
+            "command": "cursorMove",
+            "args": "{ to: 'up', select: false }"
+        },
+        "block-travel.jumpDown",
+        "block-travel.selectUp",
+    ],
+    "O": "block-travel.selectUp",
+
+    // page movement
+    "=,+": [
+        {
+            "command": "editorScroll",
+            "args": "{ to: 'down', by: 'halfPage' }"
+        },
+        {
+            "command": "cursorMove",
+            "args": "{ to: 'viewPortBottom', select: __rkeys[0] === '+' }"
+        }
+    ],
+    "-,_": [
+        {
+            "command": "editorScroll",
+            "args": "{ to: 'up', by: 'halfPage' }"
+        },
+        {
+            "command": "cursorMove",
+            "args": "{ to: 'viewPortTop', select: __rkeys[0] == '_' }"
+        }
+    ],
+
+    // search related
+    "/": [ "actions.find" ],
+    "?": [
+        {
+            "command": "modaledit.search",
+            "args": {
+                "caseSensitive": true,
+                "backwards": false,
+                "selectTillMatch": true
+            }
+        }
+    ],
+
+    // "f": [
+    //     "modaledit.resetSelection",
+    //     {
+    //         "command": "modaledit.search",
+    //         "args": {
+    //             "caseSensitive": true,
+    //             "acceptAfter": 1,
+    //             "backwards": false,
+    //             "selectTillMatch": false // TODO: use true, but make sure it selects from last stopping point (requires change in modaledit code)
+    //         }
+    //     }
+    // ],
+    "f": [
+        {
+            "command": "modaledit.search",
+            "args": {
+                "caseSensitive": true,
+                "acceptAfter": 1,
+                "backwards": false,
+                "selectTillMatch": true
+            }
+        }
+    ],
+    // "d": [
+    //     "modaledit.resetSelection",
+    //     {
+    //         "command": "modaledit.search",
+    //         "args": {
+    //             "caseSensitive": true,
+    //             "acceptAfter": 1,
+    //             "backwards": true,
+    //             "selectTillMatch": false // TODO: use true, but make sure it selects from last stopping point (requires change in modaledit code)
+    //         }
+    //     }
+    // ],
+    "d": [
+        {
+            "command": "modaledit.search",
+            "args": {
+                "caseSensitive": true,
+                "acceptAfter": 1,
+                "backwards": true,
+                "selectTillMatch": true
+            }
+        }
+    ],
+
+    // "m": [
+    //     "modaledit.resetSelection",
+    //     {
+    //         "command": "modaledit.search",
+    //         "args": {
+    //             "caseSensitive": true,
+    //             "acceptAfter": 2,
+    //             "backwards": false,
+    //             "selectTillMatch": false
+    //         }
+    //     }
+    // ],
+    "m": [
+        {
+            "command": "modaledit.search",
+            "args": {
+                "caseSensitive": true,
+                "acceptAfter": 2,
+                "backwards": false,
+                "selectTillMatch": true
+            }
+        }
+    ],
+    // "n": [
+    //     {
+    //         "command": "modaledit.search",
+    //         "args": {
+    //             "caseSensitive": true,
+    //             "acceptAfter": 2,
+    //             "backwards": true,
+    //             "selectTillMatch": false
+    //         }
+    //     }
+    // ],
+    "n": [
+        {
+            "command": "modaledit.search",
+            "args": {
+                "caseSensitive": true,
+                "acceptAfter": 2,
+                "backwards": true,
+                "selectTillMatch": true
+            }
+        }
+    ],
+
+    ";": [
+        "modaledit.nextMatch"
+    ],
+    ",": [
+        "modaledit.previousMatch",
+    ],
+
+    ////////////////////////
+    // more complex syntactic selections
+
+    // "I": "select-indentation.expand-selection",
+    "%": "editor.action.jumpToBracket",
+    "[": "bracketeer.selectBracketContent",
+    "'": "bracketeer.selectQuotesContent",
+    "{": {
+        "'": "extension.selectSingleQuote",
+        "\"": "extension.selectDoubleQuote",
+        "[": "extension.selectSquareBrackets",
+        "{": "extension.selectCurlyBrackets",
+        "(": "extension.selectParenthesis",
+        "`": "extension.selectBackTick",
+        ">": "extension.selectAngleBrackets",
+        "<": "extension.selectInTag"
+    },
+
+    ////////////////////////
+    // selection modifiers
+    "s": {
+        "condition": "editor.selection.isEmpty",
+        "true": {
+            "command": "cursorMove",
+            "args": "{ to: 'left', select: true }"
+        },
+        "false": "exchangePointAndMark",
+    },
+
+    " ": {
+        "condition": "!editor.selection.isReversed",
+        "true": {
+            "command": "cursorMove",
+            "args": "{ to: 'right', select: false, value: 0 }"
+        },
+        "false": {
+            "command": "cursorMove",
+            "args": "{ to: 'left', select: false, value: 0 }"
+        }
+    },
+    ////////////////////////
+    // actions
+
+    // add text
+    "a": [
+        {
+            "condition": "editor.selection.isEmpty",
+            "true": "modaledit.enterInsert",
+            "false": [
+                {
+                    "condition": "!editor.selection.isReversed",
+                    "true": {
+                        "command": "cursorMove",
+                        "args": "{ to: 'right', select: false, value: 0 }"
+                    },
+                    "false": {
+                        "command": "cursorMove",
+                        "args": "{ to: 'left', select: false, value: 0 }"
+                    }
+                },
+                "modaledit.enterInsert"
+            ]
+        }
+    ],
+    "A": {
+        "condition": "editor.selection.isEmpty",
+        "true": [
+            {
+                "command": "cursorMove",
+                "args": "{ to: 'right', select: false }"
+            },
+            "modaledit.enterInsert"
+        ],
+        "false": [
+            "exchangePointAndMark",
+            {
+                "condition": "!editor.selection.isReversed",
+                "true": {
+                    "command": "cursorMove",
+                    "args": "{ to: 'right', select: false, value: 0 }"
+                },
+                "false": {
+                    "command": "cursorMove",
+                    "args": "{ to: 'left', select: false, value: 0 }"
+                }
+            },
+            "modaledit.enterInsert"
+        ]
+    },
+
+    "(": [
+        {
+            "command": "cursorMove",
+            "args": "{ to: 'wrappedLineFirstNonWhitespaceCharacter', select: false }"
+        },
+        "modaledit.enterInsert"
+    ],
+    ")": [
+        {
+            "command": "cursorMove",
+            "args": "{ to: 'wrappedLineEnd', select: false }"
+        },
+        "modaledit.enterInsert"
+    ],
+
+    // replace
+    "r": {
+        "condition": "!editor.selection.isSingleLine && editor.selection.end.character == 0 && editor.selection.start.character == 0",
+        "false": [
+            "deleteRight",
+            "modaledit.enterInsert"
+        ],
+        "true": [
+            "deleteRight",
+            "editor.action.insertLineBefore",
+            "modaledit.enterInsert"
+        ]
+    },
+    "R": [
+        "deleteAllRight",
+        "modaledit.enterInsert"
+    ],
+
+    // cut to clipboard
+    "x": "editor.action.clipboardCutAction",
+    "X": [
+        {
+            "condition": "!editor.selection.isReversed",
+            "true": {
+                "command": "cursorMove",
+                "args": "{ to: 'right', select: false, value: 0 }"
+            },
+            "false": {
+                "command": "cursorMove",
+                "args": "{ to: 'left', select: false, value: 0 }"
+            }
+        },
+        {
+            "command": "cursorMove",
+            "args": "{ to: 'wrappedLineEnd', select: true }"
+        },
+        "editor.action.clipboardCutAction"
+    ],
+    "]": "deleteRight",
+
+    // copy to clipboard
+    "c": [
+        "editor.action.clipboardCopyAction",
+        {
+            "condition": "!editor.selection.isReversed",
+            "true": {
+                "command": "cursorMove",
+                "args": "{ to: 'right', select: false, value: 0 }"
+            },
+            "false": {
+                "command": "cursorMove",
+                "args": "{ to: 'left', select: false, value: 0 }"
+            }
+        }
+    ],
+    // paste after
+    "v": [
+        {
+            "condition": "!editor.selection.isReversed",
+            "true": {
+                "command": "cursorMove",
+                "args": "{ to: 'right', select: false, value: 0 }"
+            },
+            "false": {
+                "command": "cursorMove",
+                "args": "{ to: 'left', select: false, value: 0 }"
+            }
+        },
+        "cursorRight",
+        "editor.action.clipboardPasteAction"
+    ],
+    // paste before
+    "V": [
+        {
+            "condition": "!editor.selection.isReversed",
+            "true": {
+                "command": "cursorMove",
+                "args": "{ to: 'right', select: false, value: 0 }"
+            },
+            "false": {
+                "command": "cursorMove",
+                "args": "{ to: 'left', select: false, value: 0 }"
+            }
+        },
+        "editor.action.clipboardPasteAction"
+    ],
+    // begin line below
+    "e": [
+        "editor.action.insertLineAfter",
+        "modaledit.enterInsert"
+    ],
+    "E": [
+        "editor.action.insertLineBefore",
+        "modaledit.enterInsert"
+    ],
+
+    ">": "editor.action.indentLines",
+    "<": "editor.action.outdentLines",
+
+    ":": "workbench.action.showCommands",
+
+    ///////////////////////
+    // history
+
+    "z": [
+        "undo",
+        {
+            "condition": "!editor.selection.isReversed",
+            "true": {
+                "command": "cursorMove",
+                "args": "{ to: 'right', select: false, value: 0 }"
+            },
+            "false": {
+                "command": "cursorMove",
+                "args": "{ to: 'left', select: false, value: 0 }"
+            }
+        }
+    ],
+    "Z": [
+        "redo",
+        {
+            "condition": "!editor.selection.isReversed",
+            "true": {
+                "command": "cursorMove",
+                "args": "{ to: 'right', select: false, value: 0 }"
+            },
+            "false": {
+                "command": "cursorMove",
+                "args": "{ to: 'left', select: false, value: 0 }"
+            }
+        }
+    ],
+    "u": "cursorUndo",
+    "U": "cursorRedo",
+
+    "Q": {
+        "command": "modaledit.toggleRecordingKeys",
+        "args": "{ register: 'default' }"
+    },
+    "q": {
+        "command": "modaledit.replayRecordedKeys",
+        "args": "{ register: 'default' }"
+    },
+
+    // first leader
+    "g": {
+        "a": "modaledit.enterInsert",
+        "c": {
+            "command": "revealLine",
+            "args": "{ lineNumber: __line, at: 'center' }"
+        },
+        "t": {
+            "command": "revealLine",
+            "args": "{ lineNumber: __line, at: 'top' }"
+        },
+        "b": {
+            "command": "revealLine",
+            "args": "{ lineNumber: __line, at: 'bottom' }"
+        },
+
+        "y": "editor.action.joinLines",
+        "i": "editor.action.showHover",
+        "r": "terminal-polyglot.send-text",
+
+        "j": "cursorBottom",
+        "J": "cursorBottomSelect",
+        "k": "cursorTop",
+        "K": "cursorTopSelect",
+        "h": "cursorHome",
+        "H": "cursorHomeSelect",
+        "l,L": {
+            "command": "cursorMove",
+            "args": "{ to: 'wrappedLineEnd', select: __rkeys[0] == 'L' }"
+        },
+
+
+        "]": "bracketeer.swapBrackets",
+        "[": "bracketeer.removeBrackets",
+        "'": "bracketeer.swapQuotes",
+        ";": "bracketeer.removeQuotes",
+
+        "e": "editor.action.marker.next",
+        "E": "editor.action.marker.prev",
+        "d": "editor.action.dirtydiff.next",
+        "D": "editor.action.dirtydiff.prev",
+        "f": "workbench.action.editor.nextChange",
+        "F": "workbench.action.editor.previousChange",
+
+        "g": "editor.action.revealDefinition",
+        "G": "editor.action.revealDefinitionAside",
+
+        "v": "clipboard-manager.editor.pickAndPaste",
+        "n": {
+            "a-z": {
+                "command": "modaledit.defineBookmark",
+                "args": "{ bookmark: __rkeys[0] }"
+            }
+        },
+        "m": {
+            "a-z": {
+                "command": "modaledit.goToBookmark",
+                "args": "{ bookmark: __rkeys[0] }"
+            }
+        },
+
+        "/": [
+            "editor.action.commentLine",
+            {
+                "condition": "!editor.selection.isReversed",
+                "true": {
+                    "command": "cursorMove",
+                    "args": "{ to: 'right', select: false, value: 0 }"
+                },
+                "false": {
+                    "command": "cursorMove",
+                    "args": "{ to: 'left', select: false, value: 0 }"
+                }
+            }
+        ]
+   },
+
+    "1-9": {
+        "id": 1,
+        "help": "Enter count followed by movement",
+        "0-9": 1,
+        "w,e,r,t,y,o,p,[,],-,=,d,f,h,j,k,l,n,m,Q,W,E,R,T,Y,I,O,P,{,},|,\\,_,+,D,F,H,J,K,L,N,M": {
+            "command": "modaledit.typeNormalKeys",
+            "args": "{ keys: __keys[__keys.length - 1] }",
+            "repeat": "Number(__keys.slice(0, -1).join(''))"
+        },
+    },
+
+    "~": {
+        "condition": "__selection == __selection.toUpperCase()",
+        "true": "editor.action.transformToLowercase",
+        "false": "editor.action.transformToUppercase"
+    },
+
+}

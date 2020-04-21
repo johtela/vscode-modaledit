@@ -161,11 +161,19 @@ interface IRecord {
     seq: string[][];
     recording: boolean;
     replaying: boolean;
+    stopping: boolean;
+    skipRecording: boolean;
+    includeFirstCommand: boolean;
+    includeLastCommand: boolean;
 }
 let keySeqRegistry: IHash<IRecord> = {};
 
 interface RegisterArgs{
     register: string;
+}
+interface RecordArgs{
+    register: string;
+    includeThisCommand?: boolean;
 }
 
 /**
@@ -192,10 +200,12 @@ const typeNormalKeysId = "modaledit.typeNormalKeys"
 const selectBetweenId = "modaledit.selectBetween"
 const repeatLastChangeId = "modaledit.repeatLastChange"
 const startRecordingKeysId = "modaledit.startRecordingKeys"
+const restartRecordingKeysId = "modaledit.restartRecordingKeys"
 const toggleRecordingKeysId = "modaledit.toggleRecordingKeys"
 const cancelRecordingKeysId = "modaledit.cancelRecordingKeys"
 const stopRecordingKeysId = "modaledit.stopRecordingKeys"
 const replayRecordedKeysId = "modaledit.replayRecordedKeys"
+const skipRecordingKeyId = "modaledit.skipRecordingKey"
 
 /**
  * ## Registering Commands
@@ -225,10 +235,12 @@ export function register(context: vscode.ExtensionContext) {
         vscode.commands.registerCommand(selectBetweenId, selectBetween),
         vscode.commands.registerCommand(repeatLastChangeId, repeatLastChange),
         vscode.commands.registerCommand(startRecordingKeysId, startRecordingKeys),
+        vscode.commands.registerCommand(restartRecordingKeysId, restartRecordingKeys),
         vscode.commands.registerCommand(toggleRecordingKeysId, toggleRecordingKeys),
         vscode.commands.registerCommand(cancelRecordingKeysId, cancelRecordingKeys),
         vscode.commands.registerCommand(stopRecordingKeysId, stopRecordingKeys),
-        vscode.commands.registerCommand(replayRecordedKeysId, replayRecordedKeys)
+        vscode.commands.registerCommand(replayRecordedKeysId, replayRecordedKeys),
+        vscode.commands.registerCommand(skipRecordingKeyId, skipRecordingKey)
     )
     statusBarItem = vscode.window.createStatusBarItem(
         vscode.StatusBarAlignment.Left);
@@ -252,8 +264,34 @@ async function onType(event: { text: string }) {
         lastKeySequence = currentKeySequence
         currentKeySequence = []
         for(let label in keySeqRegistry){
-            if (keySeqRegistry[label].recording){
-                keySeqRegistry[label].reqSeq.push(lastKeySequence)
+            let register = keySeqRegistry[label]
+            if (register.recording){
+                if(register.skipRecording){
+                    register.skipRecording = false;
+                    continue;
+                }
+                if(!register.stopping) register.reqSeq.push(lastKeySequence)
+                else{
+                    // actions.log("include last? "+register.includeLastCommand)
+                    if(register.includeLastCommand)
+                        register.reqSeq.push(lastKeySequence)
+
+                    // actions.log("include first? "+register.includeFirstCommand)
+
+                    if(register.includeFirstCommand){
+                        register.seq = register.reqSeq;
+                    }else{
+                        register.seq = register.reqSeq.slice(1)
+                    }
+                    register.reqSeq = [];
+                    register.recording = false;
+                    register.stopping = false;
+
+                    actions.log("key sequence: ")
+                    for(let i=0;i<register.seq.length;i++){
+                        actions.log("action: "+register.seq[i].join());
+                    }
+                }
             }
         }
     }
@@ -789,7 +827,11 @@ function getRegister(register: string){
             seq: [],
             reqSeq: [],
             recording: false,
-            replaying: false
+            replaying: false,
+            stopping: false,
+            skipRecording: false,
+            includeFirstCommand: false,
+            includeLastCommand: false,
         }
         keySeqRegistry[register] = record;
         return record;
@@ -806,16 +848,30 @@ function getRegister(register: string){
  * The `startRecordingKeys` command starts the storing of key presses
  * into a given key sequence register.
  */
-function startRecordingKeys(args: RegisterArgs){
+function startRecordingKeys(args: RecordArgs){
     actions.log("start recording...")
     let register = getRegister(args.register)
     if(!register.replaying){
         register.reqSeq = [];
         register.recording = true;
+        register.includeFirstCommand = args.includeThisCommand ?
+            args.includeThisCommand : false;
     }
 }
 
-function toggleRecordingKeys(args: RegisterArgs){
+function restartRecordingKeys(args: RecordArgs){
+    actions.log("start recording...")
+    let register = getRegister(args.register)
+    if(!register.replaying){
+        if(!register.recording){
+            register.recording = true;
+            register.includeFirstCommand = args.includeThisCommand ?
+                args.includeThisCommand : false;
+        }
+    }
+}
+
+function toggleRecordingKeys(args: RecordArgs){
     let register = getRegister(args.register);
     if(!register.replaying){
         if(register.recording){
@@ -831,9 +887,9 @@ function toggleRecordingKeys(args: RegisterArgs){
  */
 function cancelRecordingKeys(args: RegisterArgs){
     let register = getRegister(args.register)
-    if(!register.replaying){
-        keySeqRegistry[args.register].reqSeq = [];
-        keySeqRegistry[args.register].recording = false;
+    if(!register.replaying && register.recording){
+        register.reqSeq = [];
+        register.recording = false;
     }
 }
 
@@ -841,19 +897,14 @@ function cancelRecordingKeys(args: RegisterArgs){
  * `stopRecordingKeys` stops recording, and overwrites the registry
  * with the newly recorded sequence.
  */
-function stopRecordingKeys(args: RegisterArgs){
+function stopRecordingKeys(args: RecordArgs){
     actions.log("stop recording...")
 
     let register = getRegister(args.register)
     if(!register.replaying){
-        keySeqRegistry[args.register].seq = keySeqRegistry[args.register].reqSeq;
-        keySeqRegistry[args.register].reqSeq = [];
-        keySeqRegistry[args.register].recording = false;
-
-        actions.log("key sequence: ")
-        for(let i=0;i<keySeqRegistry[args.register].seq.length;i++){
-            actions.log("action: "+keySeqRegistry[args.register].seq[i].join());
-        }
+        register.includeLastCommand = args.includeThisCommand ?
+            args.includeThisCommand : false
+        register.stopping = true;
     }
 }
 
@@ -870,4 +921,10 @@ async function replayRecordedKeys(args: RegisterArgs){
         }
     }
     register.replaying = false;
+}
+
+function skipRecordingKey(args: RegisterArgs){
+    let register = getRegister(args.register)
+    if(!register.replaying && register.recording)
+        register.skipRecording = true;
 }
