@@ -140,7 +140,7 @@ file.
             "condition": "__selecting",
             "true": "cursorTopSelect",
             "false": "cursorTop"
-        },
+        }
     },
     /**
 The opposite of that is `G` wich jumps to the end of file.
@@ -166,7 +166,7 @@ incremental search command which can be customized to this purpose.
             "args": {
                 "caseSensitive": true,
                 "acceptAfter": 1,
-                "selectTillMatch": true,
+                "selectTillMatch": true
             }
         },
         "false": {
@@ -174,9 +174,9 @@ incremental search command which can be customized to this purpose.
             "args": {
                 "caseSensitive": true,
                 "acceptAfter": 1,
-                "typeAfterAccept": "h",
+                "typeAfterAccept": "h"
             }
-        },
+        }
     },
     /**
 The command is a bit involved, so let's explain what each argument does.
@@ -203,7 +203,7 @@ character. The `backwards` parameter switches the search direction.
                 "caseSensitive": true,
                 "acceptAfter": 1,
                 "selectTillMatch": true,
-                "backwards": true,
+                "backwards": true
             }
         },
         "false": {
@@ -214,7 +214,7 @@ character. The `backwards` parameter switches the search direction.
                 "typeAfterAccept": "h",
                 "backwards": true
             }
-        },
+        }
     },
     /**
 With `;` and `,` keys you can repeat the previous `f` or `F` commands either 

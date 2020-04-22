@@ -28,7 +28,7 @@
 			"properties": {
 				"modaledit.keybindings": {
 					"type": "object",
-					"description": "Keybindings map, key → VS Code actions/commands",
+					"description": "Keybindings map key → VS Code commands",
 					"default": {},
 					"patternProperties": {
 						"^.([\\-,].)*$": {
@@ -92,6 +92,72 @@
 						}
 					}
 				},
+				"modaledit.selectbindings": {
+					"type": "object",
+					"description": "Keybindings used when selection is active",
+					"default": {},
+					"patternProperties": {
+						"^.([\\-,].)*$": {
+							"anyOf": [
+								{
+									"type": "string",
+									"description": "VS Code command"
+								},
+								{
+									"type": "array",
+									"description": "Sequence of commands",
+									"items": {
+										"anyOf": [
+											{
+												"type": "object",
+												"description": "Action"
+											},
+											{
+												"type": "string",
+												"description": "VS Code command"
+											}
+										]
+									}
+								},
+								{
+									"type": "object",
+									"description": "VS Code command with arguments",
+									"properties": {
+										"command": {
+											"type": "string",
+											"description": "VS Code command"
+										},
+										"args": {
+											"description": "Command arguments",
+											"anyOf": [
+												{
+													"type": "object"
+												},
+												{
+													"type": "string"
+												}
+											]
+										}
+									}
+								},
+								{
+									"type": "object",
+									"description": "Conditional command",
+									"properties": {
+										"condition": {
+											"type": "string",
+											"description": "JavaScript expression that is evaluated"
+										}
+									}
+								},
+								{
+									"type": "number",
+									"description": "Keymap id"
+								}
+							]
+						}
+					}
+				},				
 				"modaledit.insertCursorStyle": {
 					"type": "string",
 					"enum": [

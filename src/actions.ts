@@ -100,12 +100,13 @@ let startInNormalMode: boolean
  * The root of the action configuration is keymap. This defines what key 
  * sequences will be run when keys are pressed in normal mode.
  */
-let rootKeymap: Keymap
+let baseKeymap: Keymap
+let selectKeymap: Keymap
 /**
  * The current active keymap is stored here. The active keymap changes when the
  * user invokes a multi-key action sequence.
  */
-let keymap: Keymap
+let currentKeymap: Keymap | null = null
 /**
  * The last command run is also stored. This is needed to run commands which
  * capture the keyboard.
@@ -175,14 +176,25 @@ export function log(message: string) {
  */
 export function updateFromConfig(): void {
     const config = vscode.workspace.getConfiguration("modaledit")
-    const keybindings = config.get<object>("keybindings")
     log("Validating keybindings in 'settings.json'...")
+    validateBindings(config.get<object>("keybindings"))
+    validateBindings(config.get<object>("selectbindings"))
+    insertCursorStyle = toVSCursorStyle(
+        config.get<Cursor>("insertCursorStyle", "line"))
+    normalCursorStyle = toVSCursorStyle(
+        config.get<Cursor>("normalCursorStyle", "block"))
+    searchCursorStyle = toVSCursorStyle(
+        config.get<Cursor>("searchCursorStyle", "underline"))
+    startInNormalMode = config.get<boolean>("startInNormalMode", true)
+}
+
+function validateBindings(keybindings: object | undefined) {
     if (isKeymap(keybindings)) {
-        rootKeymap = keybindings
-        keymap = rootKeymap
+        baseKeymap = keybindings
+        currentKeymap = baseKeymap
         keymapsById = {}
         errors = 0
-        validateAndResolveKeymaps(keymap)
+        validateAndResolveKeymaps(currentKeymap)
         if (errors > 0)
             log(`Found ${errors} error${errors > 1 ? "s" : ""}. ` +
                 "Keybindings might not work correctly.")
@@ -191,13 +203,6 @@ export function updateFromConfig(): void {
     }
     else if (keybindings)
         log("ERROR: Invalid configuration structure. Keybindings not updated.")
-    insertCursorStyle = toVSCursorStyle(
-        config.get<Cursor>("insertCursorStyle", "line"))
-    normalCursorStyle = toVSCursorStyle(
-        config.get<Cursor>("normalCursorStyle", "block"))
-    searchCursorStyle = toVSCursorStyle(
-        config.get<Cursor>("searchCursorStyle", "underline"))
-    startInNormalMode = config.get<boolean>("startInNormalMode", true)
 }
 /**
  * To make sure that the keybinding section is valid, we define a function that
@@ -434,7 +439,7 @@ async function executeParameterized(action: Parameterized, selecting: boolean) {
             let val = evalString(action.repeat, selecting)
             if (typeof val === 'number')
                 repeat = Math.max(1, val)
-            else 
+            else
                 repeat = action.repeat
         }
         else
@@ -459,7 +464,7 @@ async function executeParameterized(action: Parameterized, selecting: boolean) {
  * object at this point. We set the new keymap as the active one.
  */
 async function execute(action: Action, selecting: boolean): Promise<void> {
-    keymap = rootKeymap
+    currentKeymap = null
     if (isString(action))
         await executeVSCommand(action)
     else if (isCommandSequence(action))
@@ -470,7 +475,7 @@ async function execute(action: Action, selecting: boolean): Promise<void> {
     else if (isParameterized(action))
         await executeParameterized(action, selecting)
     else
-        keymap = <Keymap>action
+        currentKeymap = <Keymap>action
 }
 /**
  * ## Key Press Handler
@@ -483,27 +488,39 @@ async function execute(action: Action, selecting: boolean): Promise<void> {
  * Otherwise we just check if the current keymap contains binding for the key
  * pressed, and execute the action. If not, we present an error to the user.
  * 
- * As a last step the function returns `true`, if the handled key caused the 
- * `keySequence` to be cleared. This indicates that the key invoked a command
- * instead of just changing the active keymap.
+ * As a last step the function returns `true`, if the current keymap is `null`.
+ * This indicates that the key invoked a command instead of just changing the 
+ * active keymap.
  */
 export async function handleKey(key: string, selecting: boolean,
     capture: boolean): Promise<boolean> {
+
+    function error() {
+        vscode.window.showWarningMessage("ModalEdit: Undefined key binding: " +
+            keySequence.join(" - "))
+        currentKeymap = null
+    }
+
     keySequence.push(key)
     if (capture && lastCommand)
         executeVSCommand(lastCommand, key)
-    else if (keymap && keymap[key]) {
-        await execute(keymap[key], selecting)
-        if (keymap == rootKeymap)
-            keySequence = []
+    else if (currentKeymap) {
+        if (currentKeymap[key])
+            await execute(currentKeymap[key], selecting)
+        else
+            error()
     }
     else {
-        vscode.window.showWarningMessage("ModalEdit: Undefined key binding: " +
-            keySequence.join(" - "))
-        keySequence = []
-        keymap = rootKeymap
+        if (selecting && selectKeymap[key])
+            await execute(selectKeymap[key], selecting)
+        else if (baseKeymap[key])
+            await execute(baseKeymap[key], selecting)
+        else
+            error()
     }
-    return (keySequence.length == 0)
+    if (!currentKeymap)
+        keySequence = []
+    return !currentKeymap
 }
 /**
  * ## Keymap Help
@@ -513,5 +530,5 @@ export async function handleKey(key: string, selecting: boolean,
  * in the status bar. 
  */
 export function getHelp(): string | undefined {
-    return keymap.help
+    return currentKeymap?.help
 }
