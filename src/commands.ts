@@ -121,7 +121,7 @@ let searching = false
  * The search parameters are stored below.
  */
 let searchString: string
-let searchStartPos: vscode.Position
+let searchStartPos: vscode.Position[]
 let searchBackwards = false
 let searchCaseSensitive = false
 let searchAcceptAfter = Number.POSITIVE_INFINITY
@@ -469,8 +469,8 @@ async function setSearching(value: boolean) {
  * This helper function changes the selection range in the active editor. It
  * also makes sure that the selection is visible.
  */
-function changeSelection(editor: vscode.TextEditor, anchor: vscode.Position,
-    active: vscode.Position) {
+function changeSelection(sel: vscode.Selection, editor: vscode.TextEditor,
+    anchor: vscode.Position, active: vscode.Position) {
     editor.selection = new vscode.Selection(anchor, active)
     editor.revealRange(editor.selection)
 }
@@ -497,7 +497,7 @@ async function search(args: SearchArgs | string): Promise<void> {
             enterNormal()
         setSearching(true)
         searchString = ""
-        searchStartPos = editor.selection.active
+        searchStartPos = editor.selections.map(x => x.active)
         searchBackwards = args.backwards || false
         searchCaseSensitive = args.caseSensitive || false
         searchAcceptAfter = args.acceptAfter || Number.POSITIVE_INFINITY
@@ -515,7 +515,7 @@ async function search(args: SearchArgs | string): Promise<void> {
          * the next match. If `acceptAfter` argument is given, and we have a
          * sufficiently long search string, we accept the search automatically.
          */
-        highlightNextMatch(editor, editor.selection.anchor, searchString + args)
+        highlightNextMatch(editor, editor.selections.map(x => x.active), searchString + args)
         if (searchString.length >= searchAcceptAfter)
             await acceptSearch()
     }
@@ -525,57 +525,65 @@ async function search(args: SearchArgs | string): Promise<void> {
  * the start position for the search, the search string, and an optional delta
  * parameter that increments or decrements the start position.
  */
-function highlightNextMatch(editor: vscode.TextEditor, startPos: vscode.Position,
+function highlightNextMatch(editor: vscode.TextEditor, startPos: vscode.Position[],
     newSearchString: string, delta: number = 0) {
     if (newSearchString == "") {
         /**
          * If search string is empty, we return to the start position.
          */
-        changeSelection(editor, searchStartPos, searchStartPos)
+        editor.selections = editor.selections.map((sel, i) =>
+            new vscode.Selection(searchStartPos[i],searchStartPos[i]))
+        editor.revealRange(editor.selection)
         searchString = newSearchString
     }
     else {
-        /**
-         * Otherwise we first map the cursor position to the starting offset
-         * from the begining of the file. We add the delta argument to the
-         * offset.
-         */
-        let doc = editor.document
-        let startOffs = doc.offsetAt(startPos) + delta
-        /**
-         * Then we get the text of the active editor as string. If we have
-         * case-insensitive search, we transform the text to lower case.
-         */
-        let docText = searchCaseSensitive ?
-            doc.getText() : doc.getText().toLowerCase()
-        /**
-         * Next we determine the search target. It is also transformed to lower
-         * case, if search is case-insensitive.
-         */
-        let target = searchCaseSensitive ?
-            newSearchString : newSearchString.toLowerCase()
-        /**
-         * This is the actual search. Depending on the search direction we
-         * find either the first or the last match from the start offset.
-         */
-        let offs = searchBackwards ?
-            docText.lastIndexOf(target, startOffs) :
-            docText.indexOf(target, startOffs)
-        if (offs >= 0) {
+        editor.selections = editor.selections.map((sel, i) => {
             /**
-             * If search was successful, we store the new search string and
-             * change the selection to highlight it. If `selectTillMatch`
-             * parameter is set, we highlight the range from the search start
-             * position to the beginning or end of the match depending on if
-             * the match is before or after the starting position.
+             * Otherwise we first map the cursor position to the starting offset
+             * from the begining of the file. We add the delta argument to the
+             * offset.
              */
-            searchString = newSearchString
-            let newPos = doc.positionAt(offs)
-            let start = searchSelectTillMatch ? searchStartPos : newPos
-            changeSelection(editor, start,
-                newPos.with(undefined, newPos.character +
-                    (newPos.isBefore(start) ? 0 : searchString.length)))
-        }
+            let doc = editor.document
+            let startOffs = doc.offsetAt(startPos[i]) + delta
+            /**
+             * Then we get the text of the active editor as string. If we have
+             * case-insensitive search, we transform the text to lower case.
+             */
+            let docText = searchCaseSensitive ?
+                doc.getText() : doc.getText().toLowerCase()
+            /**
+             * Next we determine the search target. It is also transformed to lower
+             * case, if search is case-insensitive.
+             */
+            let target = searchCaseSensitive ?
+                newSearchString : newSearchString.toLowerCase()
+            /**
+             * This is the actual search. Depending on the search direction we
+             * find either the first or the last match from the start offset.
+             */
+            let offs = searchBackwards ?
+                docText.lastIndexOf(target, startOffs) :
+                docText.indexOf(target, startOffs)
+            if (offs >= 0) {
+                /**
+                 * If search was successful, we store the new search string and
+                 * change the selection to highlight it. If `selectTillMatch`
+                 * parameter is set, we highlight the range from the search start
+                 * position to the beginning or end of the match depending on if
+                 * the match is before or after the starting position.
+                 */
+                searchString = newSearchString
+                let newPos = doc.positionAt(offs)
+                let start = searchSelectTillMatch ? searchStartPos[i] : newPos
+                let newSel = new vscode.Selection(start,
+                    newPos.with(undefined, newPos.character +
+                        (newPos.isBefore(start) ? 0 : searchString.length)))
+                return newSel
+            }else{
+                return sel
+            }
+        })
+        editor.revealRange(editor.selection)
     }
 }
 /**
@@ -603,8 +611,14 @@ async function cancelSearch(): Promise<void> {
     if (searching) {
         await setSearching(false)
         let editor = vscode.window.activeTextEditor
-        if (editor)
-            changeSelection(editor, searchStartPos, searchStartPos)
+        if (editor){
+            editor.selections = editor.selections.map((sel,i) => {
+                let newSel =
+                    new vscode.Selection(searchStartPos[i],searchStartPos[i])
+                return newSel
+            })
+            editor.revealRange(editor.selection)
+        }
     }
 }
 /**
@@ -642,17 +656,17 @@ function deleteCharFromSearch() {
 async function nextMatch(): Promise<void> {
     let editor = vscode.window.activeTextEditor
     if (editor && searchString) {
-        let s = editor.selection
+        let s = editor.selections
         if (searchBackwards)
-            highlightNextMatch(editor, s.active, searchString,
-                (searchSelectTillMatch && s.active.isBefore(searchStartPos)) ||
-                    s.isEmpty ? -1 :
+            highlightNextMatch(editor, s.map(x => x.active), searchString,
+                (searchSelectTillMatch && s[0].active.isBefore(searchStartPos[0])) ||
+                    s[0].isEmpty ? -1 :
                     -searchString.length - 1)
         else
-            highlightNextMatch(editor, s.active, searchString,
-                searchSelectTillMatch && s.active.isBefore(searchStartPos) ?
+            highlightNextMatch(editor, s.map(x => x.active), searchString,
+                searchSelectTillMatch && s[0].active.isBefore(searchStartPos[0]) ?
                     searchString.length :
-                    s.isEmpty ? 1 : 0)
+                    s[0].isEmpty ? 1 : 0)
         await typeAfterMatch()
     }
 }
@@ -689,8 +703,10 @@ async function goToBookmark(args?: BookmarkArgs): Promise<void> {
     if (bm) {
         await vscode.window.showTextDocument(bm.document)
         let editor = vscode.window.activeTextEditor
-        if (editor)
-            changeSelection(editor, bm.position, bm.position)
+        if (editor){
+            editor.selection = new vscode.Selection(bm.position, bm.position)
+            editor.revealRange(editor.selection)
+        }
     }
 }
 /**
@@ -804,7 +820,9 @@ function selectBetween(args: SelectBetweenArgs) {
                 startOffs + toOffs + (args.inclusive ? args.to.length : 0)
         }
     }
-    changeSelection(editor, doc.positionAt(fromOffs), doc.positionAt(toOffs))
+    editor.selection = new vscode.Selection(
+        doc.positionAt(fromOffs), doc.positionAt(toOffs))
+    editor.revealRange(editor.selection)
 }
 /**
  * ## Repeat Last Change Command
