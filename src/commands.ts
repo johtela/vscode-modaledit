@@ -872,15 +872,23 @@ function restartRecordingKeys(args: RecordArgs){
 }
 
 function toggleRecordingKeys(args: RecordArgs){
-    let register = getRegister(args.register);
-    if(!register.replaying){
-        if(register.recording){
-            stopRecordingKeys(args)
-        }else{
-            startRecordingKeys(args)
+    let anyRecording = false;
+    for(let label in keySeqRegistry){
+        if(keySeqRegistry[label].recording){
+            anyRecording = true;
+            break;
         }
     }
+    if(anyRecording){
+        for(let label in keySeqRegistry){
+            stopRecordingKeys({
+                register: label,
+                includeThisCommand: args.includeThisCommand
+            })
+        }
+    }else startRecordingKeys(args)
 }
+
 /**
  * `cancelRecordingKeys` stops recording, and does not overwrite the current
  * sequence for a given register.
