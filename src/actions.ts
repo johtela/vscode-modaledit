@@ -176,9 +176,7 @@ export function log(message: string) {
  */
 export function updateFromConfig(): void {
     const config = vscode.workspace.getConfiguration("modaledit")
-    log("Validating keybindings in 'settings.json'...")
-    validateBindings(config.get<object>("keybindings"))
-    validateBindings(config.get<object>("selectbindings"))
+    UpdateKeybindings(config)
     insertCursorStyle = toVSCursorStyle(
         config.get<Cursor>("insertCursorStyle", "line"))
     normalCursorStyle = toVSCursorStyle(
@@ -187,22 +185,30 @@ export function updateFromConfig(): void {
         config.get<Cursor>("searchCursorStyle", "underline"))
     startInNormalMode = config.get<boolean>("startInNormalMode", true)
 }
-
-function validateBindings(keybindings: object | undefined) {
-    if (isKeymap(keybindings)) {
-        baseKeymap = keybindings
-        currentKeymap = baseKeymap
-        keymapsById = {}
-        errors = 0
-        validateAndResolveKeymaps(currentKeymap)
-        if (errors > 0)
-            log(`Found ${errors} error${errors > 1 ? "s" : ""}. ` +
-                "Keybindings might not work correctly.")
-        else
-            log("Validation completed successfully.")
+/**
+ * The following function updates base keymap and select-mode keymap.
+ */
+function UpdateKeybindings(config: vscode.WorkspaceConfiguration) {
+    log("Validating keybindings in 'settings.json'...")
+    keymapsById = {}
+    errors = 0
+    let base = config.get<object>("keybindings")
+    if (isKeymap(base)) {
+        baseKeymap = base
+        validateAndResolveKeymaps(base)
     }
-    else if (keybindings)
+    else
         log("ERROR: Invalid configuration structure. Keybindings not updated.")
+    let sel = config.get<object>("selectbindings")
+    if (isKeymap(sel)) {
+        selectKeymap = sel
+        validateAndResolveKeymaps(sel)
+    }
+    if (errors > 0)
+        log(`Found ${errors} error${errors > 1 ? "s" : ""}. ` +
+            "Keybindings might not work correctly.")
+    else
+        log("Validation completed successfully.")
 }
 /**
  * To make sure that the keybinding section is valid, we define a function that
@@ -269,7 +275,6 @@ function validateAndResolveKeymaps(keybindings: Keymap) {
         }
     }
 }
-
 /**
  * The helper function below converts cursor styles specified in configuration 
  * to enumeration members used by VS Code.
