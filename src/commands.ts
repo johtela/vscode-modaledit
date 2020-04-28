@@ -273,6 +273,7 @@ async function onType(event: { text: string }) {
                 if(!register.stopping) register.reqSeq.push(lastKeySequence)
                 else{
                     // actions.log("include last? "+register.includeLastCommand)
+                    // actions.log("last key: "+lastKeySequence)
                     if(register.includeLastCommand)
                         register.reqSeq.push(lastKeySequence)
 
@@ -515,7 +516,7 @@ async function search(args: SearchArgs | string): Promise<void> {
          * the next match. If `acceptAfter` argument is given, and we have a
          * sufficiently long search string, we accept the search automatically.
          */
-        highlightNextMatch(editor, editor.selections.map(x => x.active), searchString + args)
+        highlightNextMatch(editor, editor.selections.map(x => x.anchor), searchString + args)
         if (searchString.length >= searchAcceptAfter)
             await acceptSearch()
     }
@@ -931,6 +932,7 @@ function stopRecordingKeys(args: RecordArgs){
         register.includeLastCommand = args.includeThisCommand ?
             args.includeThisCommand : false
         register.stopping = true;
+        actions.log('include command: '+register.stopping)
     }
 }
 
