@@ -192,6 +192,11 @@ function UpdateKeybindings(config: vscode.WorkspaceConfiguration) {
     log("Validating keybindings in 'settings.json'...")
     keymapsById = {}
     errors = 0
+    let sel = config.get<object>("selectbindings")
+    if (isKeymap(sel)) {
+        selectKeymap = sel
+        validateAndResolveKeymaps(sel)
+    }
     let base = config.get<object>("keybindings")
     if (isKeymap(base)) {
         baseKeymap = base
@@ -199,11 +204,6 @@ function UpdateKeybindings(config: vscode.WorkspaceConfiguration) {
     }
     else
         log("ERROR: Invalid configuration structure. Keybindings not updated.")
-    let sel = config.get<object>("selectbindings")
-    if (isKeymap(sel)) {
-        selectKeymap = sel
-        validateAndResolveKeymaps(sel)
-    }
     if (errors > 0)
         log(`Found ${errors} error${errors > 1 ? "s" : ""}. ` +
             "Keybindings might not work correctly.")

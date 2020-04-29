@@ -670,7 +670,7 @@ async function typeNormalKeys(args: TypeNormalKeysArgs): Promise<void> {
  * ## Advanced Selection Command
  * 
  * For selecting ranges of text between two characters (inside parenthesis, for
- * ecample) we add the `modaledit.selectBetween` command. 
+ * example) we add the `modaledit.selectBetween` command. 
  */
 function selectBetween(args: SelectBetweenArgs) {
     let editor = vscode.window.activeTextEditor
@@ -679,19 +679,19 @@ function selectBetween(args: SelectBetweenArgs) {
     if (typeof args !== 'object')
         throw Error(`${selectBetweenId}: Invalid args: ${JSON.stringify(args)}`)
     let doc = editor.document
-    let cursorPos = editor.selection.active
-    let startPos = new vscode.Position(args.docScope ? 0 : cursorPos.line, 0)
-    let endPos = doc.lineAt(args.docScope ? doc.lineCount - 1 : cursorPos.line)
+    let anchorPos = editor.selection.anchor
+    let startPos = new vscode.Position(args.docScope ? 0 : anchorPos.line, 0)
+    let endPos = doc.lineAt(args.docScope ? doc.lineCount - 1 : anchorPos.line)
         .range.end
-    let cursorOffs = doc.offsetAt(cursorPos)
+    let anchorOffs = doc.offsetAt(anchorPos)
     let startOffs = doc.offsetAt(startPos)
     let endOffs = doc.offsetAt(endPos)
-    let fromOffs = cursorOffs
-    let toOffs = cursorOffs
+    let fromOffs = anchorOffs
+    let toOffs = anchorOffs
     if (args.regex) {
         if (args.from) {
             fromOffs = startOffs
-            let text = doc.getText(new vscode.Range(startPos, cursorPos))
+            let text = doc.getText(new vscode.Range(startPos, anchorPos))
             let re = new RegExp(args.from, args.caseSensitive ? "g" : "gi")
             let match: RegExpExecArray | null = null
             while ((match = re.exec(text)) != null) {
@@ -701,11 +701,11 @@ function selectBetween(args: SelectBetweenArgs) {
         }
         if (args.to) {
             toOffs = endOffs
-            let text = doc.getText(new vscode.Range(cursorPos, endPos))
+            let text = doc.getText(new vscode.Range(anchorPos, endPos))
             let re = new RegExp(args.to, args.caseSensitive ? undefined : "i")
             let match = re.exec(text)
             if (match)
-                toOffs = cursorOffs + match.index +
+                toOffs = anchorOffs + match.index +
                     (args.inclusive ? match[0].length : 0)
         }
     }
@@ -715,13 +715,13 @@ function selectBetween(args: SelectBetweenArgs) {
             text = text.toLowerCase()
         if (args.from) {
             fromOffs = text.lastIndexOf(args.caseSensitive ?
-                args.from : args.from.toLowerCase(), cursorOffs - startOffs)
+                args.from : args.from.toLowerCase(), anchorOffs - startOffs)
             fromOffs = fromOffs < 0 ? startOffs :
                 startOffs + fromOffs + (args.inclusive ? 0 : args.from.length)
         }
         if (args.to) {
             toOffs = text.indexOf(args.caseSensitive ?
-                args.to : args.to.toLowerCase(), cursorOffs - startOffs)
+                args.to : args.to.toLowerCase(), anchorOffs - startOffs)
             toOffs = toOffs < 0 ? endOffs :
                 startOffs + toOffs + (args.inclusive ? args.to.length : 0)
         }
