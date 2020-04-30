@@ -498,7 +498,7 @@ async function execute(action: Action, selecting: boolean): Promise<void> {
  * active keymap.
  */
 export async function handleKey(key: string, selecting: boolean,
-    capture: boolean): Promise<boolean> {
+    capture: boolean, userInitiated: boolean): Promise<boolean> {
 
     function error() {
         vscode.window.showWarningMessage("ModalEdit: Undefined key binding: " +
@@ -506,7 +506,8 @@ export async function handleKey(key: string, selecting: boolean,
         currentKeymap = null
     }
 
-    keySequence.push(key)
+    if (userInitiated)
+        keySequence.push(key)
     if (capture && lastCommand)
         executeVSCommand(lastCommand, key)
     else if (currentKeymap) {
@@ -523,7 +524,7 @@ export async function handleKey(key: string, selecting: boolean,
         else
             error()
     }
-    if (!currentKeymap)
+    if (!currentKeymap && userInitiated)
         keySequence = []
     return !currentKeymap
 }

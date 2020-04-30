@@ -213,7 +213,7 @@ async function onType(event: { text: string }) {
         textChanged = false
     }
     currentKeySequence.push(event.text)
-    if (await runActionForKey(event.text)) {
+    if (await runActionForKey(event.text, true)) {
         lastKeySequence = currentKeySequence
         currentKeySequence = []
     }
@@ -235,8 +235,9 @@ export function onTextChanged() {
  * key sequence that did not (yet) cause any commands to run. This information 
  * is needed to decide whether the `lastKeySequence` variable is updated.
  */
-async function runActionForKey(key: string): Promise<boolean> {
-    return await actions.handleKey(key, isSelecting(), searching)
+async function runActionForKey(key: string, userInitiated: boolean): 
+    Promise<boolean> {
+    return await actions.handleKey(key, isSelecting(), searching, userInitiated)
 }
 /**
  * ## Mode Switching  Commands
@@ -664,7 +665,7 @@ async function typeNormalKeys(args: TypeNormalKeysArgs): Promise<void> {
     if (typeof args !== 'object' || typeof (args.keys) !== 'string')
         throw Error(`${typeNormalKeysId}: Invalid args: ${JSON.stringify(args)}`)
     for (let i = 0; i < args.keys.length; i++)
-        await runActionForKey(args.keys[i])
+        await runActionForKey(args.keys[i], false)
 }
 /**
  * ## Advanced Selection Command
@@ -679,19 +680,33 @@ function selectBetween(args: SelectBetweenArgs) {
     if (typeof args !== 'object')
         throw Error(`${selectBetweenId}: Invalid args: ${JSON.stringify(args)}`)
     let doc = editor.document
+    /**
+     * Get position of cursor and anchor. If `from` parameter is missing, anchor
+     * position will be used as the selection start. If `to` parameter is 
+     * missing, the cursor position is where selection ends. `fromOffs` and
+     * `toOffs` variables' default values are set accordingly. 
+     */
+    let cursorPos = editor.selection.active
     let anchorPos = editor.selection.anchor
-    let startPos = new vscode.Position(args.docScope ? 0 : anchorPos.line, 0)
-    let endPos = doc.lineAt(args.docScope ? doc.lineCount - 1 : anchorPos.line)
-        .range.end
+    let cursorOffs = doc.offsetAt(cursorPos)
     let anchorOffs = doc.offsetAt(anchorPos)
+    let fromOffs = anchorOffs
+    let toOffs = cursorOffs
+    /**
+     * Next we determine the search range. The `startOffs` marks the starting
+     * offset and `endOffs` the end. Depending on the specified scope these
+     * variables are either set to start/end of the current line or the whole
+     * document.
+     */
+    let startPos = new vscode.Position(args.docScope ? 0 : cursorPos.line, 0)
+    let endPos = doc.lineAt(args.docScope ? doc.lineCount - 1 : cursorPos.line)
+        .range.end
     let startOffs = doc.offsetAt(startPos)
     let endOffs = doc.offsetAt(endPos)
-    let fromOffs = anchorOffs
-    let toOffs = anchorOffs
     if (args.regex) {
         if (args.from) {
             fromOffs = startOffs
-            let text = doc.getText(new vscode.Range(startPos, anchorPos))
+            let text = doc.getText(new vscode.Range(startPos, cursorPos))
             let re = new RegExp(args.from, args.caseSensitive ? "g" : "gi")
             let match: RegExpExecArray | null = null
             while ((match = re.exec(text)) != null) {
@@ -701,11 +716,11 @@ function selectBetween(args: SelectBetweenArgs) {
         }
         if (args.to) {
             toOffs = endOffs
-            let text = doc.getText(new vscode.Range(anchorPos, endPos))
+            let text = doc.getText(new vscode.Range(cursorPos, endPos))
             let re = new RegExp(args.to, args.caseSensitive ? undefined : "i")
             let match = re.exec(text)
             if (match)
-                toOffs = anchorOffs + match.index +
+                toOffs = cursorOffs + match.index +
                     (args.inclusive ? match[0].length : 0)
         }
     }
@@ -715,13 +730,13 @@ function selectBetween(args: SelectBetweenArgs) {
             text = text.toLowerCase()
         if (args.from) {
             fromOffs = text.lastIndexOf(args.caseSensitive ?
-                args.from : args.from.toLowerCase(), anchorOffs - startOffs)
+                args.from : args.from.toLowerCase(), cursorOffs - startOffs)
             fromOffs = fromOffs < 0 ? startOffs :
                 startOffs + fromOffs + (args.inclusive ? 0 : args.from.length)
         }
         if (args.to) {
             toOffs = text.indexOf(args.caseSensitive ?
-                args.to : args.to.toLowerCase(), anchorOffs - startOffs)
+                args.to : args.to.toLowerCase(), cursorOffs - startOffs)
             toOffs = toOffs < 0 ? endOffs :
                 startOffs + toOffs + (args.inclusive ? args.to.length : 0)
         }
@@ -739,6 +754,6 @@ function selectBetween(args: SelectBetweenArgs) {
  */
 async function repeatLastChange(): Promise<void> {
     for (let i = 0; i < lastChange.length; i++)
-        await runActionForKey(lastChange[i])
+        await runActionForKey(lastChange[i], false)
     currentKeySequence = lastChange
 }
