@@ -181,6 +181,7 @@ const toggleId = "modaledit.toggle"
 const enterNormalId = "modaledit.enterNormal"
 const enterInsertId = "modaledit.enterInsert"
 const toggleSelectionId = "modaledit.toggleSelection"
+const enableSelectionId = "modaledit.enableSelection"
 const cancelSelectionId = "modaledit.cancelSelection"
 const resetSelectionId = "modaledit.resetSelection"
 const searchId = "modaledit.search"
@@ -210,6 +211,7 @@ export function register(context: vscode.ExtensionContext) {
         vscode.commands.registerCommand(enterNormalId, enterNormal),
         vscode.commands.registerCommand(enterInsertId, enterInsert),
         vscode.commands.registerCommand(toggleSelectionId, toggleSelection),
+        vscode.commands.registerCommand(enableSelectionId, enableSelection),
         vscode.commands.registerCommand(cancelSelectionId, cancelSelection),
         vscode.commands.registerCommand(resetSelectionId, resetSelection),
         vscode.commands.registerCommand(searchId, search),
@@ -430,6 +432,15 @@ async function toggleSelection(): Promise<void> {
     selecting = !oldSelecting
     updateCursorAndStatusBar(vscode.window.activeTextEditor)
 }
+
+/**
+ * `modaledit.enableSelection` sets the selecting to true.
+ */
+function enableSelection() {
+    selecting = true;
+    updateStatusBar(vscode.window.activeTextEditor)
+}
+
 /**
  * The following helper function actually determines, if a selection is active.
  * It checks not only the `selecting` flag but also if there is any text 
