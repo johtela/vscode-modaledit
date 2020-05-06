@@ -182,6 +182,7 @@ const enterNormalId = "modaledit.enterNormal"
 const enterInsertId = "modaledit.enterInsert"
 const toggleSelectionId = "modaledit.toggleSelection"
 const cancelSelectionId = "modaledit.cancelSelection"
+const resetSelectionId = "modaledit.resetSelection"
 const searchId = "modaledit.search"
 const cancelSearchId = "modaledit.cancelSearch"
 const deleteCharFromSearchId = "modaledit.deleteCharFromSearch"
@@ -210,6 +211,7 @@ export function register(context: vscode.ExtensionContext) {
         vscode.commands.registerCommand(enterInsertId, enterInsert),
         vscode.commands.registerCommand(toggleSelectionId, toggleSelection),
         vscode.commands.registerCommand(cancelSelectionId, cancelSelection),
+        vscode.commands.registerCommand(resetSelectionId, resetSelection),
         vscode.commands.registerCommand(searchId, search),
         vscode.commands.registerCommand(cancelSearchId, cancelSearch),
         vscode.commands.registerCommand(deleteCharFromSearchId,
@@ -399,6 +401,23 @@ async function cancelSelection(): Promise<void> {
         updateCursorAndStatusBar(vscode.window.activeTextEditor)
     }
 }
+
+/**
+ * `modaledit.resetSelection`, like `modaledit.cancelSelect` sets selecting to
+ * false sets the anchor === active selection position. Unlike
+ * `modaledit.cancelSelect` it does not clear multiple selections
+ */
+function resetSelection() {
+    let editor = vscode.window.activeTextEditor
+    if(editor){
+        editor.selections = editor.selections.map((sel: vscode.Selection) => {
+            return new vscode.Selection(sel.active,sel.active);
+        })
+    }
+    selecting = false
+    updateStatusBar(vscode.window.activeTextEditor)
+}
+
 /**
  * `modaledit.toggleSelection` toggles the selection mode on and off. It sets
  * the selection mode flag and updates the status bar, but also clears the 
