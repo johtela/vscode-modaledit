@@ -227,7 +227,7 @@
 			},
 			{
 				"command": "modaledit.cancelSearch",
-				"title": "ModalEdit: Canel search mode"
+				"title": "ModalEdit: Cancel search mode"
 			},
 			{
 				"command": "modaledit.deleteCharFromSearch",
