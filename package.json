@@ -157,7 +157,7 @@
 							]
 						}
 					}
-				},				
+				},
 				"modaledit.insertCursorStyle": {
 					"type": "string",
 					"enum": [
