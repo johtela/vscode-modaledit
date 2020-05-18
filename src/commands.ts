@@ -125,6 +125,7 @@ let searchBackwards = false
 let searchCaseSensitive = false
 let searchAcceptAfter = Number.POSITIVE_INFINITY
 let searchSelectTillMatch = false
+let searchSelectStart: vscode.Position
 let searchTypeAfterAccept: string | undefined
 let searchReturnToNormal = true
 /**
@@ -425,6 +426,7 @@ async function search(args: SearchArgs | string): Promise<void> {
         searchCaseSensitive = args.caseSensitive || false
         searchAcceptAfter = args.acceptAfter || Number.POSITIVE_INFINITY
         searchSelectTillMatch = args.selectTillMatch || false
+        searchSelectStart = editor.selection.anchor
         searchTypeAfterAccept = args.typeAfterAccept
     }
     else if (args == "\n")
@@ -438,7 +440,7 @@ async function search(args: SearchArgs | string): Promise<void> {
          * the next match. If `acceptAfter` argument is given, and we have a
          * sufficiently long search string, we accept the search automatically.
          */
-        highlightNextMatch(editor, editor.selection.anchor, searchString + args)
+        highlightNextMatch(editor, searchStartPos, searchString + args)
         if (searchString.length >= searchAcceptAfter)
             await acceptSearch()
     }
@@ -454,7 +456,7 @@ function highlightNextMatch(editor: vscode.TextEditor, startPos: vscode.Position
         /**
          * If search string is empty, we return to the start position.
          */
-        changeSelection(editor, searchStartPos, searchStartPos)
+        changeSelection(editor, searchSelectStart, searchStartPos)
         searchString = newSearchString
     }
     else {
@@ -494,7 +496,7 @@ function highlightNextMatch(editor: vscode.TextEditor, startPos: vscode.Position
              */
             searchString = newSearchString
             let newPos = doc.positionAt(offs)
-            let start = searchSelectTillMatch ? searchStartPos : newPos
+            let start = searchSelectTillMatch ? searchSelectStart : newPos
             changeSelection(editor, start,
                 newPos.with(undefined, newPos.character +
                     (newPos.isBefore(start) ? 0 : searchString.length)))
