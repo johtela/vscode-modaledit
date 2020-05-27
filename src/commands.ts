@@ -26,6 +26,10 @@ interface SearchArgs {
     acceptAfter?: number
     selectTillMatch?: boolean
     typeAfterAccept?: string
+    typeBeforeNextMatch?: string
+    typeAfterNextMatch?: string
+    typeBeforePreviousMatch?: string
+    typeAfterPreviousMatch?: string
 }
 /**
  * ### Bookmark Arguments
@@ -127,6 +131,10 @@ let searchAcceptAfter = Number.POSITIVE_INFINITY
 let searchSelectTillMatch = false
 let searchSelectStart: vscode.Position
 let searchTypeAfterAccept: string | undefined
+let searchTypeBeforeNextMatch: string | undefined
+let searchTypeAfterNextMatch: string | undefined
+let searchTypeBeforePreviousMatch: string | undefined
+let searchTypeAfterPreviousMatch: string | undefined
 let searchReturnToNormal = true
 /**
  * Bookmarks are stored here.
@@ -236,7 +244,7 @@ export function onTextChanged() {
  * key sequence that did not (yet) cause any commands to run. This information 
  * is needed to decide whether the `lastKeySequence` variable is updated.
  */
-async function runActionForKey(key: string, userInitiated: boolean): 
+async function runActionForKey(key: string, userInitiated: boolean):
     Promise<boolean> {
     return await actions.handleKey(key, isSelecting(), searching, userInitiated)
 }
@@ -428,6 +436,10 @@ async function search(args: SearchArgs | string): Promise<void> {
         searchSelectTillMatch = args.selectTillMatch || false
         searchSelectStart = editor.selection.anchor
         searchTypeAfterAccept = args.typeAfterAccept
+        searchTypeBeforeNextMatch = args.typeBeforeNextMatch
+        searchTypeAfterNextMatch = args.typeAfterNextMatch
+        searchTypeBeforePreviousMatch = args.typeBeforePreviousMatch
+        searchTypeAfterPreviousMatch = args.typeAfterPreviousMatch
     }
     else if (args == "\n")
         /**
@@ -440,7 +452,7 @@ async function search(args: SearchArgs | string): Promise<void> {
          * the next match. If `acceptAfter` argument is given, and we have a
          * sufficiently long search string, we accept the search automatically.
          */
-        highlightNextMatch(editor, searchStartPos, searchString + args)
+        highlightMatch(editor, searchStartPos, searchString + args)
         if (searchString.length >= searchAcceptAfter)
             await acceptSearch()
     }
@@ -450,8 +462,8 @@ async function search(args: SearchArgs | string): Promise<void> {
  * the start position for the search, the search string, and an optional delta
  * parameter that increments or decrements the start position.
  */
-function highlightNextMatch(editor: vscode.TextEditor, startPos: vscode.Position,
-    newSearchString: string, delta: number = 0) {
+function highlightMatch(editor: vscode.TextEditor, startPos: vscode.Position,
+    newSearchString: string) {
     if (newSearchString == "") {
         /**
          * If search string is empty, we return to the start position.
@@ -466,7 +478,7 @@ function highlightNextMatch(editor: vscode.TextEditor, startPos: vscode.Position
          * offset.
          */
         let doc = editor.document
-        let startOffs = doc.offsetAt(startPos) + delta
+        let startOffs = doc.offsetAt(startPos)
         /**
          * Then we get the text of the active editor as string. If we have
          * case-insensitive search, we transform the text to lower case.
@@ -484,7 +496,7 @@ function highlightNextMatch(editor: vscode.TextEditor, startPos: vscode.Position
          * find either the first or the last match from the start offset.
          */
         let offs = searchBackwards ?
-            docText.lastIndexOf(target, startOffs) :
+            docText.lastIndexOf(target, startOffs - 1) :
             docText.indexOf(target, startOffs)
         if (offs >= 0) {
             /**
@@ -495,11 +507,15 @@ function highlightNextMatch(editor: vscode.TextEditor, startPos: vscode.Position
              * the match is before or after the starting position.
              */
             searchString = newSearchString
-            let newPos = doc.positionAt(offs)
-            let start = searchSelectTillMatch ? searchSelectStart : newPos
-            changeSelection(editor, start,
-                newPos.with(undefined, newPos.character +
-                    (newPos.isBefore(start) ? 0 : searchString.length)))
+            let len = searchString.length
+            let start = doc.positionAt(offs)
+            let end = doc.positionAt(offs + len)  
+            let [active, anchor] = searchBackwards ? 
+                [ start, end ] : 
+                [ end, start ]
+            if (searchSelectTillMatch) 
+                anchor = searchSelectStart
+            changeSelection(editor, anchor, active)
         }
     }
 }
@@ -511,10 +527,6 @@ function highlightNextMatch(editor: vscode.TextEditor, startPos: vscode.Position
  */
 async function acceptSearch() {
     await setSearching(false)
-    await typeAfterMatch()
-}
-
-async function typeAfterMatch() {
     if (searchTypeAfterAccept)
         await typeNormalKeys({ keys: searchTypeAfterAccept })
 }
@@ -552,7 +564,7 @@ async function cancelSearch(): Promise<void> {
 function deleteCharFromSearch() {
     let editor = vscode.window.activeTextEditor
     if (editor && searching && searchString.length > 0)
-        highlightNextMatch(editor, searchStartPos,
+        highlightMatch(editor, searchStartPos,
             searchString.slice(0, searchString.length - 1))
 }
 /**
@@ -567,28 +579,28 @@ function deleteCharFromSearch() {
 async function nextMatch(): Promise<void> {
     let editor = vscode.window.activeTextEditor
     if (editor && searchString) {
-        let s = editor.selection
-        if (searchBackwards)
-            highlightNextMatch(editor, s.active, searchString,
-                (searchSelectTillMatch && s.active.isBefore(searchStartPos)) ||
-                    s.isEmpty ? -1 :
-                    -searchString.length - 1)
-        else
-            highlightNextMatch(editor, s.active, searchString,
-                searchSelectTillMatch && s.active.isBefore(searchStartPos) ?
-                    searchString.length :
-                    s.isEmpty ? 1 : 0)
-        await typeAfterMatch()
+        if (searchTypeBeforeNextMatch)
+            await typeNormalKeys({ keys: searchTypeBeforeNextMatch })
+        highlightMatch(editor, editor.selection.active, searchString)
+        if (searchTypeAfterNextMatch)
+            await typeNormalKeys({ keys: searchTypeAfterNextMatch })
     }
 }
 /**
- * Finding the previous match piggybacks on the above function. It just
- * inverts the search direction first.
+ * When finding the previous match we flip the search direction but otherwise do
+ * the same routine as in the previous method.
  */
 async function previousMatch(): Promise<void> {
-    searchBackwards = !searchBackwards
-    await nextMatch()
-    searchBackwards = !searchBackwards
+    let editor = vscode.window.activeTextEditor
+    if (editor && searchString) {
+        if (searchTypeBeforePreviousMatch)
+            await typeNormalKeys({ keys: searchTypeBeforePreviousMatch })
+        searchBackwards = !searchBackwards
+        highlightMatch(editor, editor.selection.active, searchString)
+        searchBackwards = !searchBackwards
+        if (searchTypeAfterPreviousMatch)
+            await typeNormalKeys({ keys: searchTypeAfterPreviousMatch })
+    }
 }
 /**
  * ## Bookmarks
