@@ -389,13 +389,18 @@ can see the searched string in the status bar as well as the search parameters.
 
 The command takes following arguments. All of them are optional. 
 
-| Argument        | Type      | Default     | Description
-| --------------- | --------- | ----------- | ---------------------------------
-| `backwards`     | `boolean` | `false`     | Search backwards. Default is forwards
-| `caseSensitive` | `boolean` | `false`     | Search is case-sensitive. Default is case-insensitive
-| `acceptAfter`   | `number`  | `undefined` | Accept search automatically after _x_ characters has been entered. This helps implementing quick one or two character search operations.
-| `selectTillMatch` | `boolean` | `false`   | Select the range from current position till the match instead of just the match. Useful with `acceptAfter` to quickly extend selection till the specified character(s).
-| `typeAfterAccept` | `string`  | `undefined` | Allows to run normal mode commands through key bindings (see `modaledit.typeNormalKeys` command) after successful search. The argument can be used to enter insert mode, or clear selection after search, for example. The same command sequence is run also after `modaledit.nextMatch` and `modaledit.previousMatch` commands. I.e. the argument persists the same way as the search direction.
+| Argument                  | Type      | Default     | Description
+| ------------------------- | --------- | ----------- | ---------------------------------
+| `backwards`               | `boolean` | `false`     | Search backwards. Default is forwards
+| `caseSensitive`           | `boolean` | `false`     | Search is case-sensitive. Default is case-insensitive
+| `wrapAround`              | `boolean` | `false`     | Search wraps around to top/bottom depending on search direction. Default is off. 
+| `acceptAfter`             | `number`  | `undefined` | Accept search automatically after _x_ characters has been entered. This helps implementing quick one or two character search operations.
+| `selectTillMatch`         | `boolean` | `false`     | Select the range from current position till the match instead of just the match. Useful with `acceptAfter` to quickly extend selection till the specified character(s).
+| `typeAfterAccept`         | `string`  | `undefined` | Allows to run normal mode commands through key bindings (see `modaledit.typeNormalKeys` command) after successful search. The argument can be used to enter insert mode, or clear selection after search, for example.
+| `typeBeforeNextMatch`     | `string`  | `undefined` | Run the specified key commands *before* searhing for the next match.
+| `typeAfterNextMatch`      | `string`  | `undefined` | Run the specified key commands *after* the next match command is executed.
+| `typeBeforePreviousMatch` | `string`  | `undefined` | Run the specified key commands *before* searhing for the previous match.
+| `typeAfterPreviousMatch`  | `string`  | `undefined` | Run the specified key commands *after* the previous match command executed.
 
 #### `modaledit.cancelSearch`
 
