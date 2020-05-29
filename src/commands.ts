@@ -402,15 +402,6 @@ async function setSearching(value: boolean) {
         enterInsert()
 }
 /**
- * This helper function changes the selection range in the active editor. It
- * also makes sure that the selection is visible.
- */
-function changeSelection(editor: vscode.TextEditor, anchor: vscode.Position,
-    active: vscode.Position) {
-    editor.selection = new vscode.Selection(anchor, active)
-    editor.revealRange(editor.selection)
-}
-/**
  * This is the main command that not only initiates the search, but also handles
  * the key presses when search is active. That is why its argument is defined
  * as an union type. We also use the argument to detect whether we are starting
@@ -425,7 +416,11 @@ async function search(args: SearchArgs | string): Promise<void> {
     if (typeof args == 'object') {
         /**
          * If we get an object as argument, we start a new search. We switch
-         * to normal mode, if necessary.
+         * to normal mode, if necessary. Then we initialize the search string
+         * to empty, and store the current selections in the 
+         * `searchStartSelections` array. We need an array as the command also
+         * works with multiple cursors. Finally we store the search arguments
+         * in the module level variables.
          */
         searchReturnToNormal = normalMode
         actions.setLastCommand(searchId)
@@ -457,17 +452,24 @@ async function search(args: SearchArgs | string): Promise<void> {
          * sufficiently long search string, we accept the search automatically.
          */
         searchString += args
-        highlightMatch(editor, searchStartSelections)
+        highlightMatches(editor, searchStartSelections)
         if (searchString.length >= searchAcceptAfter)
             await acceptSearch()
     }
 }
 /**
- * The actual search functionality is located in this helper function. It gets
- * the start position for the search, the search string, and an optional delta
- * parameter that increments or decrements the start position.
+ * The actual search functionality is located in this helper function. It is 
+ * used by the actual search command plus the commands that jump to next and 
+ * previous match.
+ * 
+ * The search starts from positions specified by the `selections` argument. If 
+ * there are multilple selections (cursors) active, multiple searches are 
+ * performed. Each cursor location is considered separately, and the next match
+ * from that position is selected. The function does *not* make sure that found
+ * matches are unique. In case the matches overlap, the number of selections 
+ * will decrease. 
  */
-function highlightMatch(editor: vscode.TextEditor,
+function highlightMatches(editor: vscode.TextEditor,
     selections: vscode.Selection[]) {
     if (searchString == "")
         /**
@@ -476,15 +478,10 @@ function highlightMatch(editor: vscode.TextEditor,
         editor.selections = searchStartSelections
     else {
         /**
-         * Otherwise we first map the cursor position to the starting offset 
-         * from the begining of the file. We add the delta argument to the 
-         * offset.
-         */
-        let doc = editor.document
-        /**
-         * Then we get the text of the active editor as string. If we have
+         * We get the text of the active editor as string. If we have
          * case-insensitive search, we transform the text to lower case.
          */
+        let doc = editor.document
         let docText = searchCaseSensitive ?
             doc.getText() : doc.getText().toLowerCase()
         /**
@@ -495,19 +492,25 @@ function highlightMatch(editor: vscode.TextEditor,
             searchString : searchString.toLowerCase()
         editor.selections = selections.map(sel => {
             /**
-             * This is the actual search. Depending on the search direction we 
-             * find either the first or the last match from the start offset.
+             * This is the actual search that is performed for each cursor
+             * position. The lambda function returns a new selection for each
+             * active cursor. 
              */
             let startOffs = doc.offsetAt(sel.active)
+            /** 
+             * Depending on the search direction we find either the 
+             * first or the last match from the start offset.
+             */
             let offs = searchBackwards ?
                 docText.lastIndexOf(target, startOffs - 1) :
                 docText.indexOf(target, startOffs)
             if (offs < 0) {
                 if (searchWrapAround)
                     /**
-                     * Search string was not found, but `wrapAround` argument
-                     * was set. Try to find the search string from beginning
-                     * or end of the document.
+                     * If search string was not found but `wrapAround` argument
+                     * was set, we try to find the search string from beginning
+                     * or end of the document. If that fails too, we return
+                     * the original selection and the cursor will not move.
                      */
                     offs = searchBackwards ?
                         docText.lastIndexOf(target) :
@@ -516,15 +519,19 @@ function highlightMatch(editor: vscode.TextEditor,
                     return sel
             }
             /**
-             * If search was successful, we store the new search string and
-             * change the selection to highlight it. If `selectTillMatch`
-             * parameter is set, we highlight the range from the search start
-             * position to the beginning or end of the match depending on if
-             * the match is before or after the starting position.
+             * If search was successful, we return a new selection to highlight 
+             * it. First, we find the start and end position of the match.
              */
             let len = searchString.length
             let start = doc.positionAt(offs)
             let end = doc.positionAt(offs + len)
+            /**
+             * If the search direction is backwards, we flip the active and
+             * anchor positions. Normally, the anchor is set to the start and
+             * cursor to the end. Finally, we check if the `selectTillMatch`
+             * argument is set. If so, we move only the active cursor position
+             * and leave the selection start (anchor) as-is.
+             */
             let [active, anchor] = searchBackwards ?
                 [start, end] :
                 [end, start]
@@ -566,7 +573,7 @@ async function cancelSearch(): Promise<void> {
  * ### Modifying Search String
  * 
  * Since we cannot capture the backspace character in normal mode, we have to
- * hook it another way. We define a command `modaledit.deleteCharFromSearch`
+ * hook it some other way. We define a command `modaledit.deleteCharFromSearch`
  * which deletes the last character from the search string. This command can
  * then be bound to backspace using the standard keybindings. We only run the
  * command, if the `modaledit.searching` context is set. Below is an excerpt
@@ -578,37 +585,42 @@ async function cancelSearch(): Promise<void> {
  *    "when": "editorTextFocus && modaledit.searching"
  * }
  * ```
+ * Note that we need to also update the status bar to show the modified search
+ * string. The `onType` callback that normally handles this is not getting
+ * called when this command is invoked.
  */
 function deleteCharFromSearch() {
     let editor = vscode.window.activeTextEditor
     if (editor && searching && searchString.length > 0) {
         searchString = searchString.slice(0, searchString.length - 1)
-        highlightMatch(editor, searchStartSelections)
+        highlightMatches(editor, searchStartSelections)
         updateStatusBar(editor)
     }
 }
 /**
  * ### Finding Previous and Next Match
  * 
- * Given all the code we already have for searching, finding next and previous 
- * match is a relatively simple task. We basically just calculate the new 
- * starting position and restart the search. The selection is what determines 
- * where the search starts, but we need to adjust the starting position slightly 
- * depending on the search direction and other parameters.
+ * Using the `highlightMatches` function finding next and previous match is a 
+ * relatively simple task. We basically just restart the search from
+ * the current cursor position(s). 
+ * 
+ * We also check whether the search parameters include `typeBeforeNextMatch` or 
+ * `typeAfterNextMatch` argument. If so, we invoke the user-specified commands 
+ * before and/or after we jump to the next match.
  */
 async function nextMatch(): Promise<void> {
     let editor = vscode.window.activeTextEditor
     if (editor && searchString) {
         if (searchTypeBeforeNextMatch)
             await typeNormalKeys({ keys: searchTypeBeforeNextMatch })
-        highlightMatch(editor, editor.selections)
+        highlightMatches(editor, editor.selections)
         if (searchTypeAfterNextMatch)
             await typeNormalKeys({ keys: searchTypeAfterNextMatch })
     }
 }
 /**
  * When finding the previous match we flip the search direction but otherwise do
- * the same routine as in the previous method.
+ * the same routine as in the previous function.
  */
 async function previousMatch(): Promise<void> {
     let editor = vscode.window.activeTextEditor
@@ -616,7 +628,7 @@ async function previousMatch(): Promise<void> {
         if (searchTypeBeforePreviousMatch)
             await typeNormalKeys({ keys: searchTypeBeforePreviousMatch })
         searchBackwards = !searchBackwards
-        highlightMatch(editor, editor.selections)
+        highlightMatches(editor, editor.selections)
         searchBackwards = !searchBackwards
         if (searchTypeAfterPreviousMatch)
             await typeNormalKeys({ keys: searchTypeAfterPreviousMatch })
@@ -649,6 +661,15 @@ async function goToBookmark(args?: BookmarkArgs): Promise<void> {
         if (editor)
             changeSelection(editor, bm.position, bm.position)
     }
+}
+/**
+ * This helper function changes the selection range in the active editor. It
+ * also makes sure that the selection is visible.
+ */
+function changeSelection(editor: vscode.TextEditor, anchor: vscode.Position,
+    active: vscode.Position) {
+    editor.selection = new vscode.Selection(anchor, active)
+    editor.revealRange(editor.selection)
 }
 /**
  * ## Quick Snippets

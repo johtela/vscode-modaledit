@@ -101,6 +101,11 @@
         <a href="LICENSE.html">License</a>
         
     </li>
+    <li>
+        
+        <a href="tutorial.html">tutorial</a>
+        
+    </li>
     </ul>
     </div>
             
@@ -531,6 +536,12 @@ commands require any arguments.</p>
 dialog which takes you out of the editor. To achieve more fluid searching
 experience ModalEdit provides incremental search commands that mimic Vim's
 corresponding operations.</p>
+<blockquote>
+<p>There are lot of new parameters in the <code>search</code> command that were added in
+version 2.0. Specifically, <code>typeAfter...</code> and <code>typeBefore...</code> arguments might
+seem odd at first glance. Please see the <a href="CHANGELOG.html">change log</a> to
+understand the rationale why they are needed.</p>
+</blockquote>
 <h4 id="code-modaledit-search-code"><code>modaledit.search</code></h4>
 <p>Starts incremental search. The cursor is changed to indicate that editor is in
 search mode. Normal mode commands are suppressed while incremental search is
@@ -561,6 +572,12 @@ can see the searched string in the status bar as well as the search parameters.<
 <td>Search is case-sensitive. Default is case-insensitive</td>
 </tr>
 <tr>
+<td><code>wrapAround</code></td>
+<td><code>boolean</code></td>
+<td><code>false</code></td>
+<td>Search wraps around to top/bottom depending on search direction. Default is off.</td>
+</tr>
+<tr>
 <td><code>acceptAfter</code></td>
 <td><code>number</code></td>
 <td><code>undefined</code></td>
@@ -576,7 +593,31 @@ can see the searched string in the status bar as well as the search parameters.<
 <td><code>typeAfterAccept</code></td>
 <td><code>string</code></td>
 <td><code>undefined</code></td>
-<td>Allows to run normal mode commands through key bindings (see <code>modaledit.typeNormalKeys</code> command) after successful search. The argument can be used to enter insert mode, or clear selection after search, for example. The same command sequence is run also after <code>modaledit.nextMatch</code> and <code>modaledit.previousMatch</code> commands. I.e. the argument persists the same way as the search direction.</td>
+<td>Allows to run normal mode commands through key bindings (see <code>modaledit.typeNormalKeys</code> command) after successful search. The argument can be used to enter insert mode, or clear selection after search, for example.</td>
+</tr>
+<tr>
+<td><code>typeBeforeNextMatch</code></td>
+<td><code>string</code></td>
+<td><code>undefined</code></td>
+<td>Run the specified key commands <em>before</em> searhing for the next match.</td>
+</tr>
+<tr>
+<td><code>typeAfterNextMatch</code></td>
+<td><code>string</code></td>
+<td><code>undefined</code></td>
+<td>Run the specified key commands <em>after</em> the next match command is executed.</td>
+</tr>
+<tr>
+<td><code>typeBeforePreviousMatch</code></td>
+<td><code>string</code></td>
+<td><code>undefined</code></td>
+<td>Run the specified key commands <em>before</em> searhing for the previous match.</td>
+</tr>
+<tr>
+<td><code>typeAfterPreviousMatch</code></td>
+<td><code>string</code></td>
+<td><code>undefined</code></td>
+<td>Run the specified key commands <em>after</em> the previous match command executed.</td>
 </tr>
 </tbody>
 </table>

@@ -378,6 +378,11 @@ dialog which takes you out of the editor. To achieve more fluid searching
 experience ModalEdit provides incremental search commands that mimic Vim's 
 corresponding operations.
 
+> There are lot of new parameters in the `search` command that were added in 
+> version 2.0. Specifically, `typeAfter...` and `typeBefore...` arguments might 
+> seem odd at first glance. Please see the [change log](CHANGELOG.html) to 
+> understand the rationale why they are needed.
+
 #### `modaledit.search`  
 
 Starts incremental search. The cursor is changed to indicate that editor is in
