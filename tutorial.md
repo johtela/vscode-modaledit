@@ -72,14 +72,15 @@ _Appending_ text works analogously; `a` appends text after current character
 and `A` at the end of the line. There is a special case, though. If cursor is 
 already at the last character of the line, it should not move. This is why we
 use a conditional command to move the cursor only, if the current character
-is not `0` which marks the end of the line. A conditional command is an object 
-that contains the `condition` property. The value of the property is a JS 
-expression which ModalEdit evaluates. It selects the command based on the
-result. In this case, the result `false` will execute the `cursorRight` command.
+is not an empty string which marks the end of the line. A conditional command 
+is an object that contains the `condition` property. The value of the property 
+is a JS expression which ModalEdit evaluates. It selects the command based on 
+the result. In this case, the result `false` will execute the `cursorRight` 
+command.
 ```js
         "a": [
             {
-                "condition": "__char == 0",
+                "condition": "__char == ''",
                 "false": "cursorRight"
             },
             "modaledit.enterInsert"

@@ -726,7 +726,9 @@ async function typeNormalKeys(args: TypeNormalKeysArgs): Promise<void> {
  * ## Advanced Selection Command
  * 
  * For selecting ranges of text between two characters (inside parenthesis, for
- * example) we add the `modaledit.selectBetween` command. 
+ * example) we add the `modaledit.selectBetween` command. See the
+ * [instructions](../README.html#selecting-text-between-delimiters) for the list 
+ * of parameters this command provides.
  */
 function selectBetween(args: SelectBetweenArgs) {
     let editor = vscode.window.activeTextEditor
@@ -736,67 +738,104 @@ function selectBetween(args: SelectBetweenArgs) {
         throw Error(`${selectBetweenId}: Invalid args: ${JSON.stringify(args)}`)
     let doc = editor.document
     /**
-     * Get position of cursor and anchor. If `from` parameter is missing, anchor
-     * position will be used as the selection start. If `to` parameter is 
-     * missing, the cursor position is where selection ends. `fromOffs` and
-     * `toOffs` variables' default values are set accordingly. 
+     * Get position of cursor and anchor. These positions might be in "reverse" 
+     * order (cursor lies before anchor), so we need to sort them into `lowPos` 
+     * and `highPos` variables and corresponding offset variables. These are 
+     * used to determine the search range later on. 
+     * 
+     * Since `to` or `from` parameter might be missing, we initialize the 
+     * `fromOffs` and `toOffs` variables to low and high offsets. They delimit 
+     * the range to be selected at the end.  
      */
     let cursorPos = editor.selection.active
     let anchorPos = editor.selection.anchor
-    let cursorOffs = doc.offsetAt(cursorPos)
-    let anchorOffs = doc.offsetAt(anchorPos)
-    let fromOffs = anchorOffs
-    let toOffs = cursorOffs
+    let [highPos, lowPos] = cursorPos.isAfterOrEqual(anchorPos) ?
+        [cursorPos, anchorPos] : [anchorPos, cursorPos]
+    let highOffs = doc.offsetAt(highPos)
+    let lowOffs = doc.offsetAt(lowPos)
+    let fromOffs = lowOffs
+    let toOffs = highOffs
     /**
      * Next we determine the search range. The `startOffs` marks the starting
      * offset and `endOffs` the end. Depending on the specified scope these
      * variables are either set to start/end of the current line or the whole
      * document.
+     * 
+     * In the actual search, we have two main branches: one for the case when 
+     * regex search is used and another for the normal text search.
      */
-    let startPos = new vscode.Position(args.docScope ? 0 : cursorPos.line, 0)
-    let endPos = doc.lineAt(args.docScope ? doc.lineCount - 1 : cursorPos.line)
+    let startPos = new vscode.Position(args.docScope ? 0 : lowPos.line, 0)
+    let endPos = doc.lineAt(args.docScope ? doc.lineCount - 1 : highPos.line)
         .range.end
     let startOffs = doc.offsetAt(startPos)
     let endOffs = doc.offsetAt(endPos)
     if (args.regex) {
         if (args.from) {
+            /**
+             * This branch searches for regex in the `from` parameter starting 
+             * from `startPos` continuing until `lowPos`. We need to find the 
+             * last occurrence of the regex, so we have to add a global modifier 
+             * `g` and iterate through all the matches. In case there are no
+             * matches `fromOffs` gets the same offset as `startOffs` meaning
+             * that the selection will extend to the start of the search scope.
+             */
             fromOffs = startOffs
-            let text = doc.getText(new vscode.Range(startPos, cursorPos))
+            let text = doc.getText(new vscode.Range(startPos, lowPos))
             let re = new RegExp(args.from, args.caseSensitive ? "g" : "gi")
             let match: RegExpExecArray | null = null
-            while ((match = re.exec(text)) != null) {
+            while ((match = re.exec(text)) != null)
                 fromOffs = startOffs + match.index +
                     (args.inclusive ? 0 : match[0].length)
-            }
         }
         if (args.to) {
+            /**
+             * This block finds the regex in the `to` parameter starting from
+             * the range `[highPos, endPos]`. Since we want to find the first
+             * occurrence, we don't need to iterate over the matches in this
+             * case.
+             */
             toOffs = endOffs
-            let text = doc.getText(new vscode.Range(cursorPos, endPos))
+            let text = doc.getText(new vscode.Range(highPos, endPos))
             let re = new RegExp(args.to, args.caseSensitive ? undefined : "i")
             let match = re.exec(text)
             if (match)
-                toOffs = cursorOffs + match.index +
+                toOffs = highOffs + match.index +
                     (args.inclusive ? match[0].length : 0)
         }
     }
     else {
+        /**
+         * This branch does the regular text search. We retrieve the whole
+         * search range as string and use `indexOf` and `lastIndexOf` methods
+         * to find the strings in `to` and `from` parameters. Case insensitivity
+         * is done by converting both the search range and search string to
+         * lowercase.
+         */
         let text = doc.getText(new vscode.Range(startPos, endPos))
         if (!args.caseSensitive)
             text = text.toLowerCase()
         if (args.from) {
             fromOffs = text.lastIndexOf(args.caseSensitive ?
-                args.from : args.from.toLowerCase(), cursorOffs - startOffs)
+                args.from : args.from.toLowerCase(), lowOffs - startOffs)
             fromOffs = fromOffs < 0 ? startOffs :
                 startOffs + fromOffs + (args.inclusive ? 0 : args.from.length)
         }
         if (args.to) {
             toOffs = text.indexOf(args.caseSensitive ?
-                args.to : args.to.toLowerCase(), cursorOffs - startOffs)
+                args.to : args.to.toLowerCase(), highOffs - startOffs)
             toOffs = toOffs < 0 ? endOffs :
                 startOffs + toOffs + (args.inclusive ? args.to.length : 0)
         }
     }
-    changeSelection(editor, doc.positionAt(fromOffs), doc.positionAt(toOffs))
+    if (cursorPos.isAfterOrEqual(anchorPos))
+        /** 
+         * The last thing to do is to select the range from `fromOffs` to
+         * `toOffs`. We want to preserve the direction of the selection. If
+         * it was reserved when this command was called, we flip the variables.
+         */
+        changeSelection(editor, doc.positionAt(fromOffs), doc.positionAt(toOffs))
+    else
+        changeSelection(editor, doc.positionAt(toOffs), doc.positionAt(fromOffs))
 }
 /**
  * ## Repeat Last Change Command
