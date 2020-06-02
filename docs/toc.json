@@ -6,7 +6,7 @@
     },
     {
         "page": "Tutorial",
-        "file": ".vscode/settings.html",
+        "file": "tutorial.html",
         "desc": ""
     },
     {
@@ -37,11 +37,6 @@
     {
         "page": "License",
         "file": "LICENSE.html",
-        "desc": ""
-    },
-    {
-        "page": "tutorial",
-        "file": "tutorial.html",
         "desc": ""
     }
 ]
