@@ -357,9 +357,11 @@ export function updateStatusBar(editor: vscode.TextEditor | undefined,
  * standard version to keep the state in sync. 
  */
 async function cancelSelection(): Promise<void> {
-    await vscode.commands.executeCommand("cancelSelection")
-    selecting = false
-    updateStatusBar(vscode.window.activeTextEditor)
+    if (selecting) {
+        selecting = false
+        await vscode.commands.executeCommand("cancelSelection")
+        updateStatusBar(vscode.window.activeTextEditor)
+    } 
 }
 /**
  * `modaledit.toggleSelection` toggles the selection mode on and off. It sets
@@ -367,8 +369,9 @@ async function cancelSelection(): Promise<void> {
  * selection.
  */
 async function toggleSelection(): Promise<void> {
-    let oldSelecting = isSelecting()
-    await vscode.commands.executeCommand("cancelSelection")
+    let oldSelecting = selecting
+    if (oldSelecting)
+        await vscode.commands.executeCommand("cancelSelection")
     selecting = !oldSelecting
     updateStatusBar(vscode.window.activeTextEditor)
 }
@@ -382,7 +385,7 @@ function isSelecting(): boolean {
         return true
     selecting = vscode.window.activeTextEditor!.selections.some(
         selection => !selection.anchor.isEqual(selection.active))
-    return selecting 
+    return selecting
 }
 /**
  * ## Search Commands
