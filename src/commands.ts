@@ -378,9 +378,11 @@ async function toggleSelection(): Promise<void> {
  * selected in the active editor.
  */
 function isSelecting(): boolean {
-    return selecting ||
-        vscode.window.activeTextEditor!.selections.some(
-            selection => !selection.anchor.isEqual(selection.active))
+    if (selecting)
+        return true
+    selecting = vscode.window.activeTextEditor!.selections.some(
+        selection => !selection.anchor.isEqual(selection.active))
+    return selecting 
 }
 /**
  * ## Search Commands
