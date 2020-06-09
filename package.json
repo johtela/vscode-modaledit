@@ -226,6 +226,10 @@
 				"title": "ModalEdit: Go to bookmark"
 			},
 			{
+				"command": "modaledit.showBookmarks",
+				"title": "ModalEdit: Show bookmarks"
+			},
+			{
 				"command": "modaledit.cancelSearch",
 				"title": "ModalEdit: Cancel search mode"
 			},

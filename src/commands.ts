@@ -35,17 +35,27 @@ interface SearchArgs {
 /**
  * ### Bookmark Arguments
  * 
- * [Bookmark](../README.html#bookmarks) ID is just an index in an array. The 
- * actual positions are stored in an object that conforms to the `Bookmark` 
- * interface in the `bookmarks` array.
+ * [Bookmark](../README.html#bookmarks) ID is a user specified string label. 
+ * Actual positions are stored in an object that conforms to the `Bookmark` 
+ * interface in the `bookmarks` dictionary.
  */
 interface BookmarkArgs {
-    bookmark?: number
+    bookmark?: string,
+    select?: boolean
 }
 
-interface Bookmark {
-    document: vscode.TextDocument
-    position: vscode.Position
+class Bookmark implements vscode.QuickPickItem {
+    public description: string
+
+    constructor(
+        public label: string,
+        public document: vscode.TextDocument,
+        public position: vscode.Position) {
+        let ln = position.line
+        let col = position.character
+        let text = document.lineAt(ln).text    
+        this.description = `Ln ${ln}, Col ${col}: ${text}` 
+    }
 }
 /**
  * ### Quick Snippet Arguments
@@ -143,7 +153,7 @@ let searchReturnToNormal = true
 /**
  * Bookmarks are stored here.
  */
-let bookmarks: Bookmark[] = []
+let bookmarks: { [label: string]: Bookmark } = {}
 /**
  * Quick snippets are simply stored in an array of strings.
  */
@@ -174,6 +184,7 @@ const nextMatchId = "modaledit.nextMatch"
 const previousMatchId = "modaledit.previousMatch"
 const defineBookmarkId = "modaledit.defineBookmark"
 const goToBookmarkId = "modaledit.goToBookmark"
+const showBookmarksId = "modaledit.showBookmarks"
 const fillSnippetArgsId = "modaledit.fillSnippetArgs"
 const defineQuickSnippetId = "modaledit.defineQuickSnippet"
 const insertQuickSnippetId = "modaledit.insertQuickSnippet"
@@ -201,6 +212,7 @@ export function register(context: vscode.ExtensionContext) {
         vscode.commands.registerCommand(previousMatchId, previousMatch),
         vscode.commands.registerCommand(defineBookmarkId, defineBookmark),
         vscode.commands.registerCommand(goToBookmarkId, goToBookmark),
+        vscode.commands.registerCommand(showBookmarksId, showBookmarks),
         vscode.commands.registerCommand(fillSnippetArgsId, fillSnippetArgs),
         vscode.commands.registerCommand(defineQuickSnippetId, defineQuickSnippet),
         vscode.commands.registerCommand(insertQuickSnippetId, insertQuickSnippet),
@@ -322,6 +334,7 @@ export function updateCursorAndStatusBar(editor: vscode.TextEditor | undefined) 
             searching ? actions.getSearchCursorType() :
                 normalMode ? actions.getNormalCursorStyle() :
                     actions.getInsertCursorStyle()
+    selecting = false
     updateStatusBar(editor)
 }
 /**
@@ -648,9 +661,10 @@ async function previousMatch(): Promise<void> {
 function defineBookmark(args?: BookmarkArgs) {
     let editor = vscode.window.activeTextEditor
     if (editor) {
+        let label = args?.bookmark?.toString() || '0' 
         let document = editor.document
         let position = editor.selection.active
-        bookmarks[args?.bookmark || 0] = { document, position }
+        bookmarks[label] = new Bookmark(label, document, position)
     }
 }
 /**
@@ -658,14 +672,30 @@ function defineBookmark(args?: BookmarkArgs) {
  * we already defined. It makes sure that selection is visible.
  */
 async function goToBookmark(args?: BookmarkArgs): Promise<void> {
-    let i = args?.bookmark || 0
-    let bm = bookmarks[i]
+    let label = args?.bookmark?.toString() || '0'
+    let bm = bookmarks[label]
     if (bm) {
         await vscode.window.showTextDocument(bm.document)
         let editor = vscode.window.activeTextEditor
-        if (editor)
-            changeSelection(editor, bm.position, bm.position)
+        if (editor) {
+            if (args?.select)
+                changeSelection(editor, editor.selection.anchor, bm.position)
+            else
+                changeSelection(editor, bm.position, bm.position)
+        }
     }
+}
+/**
+ * To show the list of bookmarks in the command menu, we provide a new command.
+ */
+async function showBookmarks(): Promise<void> {
+    let items = Object.getOwnPropertyNames(bookmarks).map(name => bookmarks[name])
+    let selected = await vscode.window.showQuickPick(items, {
+        placeHolder: "Select bookmark to jump to",
+        matchOnDescription: true
+    })
+    if (selected)
+        await goToBookmark({ bookmark: selected.label })
 }
 /**
  * This helper function changes the selection range in the active editor. It
