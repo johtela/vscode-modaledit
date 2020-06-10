@@ -197,6 +197,35 @@
 					"default": "underline",
 					"description": "Shape of the cursor when incremental search is active."
 				},
+				"modaledit.selectCursorStyle": {
+					"type": "string",
+					"enum": [
+						"block",
+						"block-outline",
+						"line",
+						"line-thin",
+						"underline",
+						"underline-thin"
+					],
+					"default": "line-thin",
+					"description": "Shape of the cursor when selection is active in normal mode."
+				},
+				"modaledit.insertCursorColor": {
+					"type": "string",
+					"description": "Color of the cursor in insert mode (in HTML format)."
+				},
+				"modaledit.normalCursorColor": {
+					"type": "string",
+					"description": "Color of the cursor in normal mode (in HTML format)."
+				},
+				"modaledit.searchCursorColor": {
+					"type": "string",
+					"description": "Color of the cursor when search is active (in HTML format)."
+				},
+				"modaledit.selectCursorColor": {
+					"type": "string",
+					"description": "Color of the cursor when selection is active in normal mode (in HTML format)."
+				},
 				"modaledit.startInNormalMode": {
 					"type": "boolean",
 					"default": true,

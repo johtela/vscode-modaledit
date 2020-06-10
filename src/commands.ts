@@ -139,7 +139,7 @@ let searching = false
  */
 let searchString: string
 let searchStartSelections: vscode.Selection[]
-let searchWrapped = false
+let searchInfo: string | null = null
 /**
  * Current search parameters. 
  */
@@ -171,6 +171,10 @@ let textChanged = false
 let currentKeySequence: string[] = []
 let lastKeySequence: string[] = []
 let lastChange: string[] = []
+/**
+ * The workbench configuration is needed for changing cursor color.
+ */
+let workbenchConfig = vscode.workspace.getConfiguration('workbench')
 /**
  * ## Command Names
  * 
@@ -248,7 +252,7 @@ async function onType(event: { text: string }) {
         lastKeySequence = currentKeySequence
         currentKeySequence = []
     }
-    updateStatusBar(vscode.window.activeTextEditor, actions.getHelp())
+    updateCursorAndStatusBar(vscode.window.activeTextEditor, actions.getHelp())
 }
 /**
  * Whenever text changes in an active editor, we set a flag. This flag is
@@ -330,28 +334,16 @@ async function setNormalMode(value: boolean): Promise<void> {
     }
 }
 /**
- * This function updates the cursor shape according to the mode. It delegates
- * updating of the status bar to the next subroutine.
+ * This function updates the cursor shape and status bar according to editor
+ * state. It indicates when selection is active or search mode is on. If 
+ * so, it shows the search parameters. If no editor is active, we hide the 
+ * status bar items.
  */
-export function updateCursorAndStatusBar(editor: vscode.TextEditor | undefined) {
-    if (editor)
-        editor.options.cursorStyle =
-            searching ? actions.getSearchCursorType() :
-                normalMode ? actions.getNormalCursorStyle() :
-                    actions.getInsertCursorStyle()
-    selecting = false
-    updateStatusBar(editor)
-}
-/**
- * The last function updates the status bar text according to the mode. It also
- * indicates if selection is active or if search mode on. If so, it shows the 
- * search parameters. If no editor is active, we hide the status bar item.
- */
-export function updateStatusBar(editor: vscode.TextEditor | undefined,
+export function updateCursorAndStatusBar(editor: vscode.TextEditor | undefined,
     help?: string) {
     if (editor) {
         /**
-         * Update main status bar.
+         * Update the main status bar.
          */
         let prim: string
         if (searching)
@@ -366,23 +358,32 @@ export function updateStatusBar(editor: vscode.TextEditor | undefined,
         /**
          * Update secondary status bar. If there is any keys pressed in the
          * current sequence, we show them. Also possible help string is shown.
-         * The info about search wrapping around is shown only as long there are
+         * The info given by search command is shown only as long there are
          * no other messages to show.
          */
         let sec = "    " + currentKeySequence.join("")
         if (help)
-            sec = `${sec} - ${help}`
-        if (searchWrapped) {
-            if (sec.trim() == "") {
-                let limit = (bw: boolean) => bw ? "TOP" : "BOTTOM"
-                sec = `Search hit ${limit(searchBackwards)} continuing at ${
-                    limit(!searchBackwards)}`
-            }
+            sec = `${sec}    ${help}`
+        if (searchInfo) {
+            if (sec.trim() == "")
+                sec = searchInfo
             else
-                searchWrapped = false
+                searchInfo = null
         }
         secondaryStatusBar.text = sec
         secondaryStatusBar.show()
+        /**
+         * Update the cursor(s).
+         */
+        let [style, color] =
+            searching ? actions.getSearchCursorStyle() :
+                selecting && normalMode ? actions.getSelectCursorStyle() :
+                    normalMode ? actions.getNormalCursorStyle() :
+                        actions.getInsertCursorStyle()
+        editor.options.cursorStyle = style
+        if (actions.cursorColorCustomized())
+            workbenchConfig.update('colorCustomizations',
+                { "editorCursor.foreground": color })
     }
     else {
         mainStatusBar.hide()
@@ -401,7 +402,7 @@ async function cancelSelection(): Promise<void> {
     if (selecting) {
         selecting = false
         await vscode.commands.executeCommand("cancelSelection")
-        updateStatusBar(vscode.window.activeTextEditor)
+        updateCursorAndStatusBar(vscode.window.activeTextEditor)
     }
 }
 /**
@@ -414,7 +415,7 @@ async function toggleSelection(): Promise<void> {
     if (oldSelecting)
         await vscode.commands.executeCommand("cancelSelection")
     selecting = !oldSelecting
-    updateStatusBar(vscode.window.activeTextEditor)
+    updateCursorAndStatusBar(vscode.window.activeTextEditor)
 }
 /**
  * The following helper function actually determines, if a selection is active.
@@ -427,6 +428,15 @@ function isSelecting(): boolean {
     selecting = vscode.window.activeTextEditor!.selections.some(
         selection => !selection.anchor.isEqual(selection.active))
     return selecting
+}
+/**
+ * Function that sets the selecting flag off. This function is called from one
+ * event. The flag is resetted when the active editor changes. The function that
+ * updates the status bar sets the flag on again, if there are any active 
+ * selections.
+ */
+export function resetSelecting() {
+    selecting = false
 }
 /**
  * ## Search Commands
@@ -517,7 +527,7 @@ async function search(args: SearchArgs | string): Promise<void> {
  */
 function highlightMatches(editor: vscode.TextEditor,
     selections: vscode.Selection[]) {
-    searchWrapped = false
+    searchInfo = null
     if (searchString == "")
         /**
          * If search string is empty, we return to the start positions.
@@ -562,9 +572,14 @@ function highlightMatches(editor: vscode.TextEditor,
                     offs = searchBackwards ?
                         docText.lastIndexOf(target) :
                         docText.indexOf(target)
-                if (offs < 0)
+                if (offs < 0) {
+                    searchInfo = "Pattern not found"
                     return sel
-                searchWrapped = true
+                } 
+                let limit = (bw: boolean) => bw ? "TOP" : "BOTTOM"
+                searchInfo =
+                    `Search hit ${limit(searchBackwards)} continuing at ${
+                    limit(!searchBackwards)}`
             }
             /**
              * If search was successful, we return a new selection to highlight 
@@ -642,7 +657,7 @@ function deleteCharFromSearch() {
     if (editor && searching && searchString.length > 0) {
         searchString = searchString.slice(0, searchString.length - 1)
         highlightMatches(editor, searchStartSelections)
-        updateStatusBar(editor)
+        updateCursorAndStatusBar(editor)
     }
 }
 /**
