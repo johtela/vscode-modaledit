@@ -114,9 +114,13 @@ let currentKeymap: Keymap | null = null
 let lastCommand: string
 /**
  * The key sequence that user has pressed is stored for error reporting 
- * purposes and to make it available to command arguments.
+ * purposes and to make it available to command arguments. Since commands
+ * can invoke other commands through `typeNormalKeys` command, we need to
+ * maintain the key sequences in a stack. Both current key sequence and the
+ * stack is initialized to empty array.
  */
 let keySequence: string[] = []
+let keySeqStack: string[][] = []
 /**
  * We need a dictionary that returns a keymap for given id.
  */
@@ -386,6 +390,8 @@ function evalString(str: string, __selecting: boolean): any {
     let __keySequence = keySequence
     let __keys = keySequence
     let __rkeys = keySequence.slice().reverse()
+    let __cmd = __keys.join('')
+    let __rcmd = __rkeys.join('')
     let editor = vscode.window.activeTextEditor
     if (editor) {
         let cursor = editor.selection.active
@@ -498,7 +504,7 @@ async function execute(action: Action, selecting: boolean): Promise<void> {
  * active keymap.
  */
 export async function handleKey(key: string, selecting: boolean,
-    capture: boolean, userInitiated: boolean): Promise<boolean> {
+    capture: boolean): Promise<boolean> {
 
     function error() {
         vscode.window.showWarningMessage("ModalEdit: Undefined key binding: " +
@@ -506,8 +512,11 @@ export async function handleKey(key: string, selecting: boolean,
         currentKeymap = null
     }
 
-    if (userInitiated)
-        keySequence.push(key)
+    if (!currentKeymap) {
+        keySeqStack.push(keySequence)
+        keySequence = []        
+    }
+    keySequence.push(key)
     if (capture && lastCommand)
         executeVSCommand(lastCommand, key)
     else if (currentKeymap) {
@@ -524,8 +533,8 @@ export async function handleKey(key: string, selecting: boolean,
         else
             error()
     }
-    if (!currentKeymap && userInitiated)
-        keySequence = []
+    if (!currentKeymap)
+        keySequence = keySeqStack.pop()!
     return !currentKeymap
 }
 /**

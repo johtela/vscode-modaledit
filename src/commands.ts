@@ -238,7 +238,7 @@ async function onType(event: { text: string }) {
         textChanged = false
     }
     currentKeySequence.push(event.text)
-    if (await runActionForKey(event.text, true)) {
+    if (await runActionForKey(event.text)) {
         lastKeySequence = currentKeySequence
         currentKeySequence = []
     }
@@ -260,9 +260,8 @@ export function onTextChanged() {
  * key sequence that did not (yet) cause any commands to run. This information 
  * is needed to decide whether the `lastKeySequence` variable is updated.
  */
-async function runActionForKey(key: string, userInitiated: boolean):
-    Promise<boolean> {
-    return await actions.handleKey(key, isSelecting(), searching, userInitiated)
+async function runActionForKey(key: string): Promise<boolean> {
+    return await actions.handleKey(key, isSelecting(), searching)
 }
 /**
  * ## Mode Switching  Commands
@@ -755,7 +754,7 @@ async function typeNormalKeys(args: TypeNormalKeysArgs): Promise<void> {
     if (typeof args !== 'object' || typeof (args.keys) !== 'string')
         throw Error(`${typeNormalKeysId}: Invalid args: ${JSON.stringify(args)}`)
     for (let i = 0; i < args.keys.length; i++)
-        await runActionForKey(args.keys[i], false)
+        await runActionForKey(args.keys[i])
 }
 /**
  * ## Advanced Selection Command
@@ -883,6 +882,6 @@ function selectBetween(args: SelectBetweenArgs) {
  */
 async function repeatLastChange(): Promise<void> {
     for (let i = 0; i < lastChange.length; i++)
-        await runActionForKey(lastChange[i], false)
+        await runActionForKey(lastChange[i])
     currentKeySequence = lastChange
 }
