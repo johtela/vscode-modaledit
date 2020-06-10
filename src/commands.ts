@@ -53,8 +53,8 @@ class Bookmark implements vscode.QuickPickItem {
         public position: vscode.Position) {
         let ln = position.line
         let col = position.character
-        let text = document.lineAt(ln).text    
-        this.description = `Ln ${ln}, Col ${col}: ${text}` 
+        let text = document.lineAt(ln).text
+        this.description = `Ln ${ln}, Col ${col}: ${text}`
     }
 }
 /**
@@ -113,10 +113,13 @@ interface SelectBetweenArgs {
  */
 let typeSubscription: vscode.Disposable | undefined
 /**
- * We add an item in the status bar that shows the current mode. The reference
- * to the status bar item is stored below.
+ * We add two items in the status bar that show the current mode. The main 
+ * status bar shows the current state we are in. The secondary status bar shows 
+ * additional info such as keys that have been pressed so far and any help 
+ * strings defined in key bindings.  
  */
-let statusBarItem: vscode.StatusBarItem
+let mainStatusBar: vscode.StatusBarItem
+let secondaryStatusBar: vscode.StatusBarItem
 /**
  * This is the main mode flag that tells if we are in normal mode or insert 
  * mode.
@@ -136,6 +139,7 @@ let searching = false
  */
 let searchString: string
 let searchStartSelections: vscode.Selection[]
+let searchWrapped = false
 /**
  * Current search parameters. 
  */
@@ -220,9 +224,11 @@ export function register(context: vscode.ExtensionContext) {
         vscode.commands.registerCommand(selectBetweenId, selectBetween),
         vscode.commands.registerCommand(repeatLastChangeId, repeatLastChange)
     )
-    statusBarItem = vscode.window.createStatusBarItem(
-        vscode.StatusBarAlignment.Left);
-    statusBarItem.command = toggleId;
+    mainStatusBar = vscode.window.createStatusBarItem(
+        vscode.StatusBarAlignment.Left)
+    mainStatusBar.command = toggleId
+    secondaryStatusBar = vscode.window.createStatusBarItem(
+        vscode.StatusBarAlignment.Left)
 }
 /**
  * ## Keyboard Event Handler
@@ -344,21 +350,44 @@ export function updateCursorAndStatusBar(editor: vscode.TextEditor | undefined) 
 export function updateStatusBar(editor: vscode.TextEditor | undefined,
     help?: string) {
     if (editor) {
-        let text: string
+        /**
+         * Update main status bar.
+         */
+        let prim: string
         if (searching)
-            text = `SEARCH [${searchBackwards ? "B" : "F"
+            prim = `SEARCH [${searchBackwards ? "B" : "F"
                 }${searchCaseSensitive ? "S" : ""}]: ${searchString}`
         else {
             let sel = isSelecting() ? " [S]" : ""
-            text = normalMode ? `--NORMAL${sel}--` : `--INSERT${sel}--`
+            prim = normalMode ? `--NORMAL${sel}--` : `--INSERT${sel}--`
         }
+        mainStatusBar.text = prim
+        mainStatusBar.show()
+        /**
+         * Update secondary status bar. If there is any keys pressed in the
+         * current sequence, we show them. Also possible help string is shown.
+         * The info about search wrapping around is shown only as long there are
+         * no other messages to show.
+         */
+        let sec = "    " + currentKeySequence.join("")
         if (help)
-            text = `${text}  ${help}`
-        statusBarItem.text = text
-        statusBarItem.show()
+            sec = `${sec} - ${help}`
+        if (searchWrapped) {
+            if (sec.trim() == "") {
+                let limit = (bw: boolean) => bw ? "TOP" : "BOTTOM"
+                sec = `Search hit ${limit(searchBackwards)} continuing at ${
+                    limit(!searchBackwards)}`
+            }
+            else
+                searchWrapped = false
+        }
+        secondaryStatusBar.text = sec
+        secondaryStatusBar.show()
     }
-    else
-        statusBarItem.hide()
+    else {
+        mainStatusBar.hide()
+        secondaryStatusBar.hide()
+    }
 }
 /**
  * ## Selection Commands
@@ -373,7 +402,7 @@ async function cancelSelection(): Promise<void> {
         selecting = false
         await vscode.commands.executeCommand("cancelSelection")
         updateStatusBar(vscode.window.activeTextEditor)
-    } 
+    }
 }
 /**
  * `modaledit.toggleSelection` toggles the selection mode on and off. It sets
@@ -488,6 +517,7 @@ async function search(args: SearchArgs | string): Promise<void> {
  */
 function highlightMatches(editor: vscode.TextEditor,
     selections: vscode.Selection[]) {
+    searchWrapped = false
     if (searchString == "")
         /**
          * If search string is empty, we return to the start positions.
@@ -534,6 +564,7 @@ function highlightMatches(editor: vscode.TextEditor,
                         docText.indexOf(target)
                 if (offs < 0)
                     return sel
+                searchWrapped = true
             }
             /**
              * If search was successful, we return a new selection to highlight 
@@ -660,7 +691,7 @@ async function previousMatch(): Promise<void> {
 function defineBookmark(args?: BookmarkArgs) {
     let editor = vscode.window.activeTextEditor
     if (editor) {
-        let label = args?.bookmark?.toString() || '0' 
+        let label = args?.bookmark?.toString() || '0'
         let document = editor.document
         let position = editor.selection.active
         bookmarks[label] = new Bookmark(label, document, position)
