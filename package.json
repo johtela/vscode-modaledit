@@ -210,21 +210,41 @@
 					"default": "line-thin",
 					"description": "Shape of the cursor when selection is active in normal mode."
 				},
-				"modaledit.insertCursorColor": {
+				"modaledit.insertStatusText": {
 					"type": "string",
-					"description": "Color of the cursor in insert mode (in HTML format)."
+					"default": "-- $(edit) INSERT --",
+					"description": "Mode text (and icons) shown in status bar in insert mode."
 				},
-				"modaledit.normalCursorColor": {
+				"modaledit.insertStatusColor": {
 					"type": "string",
-					"description": "Color of the cursor in normal mode (in HTML format)."
+					"description": "Color of the status bar mode text in insert mode (in HTML format)."
 				},
-				"modaledit.searchCursorColor": {
+				"modaledit.normalStatusText": {
 					"type": "string",
-					"description": "Color of the cursor when search is active (in HTML format)."
+					"default": "-- $(symbol-method) NORMAL --",
+					"description": "Mode text (and icons) shown in status bar in normal mode."
 				},
-				"modaledit.selectCursorColor": {
+				"modaledit.normalStatusColor": {
 					"type": "string",
-					"description": "Color of the cursor when selection is active in normal mode (in HTML format)."
+					"description": "Color of the status bar mode text in normal mode (in HTML format)."
+				},
+				"modaledit.searchStatusText": {
+					"type": "string",
+					"default": "$(search) SEARCH",
+					"description": "Mode text (and icons) shown in status bar in search mode."
+				},
+				"modaledit.searchStatusColor": {
+					"type": "string",
+					"description": "Color of the status bar mode text when in search mode (in HTML format)."
+				},
+				"modaledit.selectStatusText": {
+					"type": "string",
+					"default": "-- $(paintcan) VISUAL --",
+					"description": "Mode text (and icons) shown in status bar selection is active in normal mode."
+				},
+				"modaledit.selectStatusColor": {
+					"type": "string",
+					"description": "Color of the status bar mode text when selection is active in normal mode (in HTML format)."
 				},
 				"modaledit.startInNormalMode": {
 					"type": "boolean",

@@ -92,10 +92,14 @@ let insertCursorStyle: vscode.TextEditorCursorStyle
 let normalCursorStyle: vscode.TextEditorCursorStyle
 let searchCursorStyle: vscode.TextEditorCursorStyle
 let selectCursorStyle: vscode.TextEditorCursorStyle
-let insertCursorColor: string | undefined
-let normalCursorColor: string | undefined
-let searchCursorColor: string | undefined
-let selectCursorColor: string | undefined
+let insertStatusText: string
+let normalStatusText: string
+let searchStatusText: string
+let selectStatusText: string
+let insertStatusColor: string | undefined
+let normalStatusColor: string | undefined
+let searchStatusColor: string | undefined
+let selectStatusColor: string | undefined
 /**
  * Another thing you can set in config, is whether ModalEdit starts in normal
  * mode. 
@@ -135,29 +139,24 @@ let keymapsById: { [id: number]: Keymap }
  * 
  * The following functions return the current configuration settings.
  */
-export function getInsertCursorStyle(): 
-    [vscode.TextEditorCursorStyle, string | undefined] {
-    return [ insertCursorStyle, insertCursorColor ]
+export function getInsertStyles(): 
+    [vscode.TextEditorCursorStyle, string, string | undefined] {
+    return [ insertCursorStyle, insertStatusText, insertStatusColor ]
 }
 
-export function getNormalCursorStyle(): 
-    [vscode.TextEditorCursorStyle, string | undefined ] {
-    return [ normalCursorStyle, normalCursorColor ]
+export function getNormalStyles(): 
+    [vscode.TextEditorCursorStyle, string, string | undefined ] {
+    return [ normalCursorStyle, normalStatusText, normalStatusColor ]
 }
 
-export function getSearchCursorStyle(): 
-    [vscode.TextEditorCursorStyle, string  | undefined] {
-    return [ searchCursorStyle, searchCursorColor ]
+export function getSearchStyles(): 
+    [vscode.TextEditorCursorStyle, string, string  | undefined] {
+    return [ searchCursorStyle, searchStatusText, searchStatusColor ]
 }
 
-export function getSelectCursorStyle(): 
-    [vscode.TextEditorCursorStyle, string | undefined] {
-    return [ selectCursorStyle, selectCursorColor ]
-}
-
-export function cursorColorCustomized(): boolean {
-    return insertCursorColor || normalCursorColor || searchCursorColor ||
-        selectCursorColor ? true : false
+export function getSelectStyles(): 
+    [vscode.TextEditorCursorStyle, string, string | undefined] {
+    return [ selectCursorStyle, selectStatusText, selectStatusColor ]
 }
 
 export function getStartInNormalMode(): boolean {
@@ -207,10 +206,15 @@ export function updateFromConfig(): void {
         config.get<Cursor>("searchCursorStyle", "underline"))
     selectCursorStyle = toVSCursorStyle(
         config.get<Cursor>("selectCursorStyle", "line-thin"))
-    insertCursorColor = config.get("insertCursorColor") || undefined
-    normalCursorColor = config.get("normalCursorColor") || undefined
-    searchCursorColor = config.get("searchCursorColor") || undefined
-    selectCursorColor = config.get("selectCursorColor") || undefined
+    insertStatusText = config.get("insertStatusText", "-- $(edit) INSERT --")
+    normalStatusText = config.get("normalStatusText", 
+        "-- $(symbol-method) NORMAL --")
+    searchStatusText = config.get("searchStatusText", "$(search) SEARCH")
+    selectStatusText = config.get("selectStatusText", "-- $(paintcan) VISUAL --")
+    insertStatusColor = config.get("insertStatusColor") || undefined
+    normalStatusColor = config.get("normalStatusColor") || undefined
+    searchStatusColor = config.get("searchStatusColor") || undefined
+    selectStatusColor = config.get("selectStatusColor") || undefined
     startInNormalMode = config.get<boolean>("startInNormalMode", true)
 }
 /**
@@ -542,7 +546,7 @@ export async function handleKey(key: string, selecting: boolean,
     }
     keySequence.push(key)
     if (capture && lastCommand)
-        executeVSCommand(lastCommand, key)
+        await executeVSCommand(lastCommand, key)
     else if (currentKeymap) {
         if (currentKeymap[key])
             await execute(currentKeymap[key], selecting)

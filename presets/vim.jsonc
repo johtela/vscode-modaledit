@@ -1,5 +1,5 @@
 {
-    "modaledit.keybindings": {
+     "modaledit.keybindings": {
         // Move cursor with with enter and space
         "\n": [
             "cursorDown",
@@ -72,7 +72,7 @@
                 },
                 // Apply until character is found
                 "f,t,F,T": {
-                    "help": "Apply until _",
+                    "help": "Do until _",
                     " -~": {
                         "command": "modaledit.typeNormalKeys",
                         "args": "{ keys: 'v' + __rcmd[1] + __rcmd[0] + __rcmd[2] }"
@@ -80,7 +80,7 @@
                 },
                 // Apply inside delimiters
                 "a,i": {
-                    "help": "Apply around/inside _",
+                    "help": "Do around/inside _",
                     "w,p,b,B,t, -/,:-@,[-`,{-~": {
                         "command": "modaledit.typeNormalKeys",
                         "args": "{ keys: 'v' + __rcmd[1] + __rcmd[0] + __rcmd[2] }"
@@ -239,7 +239,7 @@
         // Edit (delete/yank/change/indent/outdent/reformat) with motion
         "d,y,c,<,>,=": {
             "id": 2,
-            "help": "Type motion command",
+            "help": "Edit with motion",
             // Motions possibly repeated <_NUM_> times
             "d,y,c,<,>,=": {
                 "command": "modaledit.typeNormalKeys",
@@ -262,7 +262,7 @@
             },
             // Apply until character is found
             "f,t,F,T": {
-                "help": "Apply until _",
+                "help": "Do until _",
                 " -~": {
                     "command": "modaledit.typeNormalKeys",
                     "args": "{ keys: 'v' + __rcmd[1] + __rcmd[0] + __rcmd[2] }"
@@ -270,7 +270,7 @@
             },
             // Apply inside delimiters
             "a,i": {
-                "help": "Apply around/inside _",
+                "help": "Do around/inside _",
                 "w,p,b,B,t, -/,:-@,[-`,{-~": {
                     "command": "modaledit.typeNormalKeys",
                     "args": "{ keys: 'v' + __rcmd[1] + __rcmd[0] + __rcmd[2] }"
@@ -325,7 +325,7 @@
         // Repeat commands by prefixing with number(s)
         "1-9": {
             "id": 3,
-            "help": "Enter count followed by command",
+            "help": "Repeat n times",
             "0-9": 3,
             "h,j,k,l,w,b,W,B,u,%": {
                 "command": "modaledit.typeNormalKeys",
@@ -566,13 +566,18 @@
         ],
         // Delete (cut) selection
         "d,x": [
-            "editor.action.clipboardCopyAction",
-            "deleteRight",
+            {
+                "condition": "__selection.length > 0",
+                "true": "editor.action.clipboardCutAction"
+            },
             "modaledit.cancelSelection"
         ],
         // Change selection
         "c": [
-            "editor.action.clipboardCutAction",
+            {
+                "condition": "__selection.length > 0",
+                "true": "editor.action.clipboardCutAction"
+            },
             "modaledit.enterInsert"
         ],
         // Yank (copy) selection

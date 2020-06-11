@@ -172,10 +172,6 @@ let currentKeySequence: string[] = []
 let lastKeySequence: string[] = []
 let lastChange: string[] = []
 /**
- * The workbench configuration is needed for changing cursor color.
- */
-let workbenchConfig = vscode.workspace.getConfiguration('workbench')
-/**
  * ## Command Names
  * 
  * Since command names are easy to misspell, we define them as constants.
@@ -342,18 +338,25 @@ async function setNormalMode(value: boolean): Promise<void> {
 export function updateCursorAndStatusBar(editor: vscode.TextEditor | undefined,
     help?: string) {
     if (editor) {
+        // Get the style parameters
+        let [style, text, color] =
+            searching ? actions.getSearchStyles() :
+                isSelecting() && normalMode ? actions.getSelectStyles() :
+                    normalMode ? actions.getNormalStyles() :
+                        actions.getInsertStyles()
+
+        /**
+         * Update the cursor style.
+         */
+        editor.options.cursorStyle = style
         /**
          * Update the main status bar.
          */
-        let prim: string
-        if (searching)
-            prim = `SEARCH [${searchBackwards ? "B" : "F"
-                }${searchCaseSensitive ? "S" : ""}]: ${searchString}`
-        else {
-            let sel = isSelecting() ? " [S]" : ""
-            prim = normalMode ? `--NORMAL${sel}--` : `--INSERT${sel}--`
-        }
-        mainStatusBar.text = prim
+        mainStatusBar.text = searching ?
+            `${text} [${searchBackwards ? "B" : "F"
+                }${searchCaseSensitive ? "S" : ""}]: ${searchString}` :
+            text
+        mainStatusBar.color = color
         mainStatusBar.show()
         /**
          * Update secondary status bar. If there is any keys pressed in the
@@ -372,18 +375,6 @@ export function updateCursorAndStatusBar(editor: vscode.TextEditor | undefined,
         }
         secondaryStatusBar.text = sec
         secondaryStatusBar.show()
-        /**
-         * Update the cursor(s).
-         */
-        let [style, color] =
-            searching ? actions.getSearchCursorStyle() :
-                selecting && normalMode ? actions.getSelectCursorStyle() :
-                    normalMode ? actions.getNormalCursorStyle() :
-                        actions.getInsertCursorStyle()
-        editor.options.cursorStyle = style
-        if (actions.cursorColorCustomized())
-            workbenchConfig.update('colorCustomizations',
-                { "editorCursor.foreground": color })
     }
     else {
         mainStatusBar.hide()
@@ -423,7 +414,7 @@ async function toggleSelection(): Promise<void> {
  * selected in the active editor.
  */
 function isSelecting(): boolean {
-    if (selecting)
+    if (normalMode && selecting)
         return true
     selecting = vscode.window.activeTextEditor!.selections.some(
         selection => !selection.anchor.isEqual(selection.active))
@@ -575,7 +566,7 @@ function highlightMatches(editor: vscode.TextEditor,
                 if (offs < 0) {
                     searchInfo = "Pattern not found"
                     return sel
-                } 
+                }
                 let limit = (bw: boolean) => bw ? "TOP" : "BOTTOM"
                 searchInfo =
                     `Search hit ${limit(searchBackwards)} continuing at ${
@@ -612,7 +603,7 @@ function highlightMatches(editor: vscode.TextEditor,
  * `typeAfterAccept` argument is set we run the given normal mode commands.
  */
 async function acceptSearch() {
-    await setSearching(false)
+    setSearching(false)
     if (searchTypeAfterAccept)
         await typeNormalKeys({ keys: searchTypeAfterAccept })
 }
