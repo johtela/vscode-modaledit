@@ -141,6 +141,12 @@ let searching = false
 let searchString: string
 let searchStartSelections: vscode.Selection[]
 let searchInfo: string | null = null
+let searchChanged: boolean = false;
+/**
+ * Search text decoration (to highlight matches)
+ */
+let searchDecorator: vscode.TextEditorDecorationType;
+
 /**
  * Current search parameters.
  */
@@ -203,7 +209,8 @@ const importPresetsId = "modaledit.importPresets"
  * ## Registering Commands
  *
  * The commands are registered when the extension is activated (main entry point
- * calls this function). We also create the status bar item.
+ * calls this function). We also create the status bar item and text
+ * decorations.
  */
 export function register(context: vscode.ExtensionContext) {
     context.subscriptions.push(
@@ -237,6 +244,10 @@ export function register(context: vscode.ExtensionContext) {
     mainStatusBar.command = toggleId
     secondaryStatusBar = vscode.window.createStatusBarItem(
         vscode.StatusBarAlignment.Left)
+    searchDecorator = vscode.window.createTextEditorDecorationType({
+        backgroundColor: "rgb(200,100,0)",
+        color: "#ffffff"
+    });
 }
 /**
  * ## Keyboard Event Handler
@@ -257,6 +268,11 @@ async function onType(event: { text: string }) {
         currentKeySequence = []
     }
     updateCursorAndStatusBar(vscode.window.activeTextEditor, actions.getHelp())
+    // clear any search decorators if this key did not alter search state
+    if(!searchChanged){
+        vscode.window.activeTextEditor?.setDecorations(searchDecorator, []);
+    }
+    searchChanged = false;
 }
 /**
  * Whenever text changes in an active editor, we set a flag. This flag is
@@ -549,12 +565,14 @@ async function search(args: SearchArgs | string): Promise<void> {
 function highlightMatches(editor: vscode.TextEditor,
     selections: vscode.Selection[]) {
     searchInfo = null
-    if (searchString == "")
+    if (searchString == ""){
         /**
          * If search string is empty, we return to the start positions.
+         * (cleaering the deceorators)
          */
         editor.selections = searchStartSelections
-    else {
+        editor.setDecorations(searchDecorator, []);
+    }else {
         /**
          * We get the text of the active editor as string. If we have
          * case-insensitive search, we transform the text to lower case.
@@ -623,6 +641,27 @@ function highlightMatches(editor: vscode.TextEditor,
                 anchor = sel.anchor
             return new vscode.Selection(anchor, active)
         })
+
+        /**
+         * Finally, we highlight all search matches to make them stand out
+         * in the document.
+         */
+        let highlightRanges: vscode.Range[] = [];
+        editor.visibleRanges.forEach(range => {
+            let text = searchCaseSensitive ? doc.getText(range) :
+                doc.getText(range).toLowerCase();
+            let baseOffset = doc.offsetAt(range.start);
+            let offset = text.indexOf(target);
+
+            while(offset > 0){
+                let start = doc.positionAt(offset + baseOffset);
+                highlightRanges.push(new vscode.Range(start,
+                    start.translate(0,target.length)));
+                offset = text.indexOf(target,offset+1);
+            }
+        });
+        editor.setDecorations(searchDecorator, highlightRanges);
+        searchChanged = true;
     }
     editor.revealRange(editor.selection)
 }
