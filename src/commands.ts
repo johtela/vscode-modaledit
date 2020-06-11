@@ -391,8 +391,8 @@ export function updateCursorAndStatusBar(editor: vscode.TextEditor | undefined,
  */
 async function cancelSelection(): Promise<void> {
     if (selecting) {
-        selecting = false
         await vscode.commands.executeCommand("cancelSelection")
+        selecting = false
         updateCursorAndStatusBar(vscode.window.activeTextEditor)
     }
 }

@@ -1,5 +1,5 @@
 {
-     "modaledit.keybindings": {
+    "modaledit.keybindings": {
         // Move cursor with with enter and space
         "\n": [
             "cursorDown",
@@ -566,18 +566,14 @@
         ],
         // Delete (cut) selection
         "d,x": [
-            {
-                "condition": "__selection.length > 0",
-                "true": "editor.action.clipboardCutAction"
-            },
+            "editor.action.clipboardCopyAction",
+            "deleteRight",
             "modaledit.cancelSelection"
         ],
         // Change selection
         "c": [
-            {
-                "condition": "__selection.length > 0",
-                "true": "editor.action.clipboardCutAction"
-            },
+            "editor.action.clipboardCopyAction",
+            "deleteRight",
             "modaledit.enterInsert"
         ],
         // Yank (copy) selection

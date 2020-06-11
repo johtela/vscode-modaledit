@@ -207,8 +207,7 @@ export function updateFromConfig(): void {
     selectCursorStyle = toVSCursorStyle(
         config.get<Cursor>("selectCursorStyle", "line-thin"))
     insertStatusText = config.get("insertStatusText", "-- $(edit) INSERT --")
-    normalStatusText = config.get("normalStatusText", 
-        "-- $(symbol-method) NORMAL --")
+    normalStatusText = config.get("normalStatusText", "-- $(move) NORMAL --")
     searchStatusText = config.get("searchStatusText", "$(search) SEARCH")
     selectStatusText = config.get("selectStatusText", "-- $(paintcan) VISUAL --")
     insertStatusColor = config.get("insertStatusColor") || undefined

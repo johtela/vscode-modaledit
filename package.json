@@ -221,7 +221,7 @@
 				},
 				"modaledit.normalStatusText": {
 					"type": "string",
-					"default": "-- $(symbol-method) NORMAL --",
+					"default": "-- $(move) NORMAL --",
 					"description": "Mode text (and icons) shown in status bar in normal mode."
 				},
 				"modaledit.normalStatusColor": {
