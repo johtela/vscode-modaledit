@@ -1,5 +1,5 @@
 {
-    "modaledit.keybindings": {
+    "keybindings": {
         // Move cursor with with enter and space
         "\n": [
             "cursorDown",
@@ -455,7 +455,7 @@
         }
     },
     // Select (visual) mode commands.
-    "modaledit.selectbindings": {
+    "selectbindings": {
         "l": "cursorRightSelect",
         "h": "cursorLeftSelect",
         "j": "cursorDownSelect",

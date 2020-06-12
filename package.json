@@ -285,6 +285,10 @@
 			{
 				"command": "modaledit.deleteCharFromSearch",
 				"title": "ModalEdit: Delete the last search character"
+			},
+			{
+				"command": "modaledit.usePreset",
+				"title": "ModalEdit: Use preset keybindings"
 			}
 		],
 		"keybindings": [

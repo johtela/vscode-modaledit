@@ -8,6 +8,7 @@
 //#region -c commands.ts imports
 import * as vscode from 'vscode'
 import * as actions from './actions'
+import { TextDecoder } from 'util'
 //#endregion
 /**
  * ## Command Arguments
@@ -195,6 +196,7 @@ const insertQuickSnippetId = "modaledit.insertQuickSnippet"
 const typeNormalKeysId = "modaledit.typeNormalKeys"
 const selectBetweenId = "modaledit.selectBetween"
 const repeatLastChangeId = "modaledit.repeatLastChange"
+const usePresetId = "modaledit.usePreset"
 /**
  * ## Registering Commands
  * 
@@ -222,7 +224,8 @@ export function register(context: vscode.ExtensionContext) {
         vscode.commands.registerCommand(insertQuickSnippetId, insertQuickSnippet),
         vscode.commands.registerCommand(typeNormalKeysId, typeNormalKeys),
         vscode.commands.registerCommand(selectBetweenId, selectBetween),
-        vscode.commands.registerCommand(repeatLastChangeId, repeatLastChange)
+        vscode.commands.registerCommand(repeatLastChangeId, repeatLastChange),
+        vscode.commands.registerCommand(usePresetId, usePreset)
     )
     mainStatusBar = vscode.window.createStatusBarItem(
         vscode.StatusBarAlignment.Left)
@@ -354,7 +357,7 @@ export function updateCursorAndStatusBar(editor: vscode.TextEditor | undefined,
          */
         mainStatusBar.text = searching ?
             `${text} [${searchBackwards ? "B" : "F"
-                }${searchCaseSensitive ? "S" : ""}]: ${searchString}` :
+            }${searchCaseSensitive ? "S" : ""}]: ${searchString}` :
             text
         mainStatusBar.color = color
         mainStatusBar.show()
@@ -921,4 +924,35 @@ async function repeatLastChange(): Promise<void> {
     for (let i = 0; i < lastChange.length; i++)
         await runActionForKey(lastChange[i])
     currentKeySequence = lastChange
+}
+/**
+ * ## Use Preset Keybindings
+ * 
+ * This command will overwrite to `keybindings` and `selectbindings` settings
+ * with presets. The presets are stored under the subdirectory named `presets`.
+ * Command scans the directory and shows all the files in a pick list. If the
+ * user selects a file, its contents will replace the key binding in the global
+ * `settings.json` file.
+ */
+async function usePreset() {
+    let presetsPath = vscode.extensions.getExtension("johtela.vscode-modaledit")!
+        .extensionPath + "/presets"
+    let fs = vscode.workspace.fs
+    let presets = (await fs.readDirectory(vscode.Uri.file(presetsPath)))
+        .map(t => t[0])
+    let choice = await vscode.window.showQuickPick(presets, {
+        placeHolder: "Warning: Selecting a preset will override current " +
+            "keybindings in global 'settings.json'"
+    })
+    if (choice) {
+        let path = presetsPath + "/" + choice
+        let js = `(${new TextDecoder("utf-8").decode(
+            await fs.readFile(vscode.Uri.file(path)))})`
+        let preset = eval(js)
+        let config = vscode.workspace.getConfiguration("modaledit")
+        if (preset.keybindings)
+            config.update("keybindings", preset.keybindings, true)
+        if (preset.selectbindings)
+            config.update("selectbindings", preset.selectbindings, true)
+    }
 }
