@@ -196,7 +196,7 @@ const insertQuickSnippetId = "modaledit.insertQuickSnippet"
 const typeNormalKeysId = "modaledit.typeNormalKeys"
 const selectBetweenId = "modaledit.selectBetween"
 const repeatLastChangeId = "modaledit.repeatLastChange"
-const usePresetId = "modaledit.usePreset"
+const importPresetsId = "modaledit.importPresets"
 /**
  * ## Registering Commands
  * 
@@ -225,7 +225,7 @@ export function register(context: vscode.ExtensionContext) {
         vscode.commands.registerCommand(typeNormalKeysId, typeNormalKeys),
         vscode.commands.registerCommand(selectBetweenId, selectBetween),
         vscode.commands.registerCommand(repeatLastChangeId, repeatLastChange),
-        vscode.commands.registerCommand(usePresetId, usePreset)
+        vscode.commands.registerCommand(importPresetsId, importPresets)
     )
     mainStatusBar = vscode.window.createStatusBarItem(
         vscode.StatusBarAlignment.Left)
@@ -930,24 +930,50 @@ async function repeatLastChange(): Promise<void> {
  * 
  * This command will overwrite to `keybindings` and `selectbindings` settings
  * with presets. The presets are stored under the subdirectory named `presets`.
- * Command scans the directory and shows all the files in a pick list. If the
- * user selects a file, its contents will replace the key binding in the global
- * `settings.json` file.
+ * Command scans the directory and shows all the files in a pick list. 
+ * Alternatively the user can browse for other file that he/she has anywhere
+ * in the file system. If the user selects a file, its contents will replace 
+ * the key binding in the global `settings.json` file.
+ * 
+ * The presets can be defined as JSON or JavaScript. The code checks if the file
+ * start with `{` and surrounds it with parenthesis in that case. Then it 
+ * evaluates the contents of the file as JavaScript. This allows the user to use 
+ * non-standard JSON files that include comments. Or, if the user likes to
+ * define the whole shebang in code, he/she just has to make sure that the code
+ * evaluates to an object that has `keybindings` and/or `selectbindings` member.
  */
-async function usePreset() {
+async function importPresets() {
+    const browse = "Browse..."
     let presetsPath = vscode.extensions.getExtension("johtela.vscode-modaledit")!
         .extensionPath + "/presets"
     let fs = vscode.workspace.fs
     let presets = (await fs.readDirectory(vscode.Uri.file(presetsPath)))
         .map(t => t[0])
+    presets.push(browse)
     let choice = await vscode.window.showQuickPick(presets, {
         placeHolder: "Warning: Selecting a preset will override current " +
             "keybindings in global 'settings.json'"
     })
     if (choice) {
-        let path = presetsPath + "/" + choice
-        let js = `(${new TextDecoder("utf-8").decode(
-            await fs.readFile(vscode.Uri.file(path)))})`
+        let uri = vscode.Uri.file(presetsPath + "/" + choice)
+        if (choice == browse) {
+            let userPreset = await vscode.window.showOpenDialog({
+                openLabel: "Import presets",
+                filters: {
+                    JavaScript: [ "js" ],
+                    JSON: [ "json", "jsonc" ],
+                },
+                canSelectFiles: true,
+                canSelectFolders: false,
+                canSelectMany: false
+            })
+            if (!userPreset)
+                return
+            uri = userPreset[0]
+        }
+        let js = new TextDecoder("utf-8").decode(await fs.readFile(uri))
+        if (js.trimLeft().startsWith("{"))
+            js = `(${js})`
         let preset = eval(js)
         let config = vscode.workspace.getConfiguration("modaledit")
         if (preset.keybindings)

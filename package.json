@@ -287,8 +287,8 @@
 				"title": "ModalEdit: Delete the last search character"
 			},
 			{
-				"command": "modaledit.usePreset",
-				"title": "ModalEdit: Use preset keybindings"
+				"command": "modaledit.importPresets",
+				"title": "ModalEdit: Import preset keybindings"
 			}
 		],
 		"keybindings": [
