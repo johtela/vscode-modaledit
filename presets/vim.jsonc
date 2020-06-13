@@ -28,12 +28,11 @@ scratch, this document gives you pointers how to go about doing so.
 ## Game Plan
 
 We start with the basic movement commands which are mostly straightforward
-to implement. All of the movement commands have basically two modes of 
-operation: normal mode (no selection), and visual mode (extending selection when 
-moving). We have to make sure all movements work correctly in both modes. This 
-allows us to reuse these same keybindings when implementing more advanced 
-operations. The goal is to avoid repetition and build complex sequences from
-primitive commands.
+to implement. Movement commands have two modes of operation: normal mode (moving
+cursor), and visual mode (extending selection when moving). We make sure all 
+movements work correctly in both modes. This allows us to reuse these same 
+keybindings when implementing more advanced operations. The goal is to avoid 
+repetition and build complex sequences from primitive commands.
 
 In Vim, there are multiple key sequences for a same operation. For example,
 you can convert a paragraph upper case by typing `gUip`. You can perform the 
