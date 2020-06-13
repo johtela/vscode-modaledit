@@ -1,3 +1,50 @@
+/**
+# Semi-complete Vim Keybindings for ModalEdit 
+
+From get-go, providing comprehensive Vim emulation was a non-goal of ModalEdit.
+The idea of the extension is to provide an engine that allows the user to map
+any key combination to any command provided by VS Code. However, most users 
+equate modal editing with Vim, and are familiar with its default keybindings. 
+Vim users really love the powerful key sequences that combine editing operations 
+with cursor movements or text ranges.
+
+ModalEdit has also evolved by taking inspiration mainly from Vim. Many 
+capabilities were added with the motive to enable some Vim feature that was 
+previously not possible to implement. With version 2.0 ModalEdit's functionality 
+is now extensive enough to build quite comprehensive Vim emulation.
+
+Adding Vim keybindings as optional presets serves two purposes: it lowers the
+barrier of entry for Vim users who don't want to spend the time defining 
+bindings from ground up. Secondly, Vim presets serve as an example to show
+how you can build sophisticated command sequences using the machinery provided 
+by ModalEdit. 
+
+If you are not interested how the Vim keybindings are implemented and just want
+to use them, you can skip this discussion. Just import the presets by pressing 
+`Ctrl+Shift+p` and running command **ModalEdit: Import preset keybindings**. If
+you are planning to customize the bindings, or create Vim-style commands from
+scratch, this document gives you pointers how to go about doing so.
+
+## Game Plan
+
+We start with the basic movement commands which are mostly straightforward
+to implement. All of the movement commands have basically two modes of 
+operation: normal mode (no selection), and visual mode (extending selection when 
+moving). We have to make sure all movements work correctly in both modes. This 
+allows us to reuse these same keybindings when implementing more advanced 
+operations. The goal is to avoid repetition and build complex sequences from
+primitive commands.
+
+In Vim, there are multiple key sequences for a same operation. For example,
+you can convert a paragraph upper case by typing `gUip`. You can perform the 
+same operation using visual mode by typing `vipU`. The trick we use is to 
+convert key sequences that operate directly on character, word, line, paragraph,
+etc. to analagous key sequence that works through visual mode. Consequently, we
+can implement all the editing commands so that they work on active selection,
+and reuse these commands with the other key sequences.
+
+
+*/
 {
     "keybindings": {
         // Move cursor with with enter and space
