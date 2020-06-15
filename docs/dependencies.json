@@ -12,8 +12,12 @@
         "url": "src/commands.html",
         "dependencies": [
             "vscode",
-            "src/actions"
+            "src/actions",
+            "util"
         ]
+    },
+    "util": {
+        "dependencies": []
     },
     "src/extension": {
         "url": "src/extension.html",

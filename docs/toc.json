@@ -38,5 +38,10 @@
         "page": "License",
         "file": "LICENSE.html",
         "desc": ""
+    },
+    {
+        "page": "vim",
+        "file": "presets/vim.html",
+        "desc": ""
     }
 ]

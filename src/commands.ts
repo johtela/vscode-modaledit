@@ -972,7 +972,7 @@ async function importPresets() {
             uri = userPreset[0]
         }
         let js = new TextDecoder("utf-8").decode(await fs.readFile(uri))
-        if (js.trimLeft().startsWith("{"))
+        if (uri.fsPath.match(/jsonc?$/))
             js = `(${js})`
         let preset = eval(js)
         let config = vscode.workspace.getConfiguration("modaledit")

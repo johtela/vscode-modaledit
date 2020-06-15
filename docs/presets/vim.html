@@ -1,0 +1,1060 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>ModalEdit - vim</title>
+    <link rel="icon" type="image/icon" href="../images/favicon.png" />
+    <link rel="stylesheet" href="../css/main.css" />
+    
+    
+</head>
+<body>
+    
+    <div class="navbar">
+        <div class="navmenu">
+            
+    <a class="title enabled" href="../index.html">
+        <img src="../images/escape.svg" />
+        <span>ModalEdit</span>
+    </a>
+    <a class="enabled" href="https://marketplace.visualstudio.com/items?itemName=johtela.vscode-modaledit">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 512"><path d="M537.6 226.6c4.1-10.7 6.4-22.4 6.4-34.6 0-53-43-96-96-96-19.7 0-38.1 6-53.3 16.2C367 64.2 315.3 32 256 32c-88.4 0-160 71.6-160 160 0 2.7.1 5.4.2 8.1C40.2 219.8 0 273.2 0 336c0 79.5 64.5 144 144 144h368c70.7 0 128-57.3 128-128 0-61.9-44-113.6-102.4-125.4zm-132.9 88.7L299.3 420.7c-6.2 6.2-16.4 6.2-22.6 0L171.3 315.3c-10.1-10.1-2.9-27.3 11.3-27.3H248V176c0-8.8 7.2-16 16-16h48c8.8 0 16 7.2 16 16v112h65.4c14.2 0 21.4 17.2 11.3 27.3z"/></svg>
+        <span>Download</span>
+    </a>
+    <a class="enabled" href="https://github.com/johtela/vscode-modaledit">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 496 512"><path d="M165.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6zm-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3zm44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9zM244.8 8C106.1 8 0 113.3 0 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C428.2 457.8 496 362.9 496 252 496 113.3 383.5 8 244.8 8zM97.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1zm-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7zm32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1zm-11.4-14.7c-1.6 1-1.6 3.6 0 5.9 1.6 2.3 4.3 3.3 5.6 2.3 1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2z"/></svg>
+        <span>GitHub</span>
+    </a>
+    <a class="enabled" href="../LICENSE.html">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 384 512"><path d="M224 136V0H24C10.7 0 0 10.7 0 24v464c0 13.3 10.7 24 24 24h336c13.3 0 24-10.7 24-24V160H248c-13.2 0-24-10.8-24-24zM64 72c0-4.42 3.58-8 8-8h80c4.42 0 8 3.58 8 8v16c0 4.42-3.58 8-8 8H72c-4.42 0-8-3.58-8-8V72zm0 64c0-4.42 3.58-8 8-8h80c4.42 0 8 3.58 8 8v16c0 4.42-3.58 8-8 8H72c-4.42 0-8-3.58-8-8v-16zm192.81 248H304c8.84 0 16 7.16 16 16s-7.16 16-16 16h-47.19c-16.45 0-31.27-9.14-38.64-23.86-2.95-5.92-8.09-6.52-10.17-6.52s-7.22.59-10.02 6.19l-7.67 15.34a15.986 15.986 0 0 1-14.31 8.84c-.38 0-.75-.02-1.14-.05-6.45-.45-12-4.75-14.03-10.89L144 354.59l-10.61 31.88c-5.89 17.66-22.38 29.53-41 29.53H80c-8.84 0-16-7.16-16-16s7.16-16 16-16h12.39c4.83 0 9.11-3.08 10.64-7.66l18.19-54.64c3.3-9.81 12.44-16.41 22.78-16.41s19.48 6.59 22.77 16.41l13.88 41.64c19.77-16.19 54.05-9.7 66 14.16 2.02 4.06 5.96 6.5 10.16 6.5zM377 105L279.1 7c-4.5-4.5-10.6-7-17-7H256v128h128v-6.1c0-6.3-2.5-12.4-7-16.9z"/></svg>
+        <span>License</span>
+    </a>
+    <a class="enabled" href="../LICENSE.html">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path d="M223.7 239l136-136c9.4-9.4 24.6-9.4 33.9 0l22.6 22.6c9.4 9.4 9.4 24.6 0 33.9L319.9 256l96.4 96.4c9.4 9.4 9.4 24.6 0 33.9L393.7 409c-9.4 9.4-24.6 9.4-33.9 0l-136-136c-9.5-9.4-9.5-24.6-.1-34zm-192 34l136 136c9.4 9.4 24.6 9.4 33.9 0l22.6-22.6c9.4-9.4 9.4-24.6 0-33.9L127.9 256l96.4-96.4c9.4-9.4 9.4-24.6 0-33.9L201.7 103c-9.4-9.4-24.6-9.4-33.9 0l-136 136c-9.5 9.4-9.5 24.6-.1 34z"/></svg>
+        <span>Previous: License</span>
+    </a>
+    <a  >
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path d="M224.3 273l-136 136c-9.4 9.4-24.6 9.4-33.9 0l-22.6-22.6c-9.4-9.4-9.4-24.6 0-33.9l96.4-96.4-96.4-96.4c-9.4-9.4-9.4-24.6 0-33.9L54.3 103c9.4-9.4 24.6-9.4 33.9 0l136 136c9.5 9.4 9.5 24.6.1 34zm192-34l-136-136c-9.4-9.4-24.6-9.4-33.9 0l-22.6 22.6c-9.4 9.4-9.4 24.6 0 33.9l96.4 96.4-96.4 96.4c-9.4 9.4-9.4 24.6 0 33.9l22.6 22.6c9.4 9.4 24.6 9.4 33.9 0l136-136c9.4-9.2 9.4-24.4 0-33.8z"/></svg>
+        <span>Next:</span>
+    </a>
+        </div>
+        
+    <a class="hamburger">
+        <div class="bar1"></div>
+        <div class="bar2"></div>
+        <div class="bar3"></div>
+    </a>
+    </div>
+    
+    <div class="layout">
+        <div class="sidepane collapsible">
+            
+    <div class="tocmenu">
+        <h3>Table of Contents</h3>
+        
+    <ul>
+        
+    <li>
+        
+        <a href="../README.html">Home</a>
+        
+    </li>
+    <li>
+        
+        <a href="../tutorial.html">Tutorial</a>
+        
+    </li>
+    <li>
+        <button class="accordion">
+        Implementation
+        </button>
+            
+    <ul>
+        
+    <li>
+        
+        <a href="../src/extension.html">Extension</a>
+        
+    </li>
+    <li>
+        
+        <a href="../src/actions.html">Actions</a>
+        
+    </li>
+    <li>
+        
+        <a href="../src/commands.html">Commands</a>
+        
+    </li>
+    </ul>
+    </li>
+    <li>
+        
+        <a href="../CHANGELOG.html">Changelog</a>
+        
+    </li>
+    <li>
+        
+        <a href="../LICENSE.html">License</a>
+        
+    </li>
+    <li>
+        
+        <a href="vim.html" class="highlight">vim</a>
+        
+    </li>
+    </ul>
+    </div>
+            
+    <div class="footer">
+        Copyright © 2020 Tommi Johtela
+        <div class="ad">
+            Created with <a href="https://github.com/johtela/litscript">LiTScript</a>
+        </div>
+    </div>
+
+        </div>
+        <div class="sideicon collapsible">
+            
+    <a class="hamburger">
+        <div class="bar1"></div>
+        <div class="bar2"></div>
+        <div class="bar3"></div>
+    </a>
+        </div>
+        <div class="scrollingarea closepopups">
+            
+    <div class="contentarea">
+        <h1 id="semi-complete-vim-keybindings-for-modal-edit">Semi-complete Vim Keybindings for ModalEdit</h1>
+<p><img src="../images/pooh.jpg" alt="" width="375" height="403">
+From get-go, providing full Vim emulation was a non-goal of ModalEdit. The idea
+of the extension is to provide an engine that allows the user to map any key
+combination to any command provided by VS Code. However, most users equate modal
+editing with Vim, and are familiar with its default keybindings. Vim users
+really love the powerful key sequences that combine editing operations with
+cursor motions or text ranges.</p>
+<p>ModalEdit has also evolved by taking inspiration mainly from Vim. Many
+capabilities were added with the motive to enable some Vim feature that was
+previously not possible to implement. With version 2.0 ModalEdit's functionality
+is now extensive enough to build a semi-complete Vim emulation. So, here we go...</p>
+<p>Adding Vim keybindings as optional presets serves two purposes: it lowers the
+barrier of entry for Vim users who don't want to spend the time defining
+bindings from ground up. Secondly, Vim presets serve as an example to show
+how you can build sophisticated command sequences using the machinery provided
+by ModalEdit.</p>
+<p>If you are not interested how the Vim keybindings are implemented and just want
+to use them, you can skip this discussion. Just import the presets by pressing
+<key>Ctrl</key><key>Shift</key><key>P</key> and running command <strong>ModalEdit:
+Import preset keybindings</strong>. You will be presented a choice to import either
+Vim bindings or any presets that you have created yourself. If you are planning
+to customize the bindings, or create Vim-style commands from scratch, this
+document gives you pointers how to go about doing so.</p>
+<h2 id="game-plan">Game Plan</h2>
+<p>We start with basic motion commands which are mostly straightforward to
+implement. Motions have two modes of operation: normal mode (moving cursor), and
+visual mode (extending selection). We make sure all motions work correctly in
+both modes. This allows us to reuse these keybindings when implementing more
+advanced operations. Our goal is to avoid repetition by building complex
+sequences from primitive commands.</p>
+<p>In Vim, there are multiple key sequences for a same operation. For example,
+you can convert a paragraph upper case by typing
+<key>g</key><key>U</key><key>i</key><key>p</key>. You can perform the same
+operation using visual mode by typing <key>v</key><key>i</key><key>p</key><key>U</key>.
+The trick we use is to convert key sequences that operate on character, word,
+line, paragraph, etc. to analagous key sequences that use visual mode. We can
+implement all the editing commands just to work on active selection and reuse
+these commands with the other key combinations. Consequently, the command
+definition then becomes a string mapping problem. And since we can use
+JavaScript to expressions to do string manipulation, these mappings are easy to
+formulate.</p>
+<p><img src="../images/vim-uppercase.gif" alt=""></p>
+<p>Many ways to skin a cat...</p>
+<h2 id="motion-commands-in-normal-mode">Motion Commands in Normal Mode</h2>
+<p>The list of available cursor motion commands is shown below.</p>
+<div style="overflow: auto">
+<table><thead>
+<tr>
+<th>Keys</th>
+<th>Cursor Motion</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>Enter</code></td>
+<td>Beginning of next line</td>
+</tr>
+<tr>
+<td><code>Space</code></td>
+<td>Next character on right</td>
+</tr>
+<tr>
+<td><code>h</code></td>
+<td>Left</td>
+</tr>
+<tr>
+<td><code>j</code></td>
+<td>Down</td>
+</tr>
+<tr>
+<td><code>k</code></td>
+<td>Up</td>
+</tr>
+<tr>
+<td><code>l</code></td>
+<td>Right</td>
+</tr>
+<tr>
+<td><code>0</code></td>
+<td>First character on line</td>
+</tr>
+<tr>
+<td><code>$</code></td>
+<td>Last character on line</td>
+</tr>
+<tr>
+<td><code>^</code></td>
+<td>First non-blank character on line</td>
+</tr>
+<tr>
+<td><code>g_</code></td>
+<td>Last non-blank character on line</td>
+</tr>
+<tr>
+<td><code>gg</code></td>
+<td>First charater in file</td>
+</tr>
+<tr>
+<td><code>G</code></td>
+<td>Last character in file</td>
+</tr>
+<tr>
+<td><code>w</code></td>
+<td>Beginning of next word</td>
+</tr>
+<tr>
+<td><code>W</code></td>
+<td>Next word separator on right</td>
+</tr>
+<tr>
+<td><code>b</code></td>
+<td>Beginning of previous word</td>
+</tr>
+<tr>
+<td><code>B</code></td>
+<td>Previous word separator on left</td>
+</tr>
+<tr>
+<td><code>H</code></td>
+<td>Top of the screen</td>
+</tr>
+<tr>
+<td><code>M</code></td>
+<td>Middle of the screen</td>
+</tr>
+<tr>
+<td><code>L</code></td>
+<td>Bottom of the screen</td>
+</tr>
+<tr>
+<td><code>%</code></td>
+<td>Matching bracket</td>
+</tr>
+</tbody>
+</table>
+</div><p>Now, lets implement all the keybindings listed above.</p>
+
+<pre class="syntaxhighlight"><code>{
+    <span class="attr">"keybindings"</span>: {
+</code></pre>
+<p>Cursor can be advanced in a file with with enter and space. These are not
+technically motion commands but included for compatibility.</p>
+
+<pre class="syntaxhighlight"><code>        "\n": [
+            "cursorDown",
+            {
+                "command": "cursorMove",
+                "args": {
+                    "to": "wrappedLineFirstNonWhitespaceCharacter"
+                }
+            }
+        ],
+        " ": "cursorRight",
+</code></pre>
+<p>Move cursor up/down/left/right.</p>
+
+<pre class="syntaxhighlight"><code>        "h": "cursorLeft",
+        "j": "cursorDown",
+        "k": "cursorUp",
+        "l": "cursorRight",
+</code></pre>
+<p>Move to first/last character on line. These work also in visual mode.</p>
+
+<pre class="syntaxhighlight"><code>        "0": {
+            "command": "cursorMove",
+            "args": "{ to: 'wrappedLineStart', select: __selecting }"
+        },
+        "$": {
+            "command": "cursorMove",
+            "args": "{ to: 'wrappedLineEnd', select: __selecting }"
+        },
+</code></pre>
+<p>Move to first/last non-blank character on line. Also these ones use the
+<code>__selecting</code> flag to indicate whether we are in visual mode.</p>
+
+<pre class="syntaxhighlight"><code>        "^": {
+            "command": "cursorMove",
+            "args": "{ to: 'wrappedLineFirstNonWhitespaceCharacter', select: __selecting }"
+        },
+        "g": {
+            "_": {
+                "command": "cursorMove",
+                "args": "{ to: 'wrappedLineLastNonWhitespaceCharacter', select: __selecting }"
+            },
+</code></pre>
+<p>Moving to the beginning of file is defined as a conditional command to make
+it work in visual mode.</p>
+
+<pre class="syntaxhighlight"><code>            "g": {
+                "condition": "__selecting",
+                "true": "cursorTopSelect",
+                "false": "cursorTop"
+            },
+</code></pre>
+<h2 id="other-commands-starting-with-key-g-key">Other Commands Starting with <key>g</key></h2>
+<p>Commands starting with <key>g</key> key are bit inconsistent in Vim. Some of
+them are basic motion commands, such as <key>g</key><key>_</key> and
+<key>g</key><key>g</key>, some are editing commands like <key>g</key><key>J</key>
+and <key>g</key><key>U</key>, and some switch between tabs 🤷‍♂️. Since we have to
+define all bindings with the same prefix in same place, we take a detour and add
+these commands before continuing with rest of the motion commands.</p>
+<p>The commands we define are.</p>
+<div style="overflow: auto">
+<table><thead>
+<tr>
+<th>Keys</th>
+<th>Command</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>gJ</code></td>
+<td>Join lines without space in between</td>
+</tr>
+<tr>
+<td><code>gu</code>&lt;<em>motion</em>&gt;</td>
+<td>Convert text specified by &lt;<em>motion</em>&gt; to lowercase</td>
+</tr>
+<tr>
+<td><code>gU</code>&lt;<em>motion</em>&gt;</td>
+<td>Convert text specified by &lt;<em>motion</em>&gt; to uppercase</td>
+</tr>
+<tr>
+<td><code>gt</code></td>
+<td>Go to next tab</td>
+</tr>
+<tr>
+<td><code>gT</code></td>
+<td>Go to previous tab</td>
+</tr>
+</tbody>
+</table>
+</div><p>Joining lines without space is done by deleting a character after the join
+command.</p>
+
+<pre class="syntaxhighlight"><code>            "J": [
+                "editor.action.joinLines",
+                "deleteRight"
+            ],
+</code></pre>
+<p>The lower/uppercase transition works with any motion, but since we have not
+defined all of them yet, we explain the command structure later in the document.
+The structure we use here is exactly the same as with <key>d</key> command, for
+example.</p>
+
+<pre class="syntaxhighlight"><code>            "u,U": {
+                "id": 1,
+                "help": "Change case with motion",
+                "u,U": {
+                    "command": "modaledit.typeNormalKeys",
+                    "args": "{ keys: __cmd.slice(0, -3) + 'V' + __rcmd[0] }"
+                },
+                "h,j,k,l,w,b,W,B,%": {
+                    "command": "modaledit.typeNormalKeys",
+                    "args": "{ keys: 'v' + __cmd.slice(0, -3) + __rcmd[0] + __rcmd[1] }"
+                },
+                "^,$,0,G,H,M,L": {
+                    "command": "modaledit.typeNormalKeys",
+                    "args": "{ keys: 'v' + __rcmd[0] + __rcmd[1] }"
+                },
+                "g": {
+                    "g,_": {
+                        "command": "modaledit.typeNormalKeys",
+                        "args": "{ keys: 'v' + __rcmd[1] + __rcmd[0] + __rcmd[2] }"
+                    }
+                },
+                "f,t,F,T": {
+                    "help": "Do until _",
+                    " -~": {
+                        "command": "modaledit.typeNormalKeys",
+                        "args": "{ keys: 'v' + __rcmd[1] + __rcmd[0] + __rcmd[2] }"
+                    }
+                },
+                "a,i": {
+                    "help": "Do around/inside _",
+                    "w,p,b,B,t, -/,:-@,[-`,{-~": {
+                        "command": "modaledit.typeNormalKeys",
+                        "args": "{ keys: 'v' + __rcmd[1] + __rcmd[0] + __rcmd[2] }"
+                    }
+                },
+                "`,'": {
+                    "help": "Do until bookmark _",
+                    "a-z": {
+                        "command": "modaledit.typeNormalKeys",
+                        "args": "{ keys: 'v' + __rcmd[1] + __rcmd[0] + __rcmd[2] }"
+                    }
+                }
+            },
+</code></pre>
+<p>These command switch to next/previous tab.</p>
+
+<pre class="syntaxhighlight"><code>            "t": "workbench.action.nextEditor",
+            "T": "workbench.action.previousEditor"
+        },
+</code></pre>
+<h2 id="rest-of-the-motion-commands">Rest of the Motion Commands</h2>
+<p>Now we can complete the list of basic motion commands. This one movest the
+cursor at the end of the file and selects the range, if visual mode is on.</p>
+
+<pre class="syntaxhighlight"><code>        "G": {
+            "condition": "__selecting",
+            "true": "cursorBottomSelect",
+            "false": "cursorBottom"
+        },
+</code></pre>
+<p>The logic of separating words is bit different in VS Code and Vim, so we will
+not try to imitate Vim behavior here. In general, <key>W</key> will jump further
+forwards than <key>w</key>, and <key>B</key> further backwards than <key>b</key>,
+but they will not necessarily stop at the same character as in Vim.</p>
+
+<pre class="syntaxhighlight"><code>        "w": "cursorWordStartRight",
+        "W": "cursorWordEndRight",
+        "b": "cursorWordStartLeft",
+        "B": "cursorWordEndLeft",
+</code></pre>
+<p>Moving cursor to the top, middle, and bottom of the screen is mapped to
+<key>H</key> (high), <key>M</key> (middle), and <key>L</key> (low) keys. These
+mappings also work in visual mode.</p>
+
+<pre class="syntaxhighlight"><code>        "H": {
+            "command": "cursorMove",
+            "args": "{ to: 'viewPortTop', select: __selecting }"
+        },
+        "M": {
+            "command": "cursorMove",
+            "args": "{ to: 'viewPortCenter', select: __selecting }"
+        },
+        "L": {
+            "command": "cursorMove",
+            "args": "{ to: 'viewPortBottom', select: __selecting }"
+        },
+</code></pre>
+<p>Move to matching bracket command is somewhat challenging to implement
+consistently in VS Code. This is due to the problem that there are no commands
+that do exactly what Vim's motions do. In normal mode we call the
+<code>jumpToBracket</code> command which works if the cursor is on top of a bracket, but
+does not allow for the selection to be extended. In visual mode we use the
+<code>smartSelect.expand</code> command instead to extend the selection to whatever
+syntactic scope is above the current selection. In many cases, it is more useful
+motion than jumping to a matching bracket, but using it means that we are
+diverging from Vim's functionality.</p>
+
+<pre class="syntaxhighlight"><code>        "%": {
+            "condition": "__selecting",
+            "true": "editor.action.smartSelect.expand",
+            "false": "editor.action.jumpToBracket"
+        },
+</code></pre>
+<h2 id="jump-to-a-character">Jump to a Character</h2>
+<p>More advanced cursor motions in Vim include jump to character, which is really
+powerful when used with editing commands. With them you can apply edits upto or
+including a specified character. The same motions work also as jump commands in
+normal mode. We have to provide separate implementations for normal and visual
+mode, since we need to provide different parameters to the <code>modaledit.search</code>
+command that we utilizing.</p>
+<p>We define these commands.</p>
+<div style="overflow: auto">
+<table><thead>
+<tr>
+<th>Keys</th>
+<th>Cursor Motion</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>f</code>&lt;<em>char</em>&gt;</td>
+<td>Jump to next occurrence of &lt;<em>char</em>&gt;</td>
+</tr>
+<tr>
+<td><code>F</code>&lt;<em>char</em>&gt;</td>
+<td>Jump to previous occurrence of &lt;<em>char</em>&gt;</td>
+</tr>
+<tr>
+<td><code>t</code>&lt;<em>char</em>&gt;</td>
+<td>Jump to character before the next occurrence of &lt;<em>char</em>&gt;</td>
+</tr>
+<tr>
+<td><code>T</code>&lt;<em>char</em>&gt;</td>
+<td>Jump to character after the previous occurrence of &lt;<em>char</em>&gt;</td>
+</tr>
+<tr>
+<td><code>;</code></td>
+<td>Repeat previous f, t, F or T motion</td>
+</tr>
+<tr>
+<td><code>,</code></td>
+<td>Repeat previous f, t, F or T motion in opposite direction</td>
+</tr>
+</tbody>
+</table>
+</div><p>All of these keybindings are implemented using the
+<a href="../README.html#incremental-search">incremental search</a> command, just the
+parameters are different for each case. Basically we just perform either a
+forward or backward search and adjust the cursor position after the character
+has been selected. We also need to adjust cursor position before repeating the
+search.</p>
+<p>The adjustment is done by invoking key bindings <key>h</key> (left) or
+<key>l</key> (right), or sometimes by clearing the selection with <key>v</key>
+key.</p>
+
+<pre class="syntaxhighlight"><code>        "f": {
+            "command": "modaledit.search",
+            "args": {
+                "acceptAfter": 1,
+                "typeAfterAccept": "h",
+                "typeBeforeNextMatch": "l",
+                "typeAfterNextMatch": "h",
+                "typeAfterPreviousMatch": "v"
+            }
+        },
+        "F": {
+            "command": "modaledit.search",
+            "args": {
+                "acceptAfter": 1,
+                "backwards": true,
+                "typeAfterAccept": "v",
+                "typeAfterNextMatch": "v",
+                "typeBeforePreviousMatch": "l",
+                "typeAfterPreviousMatch": "h"
+            }
+        },
+        "t": {
+            "command": "modaledit.search",
+            "args": {
+                "acceptAfter": 1,
+                "typeAfterAccept": "hhv",
+                "typeBeforeNextMatch": "ll",
+                "typeAfterNextMatch": "hhv",
+                "typeBeforePreviousMatch": "h",
+                "typeAfterPreviousMatch": "lv"
+            }
+        },
+        "T": {
+            "command": "modaledit.search",
+            "args": {
+                "acceptAfter": 1,
+                "backwards": true,
+                "typeAfterAccept": "lv",
+                "typeBeforeNextMatch": "h",
+                "typeAfterNextMatch": "lv",
+                "typeBeforePreviousMatch": "ll",
+                "typeAfterPreviousMatch": "hhv"
+            }
+        },
+</code></pre>
+<p>Repeating the motions can be done simply by calling <code>nextMatch</code> or
+<code>previousMatch</code>.</p>
+
+<pre class="syntaxhighlight"><code>        ";": "modaledit.nextMatch",
+        ",": "modaledit.previousMatch",
+</code></pre>
+<h2 id="bookmarks">Bookmarks</h2>
+<p>You can also combine jump to bookmark motions with editing commands in Vim.
+Therefore, we define them along with the other motions. We use the
+<a href="../README.html#bookmarks">bookmark commands</a> provided by ModalEdit to implement
+these keybindings:</p>
+<div style="overflow: auto">
+<table><thead>
+<tr>
+<th>Key</th>
+<th>Cursor Motion</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>m</code>&lt;<em>char</em>&gt;</td>
+<td>Define a bookmark and bind it to key &lt;<em>char</em>&gt;</td>
+</tr>
+<tr>
+<td><code>`</code>&lt;<em>char</em>&gt;</td>
+<td>Jump to bookmark bound to key &lt;<em>char</em>&gt;</td>
+</tr>
+<tr>
+<td><code>'</code>&lt;<em>char</em>&gt;</td>
+<td>Jump to the first non-blank character of the line where bookmark &lt;<em>char</em>&gt; resides</td>
+</tr>
+</tbody>
+</table>
+</div><p>Jump commands also work in visual mode.</p>
+
+<pre class="syntaxhighlight"><code>        "m": {
+            "help": "Define mark _",
+            "a-z": {
+                "command": "modaledit.defineBookmark",
+                "args": "{ bookmark: __rcmd[0] }"
+            }
+        },
+        "`": {
+            "a-z": {
+                "command": "modaledit.goToBookmark",
+                "args": "{ bookmark: __rcmd[0], select: __selecting }"
+            }
+        },
+        "'": {
+            "a-z": [
+                {
+                    "command": "modaledit.goToBookmark",
+                    "args": "{ bookmark: __rcmd[0], select: __selecting }"
+                },
+                {
+                    "command": "cursorMove",
+                    "args": "{ to: 'wrappedLineFirstNonWhitespaceCharacter', select: __selecting }"
+                }
+            ]
+        },
+        // Switch to insert mode
+        "i": "modaledit.enterInsert",
+        "I": [
+            "cursorHome",
+            "modaledit.enterInsert"
+        ],
+        // Append text
+        "a": [
+            {
+                "condition": "__char == ''",
+                "false": "cursorRight"
+            },
+            "modaledit.enterInsert"
+        ],
+        "A": [
+            "cursorEnd",
+            "modaledit.enterInsert"
+        ],
+        // Append at the end of the word
+        "e": {
+            "a": [
+                "cursorWordEndRight",
+                "modaledit.enterInsert"
+            ]
+        },
+        // Open new line
+        "o": [
+            "editor.action.insertLineAfter",
+            "modaledit.enterInsert"
+        ],
+        "O": [
+            "editor.action.insertLineBefore",
+            "modaledit.enterInsert"
+        ],
+        // Editing
+        // Replace a character under cursor
+        "r": [
+            "deleteRight",
+            "modaledit.enterInsert"
+        ],
+        // Join lines
+        "J": "editor.action.joinLines",
+        // Undo
+        "u": [
+            "undo",
+            "modaledit.cancelSelection"
+        ],
+        // Repeat last change
+        ".": "modaledit.repeatLastChange",
+        // Selection mode on/off
+        "v": "modaledit.toggleSelection",
+        "V": [
+            {
+                "command": "cursorMove",
+                "args": {
+                    "to": "wrappedLineStart"
+                }
+            },
+            "modaledit.toggleSelection",
+            "cursorDownSelect"
+        ],
+        // Edit (delete/yank/change/indent/outdent/reformat) with motion
+        "d,y,c,&lt;,&gt;,=": {
+            "id": 2,
+            "help": "Edit with motion",
+            // Motions possibly repeated &lt;_NUM_&gt; times
+            "d,y,c,&lt;,&gt;,=": {
+                "command": "modaledit.typeNormalKeys",
+                "args": "{ keys: __cmd.slice(0, -2) + 'V' + (__rcmd[0] =='c' ? 'dO' : __rcmd[0]) }"
+            },
+            "h,j,k,l,w,b,W,B,%": {
+                "command": "modaledit.typeNormalKeys",
+                "args": "{ keys: 'v' + __cmd.slice(0, -2) + __rcmd[0] + __rcmd[1] }"
+            },
+            // Non-repeatable motions
+            "^,$,0,G,H,M,L": {
+                "command": "modaledit.typeNormalKeys",
+                "args": "{ keys: 'v' + __rcmd[0] + __rcmd[1] }"
+            },
+            "g": {
+                "g,_": {
+                    "command": "modaledit.typeNormalKeys",
+                    "args": "{ keys: 'v' + __rcmd[1] + __rcmd[0] + __rcmd[2] }"
+                }
+            },
+            // Apply until character is found
+            "f,t,F,T": {
+                "help": "Do until _",
+                " -~": {
+                    "command": "modaledit.typeNormalKeys",
+                    "args": "{ keys: 'v' + __rcmd[1] + __rcmd[0] + __rcmd[2] }"
+                }
+            },
+            // Apply inside delimiters
+            "a,i": {
+                "help": "Do around/inside _",
+                "w,p,b,B,t, -/,:-@,[-`,{-~": {
+                    "command": "modaledit.typeNormalKeys",
+                    "args": "{ keys: 'v' + __rcmd[1] + __rcmd[0] + __rcmd[2] }"
+                }
+            },
+            // Apply until bookmark
+            "`,'": {
+                "help": "Do until bookmark _",
+                "a-z": {
+                    "command": "modaledit.typeNormalKeys",
+                    "args": "{ keys: 'v' + __rcmd[1] + __rcmd[0] + __rcmd[2] }"
+                }
+            }
+        },
+        // Delete rest of line
+        "D": [
+            "modaledit.cancelSelection",
+            "cursorEndSelect",
+            "editor.action.clipboardCopyAction",
+            "deleteRight",
+            "modaledit.cancelSelection"
+        ],
+        // Delete single character
+        "x": "deleteRight",
+        // Yank rest of line
+        "Y": [
+            "modaledit.cancelSelection",
+            "cursorEndSelect",
+            "editor.action.clipboardCopyAction",
+            "modaledit.cancelSelection"
+        ],
+        // Change rest of line
+        "C": {
+            "command": "modaledit.typeNormalKeys",
+            "args": {
+                "keys": "Di"
+            }
+        },
+        // Substitute character (selection)
+        "s": [
+            "deleteRight",
+            "modaledit.enterInsert"
+        ],
+        "S": {
+            "command": "modaledit.typeNormalKeys",
+            "args": {
+                "keys": "cc"
+            }
+        },
+        // Paste commands
+        "p": [
+            "cursorRight",
+            "editor.action.clipboardPasteAction",
+            "modaledit.cancelSelection"
+        ],
+        "P": [
+            "editor.action.clipboardPasteAction",
+            "modaledit.cancelSelection"
+        ],
+        // Repeat commands by prefixing with number(s)
+        "1-9": {
+            "id": 3,
+            "help": "Repeat n times",
+            "0-9": 3,
+            "h,j,k,l,w,b,W,B,u,%": {
+                "command": "modaledit.typeNormalKeys",
+                "args": "{ keys: __rcmd[0] }",
+                "repeat": "parseInt(__cmd)"
+            },
+            "v": {
+                "command": "cursorRightSelect",
+                "repeat": "parseInt(__cmd)"
+            },
+            "V": {
+                "command": "expandLineSelection",
+                "repeat": "parseInt(__cmd)"
+            },
+            "s": [
+                {
+                    "command": "cursorRightSelect",
+                    "repeat": "parseInt(__cmd)"
+                },
+                "deleteRight",
+                "modaledit.enterInsert"
+            ],
+            "S": {
+                "command": "modaledit.typeNormalKeys",
+                "args": "{ keys: parseInt(__cmd) + 'cc' }"
+            },
+            "J": [
+                {
+                    "command": "expandLineSelection",
+                    "repeat": "parseInt(__cmd)"
+                },
+                "editor.action.joinLines",
+                "modaledit.cancelSelection"
+            ],
+            // Two ways of jumping to a line &lt;_NUM_&gt;`G` or &lt;_NUM_&gt;`gg`
+            "g": {
+                "g": [
+                    {
+                        "command": "revealLine",
+                        "args": "{ lineNumber: parseInt(__cmd) - 1, at: 'top' }"
+                    },
+                    {
+                        "command": "cursorMove",
+                        "args": {
+                            "to": "viewPortTop"
+                        }
+                    }
+                ],
+                // Repeat some `g` commands.
+                "u,U": 1,
+                "J": {
+                    "command": "modaledit.typeNormalKeys",
+                    "args": "{ keys: __cmd.slice(-2) }",
+                    "repeat": "parseInt(__cmd)"
+                }
+            },
+            "G": [
+                {
+                    "command": "revealLine",
+                    "args": "{ lineNumber: parseInt(__cmd) - 1, at: 'top' }"
+                },
+                {
+                    "command": "cursorMove",
+                    "args": {
+                        "to": "viewPortTop"
+                    }
+                }
+            ],
+            "d,c,y,&lt;,&gt;,=": 2
+        },
+        // Center cursor on screen
+        "z": {
+            "z": {
+                "command": "revealLine",
+                "args": "{ lineNumber: __line, at: 'center' }"
+            }
+        },
+        // Entering command mode and closing documents
+        ":": "workbench.action.showCommands",
+        "Z": {
+            "help": "Z - Close and save, Q - Close without saving",
+            "Z": [
+                "workbench.action.files.save",
+                "workbench.action.closeActiveEditor"
+            ],
+            "Q": "workbench.action.closeActiveEditor"
+        },
+        // Searching
+        "/": [
+            {
+                "command": "modaledit.search",
+                "args": {
+                    "caseSensitive": true,
+                    "wrapAround": true
+                }
+            }
+        ],
+        "?": {
+            "command": "modaledit.search",
+            "args": {
+                "backwards": true,
+                "caseSensitive": true
+            }
+        },
+        "n": "modaledit.nextMatch",
+        "N": "modaledit.previousMatch"
+    },
+    // Select (visual) mode commands.
+    "selectbindings": {
+        "l": "cursorRightSelect",
+        "h": "cursorLeftSelect",
+        "j": "cursorDownSelect",
+        "k": "cursorUpSelect",
+        "w": "cursorWordStartRightSelect",
+        "W": "cursorWordEndRightSelect",
+        "b": "cursorWordStartLeftSelect",
+        "B": "cursorWordEndLeftSelect",
+        // Select forwards/backwards until a character is found
+        "f": {
+            "command": "modaledit.search",
+            "args": {
+                "acceptAfter": 1,
+                "selectTillMatch": true
+            }
+        },
+        "F": {
+            "command": "modaledit.search",
+            "args": {
+                "acceptAfter": 1,
+                "backwards": true,
+                "selectTillMatch": true
+            }
+        },
+        "t": {
+            "command": "modaledit.search",
+            "args": {
+                "acceptAfter": 1,
+                "typeAfterAccept": "h",
+                "typeBeforeNextMatch": "l",
+                "typeAfterNextMatch": "h",
+                "typeBeforePreviousMatch": "h",
+                "typeAfterPreviousMatch": "l",
+                "selectTillMatch": true
+            }
+        },
+        "T": {
+            "command": "modaledit.search",
+            "args": {
+                "acceptAfter": 1,
+                "backwards": true,
+                "typeAfterAccept": "l",
+                "typeBeforeNextMatch": "h",
+                "typeAfterNextMatch": "l",
+                "typeBeforePreviousMatch": "l",
+                "typeAfterPreviousMatch": "h",
+                "selectTillMatch": true
+            }
+        },
+        // Select around/inside
+        "a,i": {
+            "help": "Select around/inside _",
+            "w": [
+                {
+                    "command": "modaledit.selectBetween",
+                    "args": "{ from: '\\\\W', to: '\\\\W', regex: true, inclusive: __rcmd[1] == 'a' }"
+                }
+            ],
+            "p": [
+                {
+                    "command": "modaledit.selectBetween",
+                    "args": "{ from: '(?&lt;=\\\\r?\\\\n)\\\\s*\\\\r?\\\\n', to: '(?&lt;=\\\\r?\\\\n)\\\\s*\\\\r?\\\\n', regex: true, inclusive: __rcmd[1] == 'a', docScope: true }"
+                }
+            ],
+            " -/,:-@,[-`,{-~": [
+                {
+                    "command": "modaledit.selectBetween",
+                    "args": "{ from: __rcmd[0], to: __rcmd[0], inclusive: __rcmd[1] == 'a' }"
+                }
+            ],
+            "(,),b": [
+                {
+                    "command": "modaledit.selectBetween",
+                    "args": "{ from: '(', to: ')', inclusive: __rcmd[1] == 'a', docScope: true }"
+                }
+            ],
+            "{,},B": [
+                {
+                    "command": "modaledit.selectBetween",
+                    "args": "{ from: '{', to: '}', inclusive: __rcmd[1] == 'a', docScope: true }"
+                }
+            ],
+            "[,]": [
+                {
+                    "command": "modaledit.selectBetween",
+                    "args": "{ from: '[', to: ']', inclusive: __rcmd[1] == 'a', docScope: true }"
+                }
+            ],
+            "&lt;,&gt;,t": [
+                {
+                    "command": "modaledit.selectBetween",
+                    "args": "{ from: '&lt;', to: '&gt;', inclusive: __rcmd[1] == 'a' }"
+                }
+            ]
+        },
+        // Indent/outdent/reformat selection
+        "&gt;": [
+            "editor.action.indentLines",
+            "modaledit.cancelSelection"
+        ],
+        "&lt;": [
+            "editor.action.outdentLines",
+            "modaledit.cancelSelection"
+        ],
+        "=": [
+            "editor.action.formatSelection",
+            "modaledit.cancelSelection"
+        ],
+        // Delete (cut) selection
+        "d,x": [
+            "editor.action.clipboardCopyAction",
+            "deleteRight",
+            "modaledit.cancelSelection"
+        ],
+        // Change selection
+        "c": [
+            "editor.action.clipboardCopyAction",
+            "deleteRight",
+            "modaledit.enterInsert"
+        ],
+        // Yank (copy) selection
+        "y": [
+            "editor.action.clipboardCopyAction",
+            "modaledit.cancelSelection"
+        ],
+        // Transform selection to lower/uppercase
+        "u": [
+            "editor.action.transformToLowercase",
+            "modaledit.cancelSelection"
+        ],
+        "U": [
+            "editor.action.transformToUppercase",
+            "modaledit.cancelSelection"
+        ]
+    }
+}
+</code></pre>
+
+        
+    </div>
+            <div class="stickypane">
+                
+    <div class="pagemenu">
+        <h3>On This Page</h3>
+            <ul class="pagetree">
+                
+            </ul>
+    </div>
+                
+            </div>
+        </div>
+    </div>
+    <script src="../js/main.js"></script>
+    
+</body>
+</html>
