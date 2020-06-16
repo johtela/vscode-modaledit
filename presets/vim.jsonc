@@ -654,13 +654,6 @@ the number from the start of the `__cmd` string.
                 "args": "{ keys: __cmd.slice(0, -2) + 'V' + (__rcmd[0] =='c' ? 'dO' : __rcmd[0]) }"
             },
             /**
-If you are wondering where the number prefix comes from as we don't have any
-numbers in the path to our keybinding block, notice that we defined an `id` for
-our block above. We can use this `id` to jump to the block from other binding
-blocks. The entered key sequence `__cmd` contains the full sequence entered by
-the user, not just immediate sequence that lead to the block. So, we can extract
-the number from the start of the `__cmd` string.
-
 Another thing to note is that we actually have some logic when choosing what
 command to run; we transform the <key>c</key> key to <key>d</key><key>O</key>
 sequence, which deletes the selected range and then inserts a new line above
