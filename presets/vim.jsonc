@@ -583,7 +583,7 @@ selection afterwards.
             "undo",
             "modaledit.cancelSelection"
         ],
-/**
+        /**
 The last "simple" keybinding we define is <key>`</key> that repeats the last
 command that changed the text somehow. This command is provided by ModalEdit. It
 checks after each key sequence is typed whether it caused a change in file.
@@ -610,12 +610,12 @@ specifies the position or range you want to apply the command to.
 
 | Keys          | Command
 | ------------- | ---------------------------
-| `d`<_motion_> | Delete range specified by motion
-| `c`<_motion_> | Delete range specified by motion and switch to insert mode
-| `y`<_motion_> | Yank range specified by motion to clipboard
-| `>`<_motion_> | Indent range specified by motion
-| `>`<_motion_> | Outdent range specified by motion
-| `=`<_motion_> | Reindent (reformat) range specified by motion
+| `d`<_motion_> | Delete range specified by <_motion_>
+| `c`<_motion_> | Delete range specified by <_motion_> and switch to insert mode
+| `y`<_motion_> | Yank range specified by <_motion_> to clipboard
+| `>`<_motion_> | Indent range specified by <_motion_>
+| `<`<_motion_> | Outdent range specified by <_motion_>
+| `=`<_motion_> | Reindent (reformat) range specified by <_motion_>
 
 We can define all commands listed above in a single keybinding block. Remember
 that our strategy is just to map the key sequences of the edit commands that use 
@@ -660,14 +660,18 @@ sequence, which deletes the selected range and then inserts a new line above
 cursor. As an example command <key>2</key><key>c</key><key>c</key> actually 
 maps to command <key>2</key><key>V</key><key>d</key><key>O</key>. 
 
-As noted in the beginning, we have reduced the task of defining thousands of 
-key combinations into a string mapping problem that can be solved generically. 
+All the other repeatable commands can be defined in almost identical way. For
+example the command to yank three words <key>3</key><key>y</key><key>w</key> is 
+converted to a sequence <key>v</key><key>3</key><key>w</key><key>y</key>.
 */
             "h,j,k,l,w,e,b,W,B,%": {
                 "command": "modaledit.typeNormalKeys",
                 "args": "{ keys: 'v' + __cmd.slice(0, -2) + __rcmd[0] + __rcmd[1] }"
             },
-            // Non-repeatable motions
+            /**
+Non-repeatable motions are even easier. We just basically rearrange the key
+sequence and add <key>v</key> key in front.
+*/
             "^,$,0,G,H,M,L": {
                 "command": "modaledit.typeNormalKeys",
                 "args": "{ keys: 'v' + __rcmd[0] + __rcmd[1] }"
@@ -678,7 +682,13 @@ key combinations into a string mapping problem that can be solved generically.
                     "args": "{ keys: 'v' + __rcmd[1] + __rcmd[0] + __rcmd[2] }"
                 }
             },
-            // Apply until character is found
+            /**
+Next motions jump to a character. They are handy when you want to edit text 
+until a specified character. For example the command 
+<key>d</key><key>t</key><key>"</key> deletes text until the next quotation mark. 
+The implementation is exactly same as above, so the command would map to key
+sequence <key>v</key><key>t</key><key>"</key><key>d</key>.
+*/
             "f,t,F,T": {
                 "help": "Do until _",
                 " -~": {
@@ -686,7 +696,15 @@ key combinations into a string mapping problem that can be solved generically.
                     "args": "{ keys: 'v' + __rcmd[1] + __rcmd[0] + __rcmd[2] }"
                 }
             },
-            // Apply inside delimiters
+            /**
+Doing an edit inside set of delimiters like braces, parenthesis or quotation
+marks can be done with the <key>a</key> or <key>i</key> movement. The difference
+between them is that <key>a</key> includes the delimiters in the edit whereas
+<key>i</key> does not. The desired delimiter is the last key in the sequence.
+Special delimiters <key>w</key>, <key>p</key>, <key>b</key>, <key>B</key>, and 
+<key>t</key> apply the edit inside word, paragraph, parenthesis, curly braces,
+and angle brackets respectively.
+*/
             "a,i": {
                 "help": "Do around/inside _",
                 "w,p,b,B,t, -/,:-@,[-`,{-~": {
@@ -694,7 +712,13 @@ key combinations into a string mapping problem that can be solved generically.
                     "args": "{ keys: 'v' + __rcmd[1] + __rcmd[0] + __rcmd[2] }"
                 }
             },
-            // Apply until bookmark
+            /**
+The last motion you can combine with editing commands is jump to tag. It is
+convenient when you want to edit long ranges of text that can't fit on screen.
+We have two variants of the motion: <key>`</key> edits until the exact mark
+location, <key>'</key> until the beginning of line where the mark specified as
+the last key resides. Key sequence is rearranged exactly as above. 
+*/
             "`,'": {
                 "help": "Do until mark _",
                 "a-z": {
@@ -703,16 +727,36 @@ key combinations into a string mapping problem that can be solved generically.
                 }
             }
         },
-        // Repeat commands by prefixing with number(s)
+        /**
+## Repeating Commands
+
+As stated above, you can repeat many motions and edit commands by prefixing
+them with number(s). All of the repeatable commands are mapped below. The trick
+is to define a [recursive keymap](../README.html#defining-recursive-keymaps)
+that sticks in the same mapping while you type number keys. After you type the
+actual command we either just invoke the command as many times as you typed, or
+jump to either of the edit command keymaps defined above.
+
+The recursive part is defined below.
+*/
         "1-9": {
             "id": 3,
             "help": "Repeat n times",
             "0-9": 3,
+            /**
+If any of the repeatable motions is typed after a number, we just do that motion
+_n_ times. The `parseInt` function extracts the number from the beginning of the
+key sequence.
+*/
             "h,j,k,l,w,b,W,B,u,%": {
                 "command": "modaledit.typeNormalKeys",
                 "args": "{ keys: __rcmd[0] }",
                 "repeat": "parseInt(__cmd)"
             },
+            /**
+We can repeat <key>v</key> and <key>V</key> commands too. They will select _n_
+characters or lines.
+*/
             "v": {
                 "command": "cursorRightSelect",
                 "repeat": "parseInt(__cmd)"
@@ -721,24 +765,28 @@ key combinations into a string mapping problem that can be solved generically.
                 "command": "expandLineSelection",
                 "repeat": "parseInt(__cmd)"
             },
-            "s": [
-                {
-                    "command": "cursorRightSelect",
-                    "repeat": "parseInt(__cmd)"
-                },
-                "deleteRight",
-                "modaledit.enterInsert"
-            ],
+            /**
+Also substitution commands can be repeated. In this case we just remap the
+key sequence and insert the repetition count in it.
+*/
+            "s": {
+                "command": "modaledit.typeNormalKeys",
+                "args": "{ keys: parseInt(__cmd) + 'vc' }"
+            },
             "S": {
                 "command": "modaledit.typeNormalKeys",
                 "args": "{ keys: parseInt(__cmd) + 'cc' }"
             },
+            /**
+We can join multiple lines at once too. This works because the 
+`editor.action.joinLines` joins all selected lines. We just have to clear the
+selection afterwards.
+*/
             "J": [
                 {
-                    "command": "expandLineSelection",
-                    "repeat": "parseInt(__cmd)"
+                    "command": "modaledit.typeNormalKeys",
+                    "args": "{ keys: parseInt(__cmd) + 'VJ' }"
                 },
-                "editor.action.joinLines",
                 "modaledit.cancelSelection"
             ],
             // Two ways of jumping to a line <_NUM_>`G` or <_NUM_>`gg`
