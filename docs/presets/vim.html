@@ -1117,27 +1117,6 @@ selection afterwards.</p>
                 "modaledit.cancelSelection"
             ],
             // Two ways of jumping to a line &lt;_NUM_&gt;`G` or &lt;_NUM_&gt;`gg`
-            "g": {
-                "g": [
-                    {
-                        "command": "revealLine",
-                        "args": "{ lineNumber: parseInt(__cmd) - 1, at: 'top' }"
-                    },
-                    {
-                        "command": "cursorMove",
-                        "args": {
-                            "to": "viewPortTop"
-                        }
-                    }
-                ],
-                // Repeat some `g` commands.
-                "u,U": 1,
-                "J": {
-                    "command": "modaledit.typeNormalKeys",
-                    "args": "{ keys: __cmd.slice(-2) }",
-                    "repeat": "parseInt(__cmd)"
-                }
-            },
             "G": [
                 {
                     "command": "revealLine",
@@ -1150,6 +1129,19 @@ selection afterwards.</p>
                     }
                 }
             ],
+            "g": {
+                "g": {
+                    "command": "modaledit.typeNormalKeys",
+                    "args": "{ leys: parseInt(__cmd) + 'G' }"
+                },
+                // Repeat some `g` commands.
+                "u,U": 1,
+                "J": {
+                    "command": "modaledit.typeNormalKeys",
+                    "args": "{ keys: __cmd.slice(-2) }",
+                    "repeat": "parseInt(__cmd)"
+                }
+            },
             "d,c,y,&lt;,&gt;,=": 2
         },
         // Center cursor on screen

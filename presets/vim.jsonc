@@ -741,7 +741,7 @@ The recursive part is defined below.
 */
         "1-9": {
             "id": 3,
-            "help": "Repeat n times",
+            "help": "Repeat / go to line",
             "0-9": 3,
             /**
 If any of the repeatable motions is typed after a number, we just do that motion
@@ -790,27 +790,6 @@ selection afterwards.
                 "modaledit.cancelSelection"
             ],
             // Two ways of jumping to a line <_NUM_>`G` or <_NUM_>`gg`
-            "g": {
-                "g": [
-                    {
-                        "command": "revealLine",
-                        "args": "{ lineNumber: parseInt(__cmd) - 1, at: 'top' }"
-                    },
-                    {
-                        "command": "cursorMove",
-                        "args": {
-                            "to": "viewPortTop"
-                        }
-                    }
-                ],
-                // Repeat some `g` commands.
-                "u,U": 1,
-                "J": {
-                    "command": "modaledit.typeNormalKeys",
-                    "args": "{ keys: __cmd.slice(-2) }",
-                    "repeat": "parseInt(__cmd)"
-                }
-            },
             "G": [
                 {
                     "command": "revealLine",
@@ -823,6 +802,19 @@ selection afterwards.
                     }
                 }
             ],
+            "g": {
+                "g": {
+                    "command": "modaledit.typeNormalKeys",
+                    "args": "{ keys: parseInt(__cmd) + 'G' }"
+                },
+                // Repeat some `g` commands.
+                "u,U": 1,
+                "J": {
+                    "command": "modaledit.typeNormalKeys",
+                    "args": "{ keys: __cmd.slice(-2) }",
+                    "repeat": "parseInt(__cmd)"
+                }
+            },
             "d,c,y,<,>,=": 2
         },
         // Center cursor on screen
