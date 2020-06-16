@@ -960,8 +960,8 @@ async function importPresets() {
             let userPreset = await vscode.window.showOpenDialog({
                 openLabel: "Import presets",
                 filters: {
-                    JavaScript: [ "js" ],
-                    JSON: [ "json", "jsonc" ],
+                    JavaScript: ["js"],
+                    JSON: ["json", "jsonc"],
                 },
                 canSelectFiles: true,
                 canSelectFolders: false,
@@ -971,14 +971,25 @@ async function importPresets() {
                 return
             uri = userPreset[0]
         }
-        let js = new TextDecoder("utf-8").decode(await fs.readFile(uri))
-        if (uri.fsPath.match(/jsonc?$/))
-            js = `(${js})`
-        let preset = eval(js)
-        let config = vscode.workspace.getConfiguration("modaledit")
-        if (preset.keybindings)
-            config.update("keybindings", preset.keybindings, true)
-        if (preset.selectbindings)
-            config.update("selectbindings", preset.selectbindings, true)
+        try {
+            let js = new TextDecoder("utf-8").decode(await fs.readFile(uri))
+            if (uri.fsPath.match(/jsonc?$/))
+                js = `(${js})`
+            let preset = eval(js)
+            let config = vscode.workspace.getConfiguration("modaledit")
+            if (!(preset.keybindings || preset.selectbindings))
+                throw new Error(
+                    `Could not find "keybindings" or "selectbindings" in ${uri}`)
+            if (preset.keybindings)
+                config.update("keybindings", preset.keybindings, true)
+            if (preset.selectbindings)
+                config.update("selectbindings", preset.selectbindings, true)
+            vscode.window.showInformationMessage(
+                "ModalEdit: Keybindings imported.")
+        }
+        catch (e) {
+            vscode.window.showWarningMessage("ModalEdit: Bindings not imported.",
+                `${e}`)
+        }
     }
 }

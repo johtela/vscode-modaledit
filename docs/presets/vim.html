@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>ModalEdit - vim</title>
+    <title>ModalEdit - Vim Presets</title>
     <link rel="icon" type="image/icon" href="../images/favicon.png" />
     <link rel="stylesheet" href="../css/main.css" />
     
@@ -32,13 +32,13 @@
         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 384 512"><path d="M224 136V0H24C10.7 0 0 10.7 0 24v464c0 13.3 10.7 24 24 24h336c13.3 0 24-10.7 24-24V160H248c-13.2 0-24-10.8-24-24zM64 72c0-4.42 3.58-8 8-8h80c4.42 0 8 3.58 8 8v16c0 4.42-3.58 8-8 8H72c-4.42 0-8-3.58-8-8V72zm0 64c0-4.42 3.58-8 8-8h80c4.42 0 8 3.58 8 8v16c0 4.42-3.58 8-8 8H72c-4.42 0-8-3.58-8-8v-16zm192.81 248H304c8.84 0 16 7.16 16 16s-7.16 16-16 16h-47.19c-16.45 0-31.27-9.14-38.64-23.86-2.95-5.92-8.09-6.52-10.17-6.52s-7.22.59-10.02 6.19l-7.67 15.34a15.986 15.986 0 0 1-14.31 8.84c-.38 0-.75-.02-1.14-.05-6.45-.45-12-4.75-14.03-10.89L144 354.59l-10.61 31.88c-5.89 17.66-22.38 29.53-41 29.53H80c-8.84 0-16-7.16-16-16s7.16-16 16-16h12.39c4.83 0 9.11-3.08 10.64-7.66l18.19-54.64c3.3-9.81 12.44-16.41 22.78-16.41s19.48 6.59 22.77 16.41l13.88 41.64c19.77-16.19 54.05-9.7 66 14.16 2.02 4.06 5.96 6.5 10.16 6.5zM377 105L279.1 7c-4.5-4.5-10.6-7-17-7H256v128h128v-6.1c0-6.3-2.5-12.4-7-16.9z"/></svg>
         <span>License</span>
     </a>
-    <a class="enabled" href="../LICENSE.html">
+    <a class="enabled" href="../tutorial.html">
         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path d="M223.7 239l136-136c9.4-9.4 24.6-9.4 33.9 0l22.6 22.6c9.4 9.4 9.4 24.6 0 33.9L319.9 256l96.4 96.4c9.4 9.4 9.4 24.6 0 33.9L393.7 409c-9.4 9.4-24.6 9.4-33.9 0l-136-136c-9.5-9.4-9.5-24.6-.1-34zm-192 34l136 136c9.4 9.4 24.6 9.4 33.9 0l22.6-22.6c9.4-9.4 9.4-24.6 0-33.9L127.9 256l96.4-96.4c9.4-9.4 9.4-24.6 0-33.9L201.7 103c-9.4-9.4-24.6-9.4-33.9 0l-136 136c-9.5 9.4-9.5 24.6-.1 34z"/></svg>
-        <span>Previous: License</span>
+        <span>Previous: Tutorial</span>
     </a>
-    <a  >
+    <a class="enabled" href="../src/extension.html">
         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path d="M224.3 273l-136 136c-9.4 9.4-24.6 9.4-33.9 0l-22.6-22.6c-9.4-9.4-9.4-24.6 0-33.9l96.4-96.4-96.4-96.4c-9.4-9.4-9.4-24.6 0-33.9L54.3 103c9.4-9.4 24.6-9.4 33.9 0l136 136c9.5 9.4 9.5 24.6.1 34zm192-34l-136-136c-9.4-9.4-24.6-9.4-33.9 0l-22.6 22.6c-9.4 9.4-9.4 24.6 0 33.9l96.4 96.4-96.4 96.4c-9.4 9.4-9.4 24.6 0 33.9l22.6 22.6c9.4 9.4 24.6 9.4 33.9 0l136-136c9.4-9.2 9.4-24.4 0-33.8z"/></svg>
-        <span>Next:</span>
+        <span>Next: Extension</span>
     </a>
         </div>
         
@@ -65,6 +65,11 @@
     <li>
         
         <a href="../tutorial.html">Tutorial</a>
+        
+    </li>
+    <li>
+        
+        <a href="vim.html" class="highlight">Vim Presets</a>
         
     </li>
     <li>
@@ -99,11 +104,6 @@
     <li>
         
         <a href="../LICENSE.html">License</a>
-        
-    </li>
-    <li>
-        
-        <a href="vim.html" class="highlight">vim</a>
         
     </li>
     </ul>
@@ -235,16 +235,20 @@ formulate.</p>
 <td>Beginning of next word</td>
 </tr>
 <tr>
-<td><code>W</code></td>
-<td>Next word separator on right</td>
+<td><code>e</code></td>
+<td>End of next word</td>
 </tr>
 <tr>
 <td><code>b</code></td>
 <td>Beginning of previous word</td>
 </tr>
 <tr>
+<td><code>W</code></td>
+<td>Beginning of next alphanumeric word</td>
+</tr>
+<tr>
 <td><code>B</code></td>
-<td>Previous word separator on left</td>
+<td>Beginning of previous alphanumeric word</td>
 </tr>
 <tr>
 <td><code>H</code></td>
@@ -302,7 +306,7 @@ technically motion commands but included for compatibility.</p>
         },
 </code></pre>
 <p>Move to first/last non-blank character on line. Also these ones use the
-<code>__selecting</code> flag to indicate whether we are in visual mode.</p>
+<code>__selecting</code> flag to check whether we are in visual mode.</p>
 
 <pre class="syntaxhighlight"><code>        "^": {
             "command": "cursorMove",
@@ -381,7 +385,7 @@ example.</p>
                     "command": "modaledit.typeNormalKeys",
                     "args": "{ keys: __cmd.slice(0, -3) + 'V' + __rcmd[0] }"
                 },
-                "h,j,k,l,w,b,W,B,%": {
+                "h,j,k,l,w,e,b,W,B,%": {
                     "command": "modaledit.typeNormalKeys",
                     "args": "{ keys: 'v' + __cmd.slice(0, -3) + __rcmd[0] + __rcmd[1] }"
                 },
@@ -410,7 +414,7 @@ example.</p>
                     }
                 },
                 "`,'": {
-                    "help": "Do until bookmark _",
+                    "help": "Do until mark _",
                     "a-z": {
                         "command": "modaledit.typeNormalKeys",
                         "args": "{ keys: 'v' + __rcmd[1] + __rcmd[0] + __rcmd[2] }"
@@ -435,14 +439,21 @@ cursor at the end of the file and selects the range, if visual mode is on.</p>
         },
 </code></pre>
 <p>The logic of separating words is bit different in VS Code and Vim, so we will
-not try to imitate Vim behavior here. In general, <key>W</key> will jump further
-forwards than <key>w</key>, and <key>B</key> further backwards than <key>b</key>,
-but they will not necessarily stop at the same character as in Vim.</p>
+not try to imitate Vim behavior here. These keys are mapped to the most similar
+motion available. The <key>W</key> and <key>B</key> commands skip separator
+characters, and move to the start of the next/previous alphanumeric word.</p>
 
 <pre class="syntaxhighlight"><code>        "w": "cursorWordStartRight",
-        "W": "cursorWordEndRight",
+        "e": "cursorWordEndRight",
         "b": "cursorWordStartLeft",
-        "B": "cursorWordEndLeft",
+        "W": {
+            "command": "cursorWordStartRight",
+            "repeat": "__char.match(/\\W/)"
+        },
+        "B": {
+            "command": "cursorWordStartLeft",
+            "repeat": "__char.match(/\\W/)"
+        },
 </code></pre>
 <p>Moving cursor to the top, middle, and bottom of the screen is mapped to
 <key>H</key> (high), <key>M</key> (middle), and <key>L</key> (low) keys. These
@@ -479,7 +490,7 @@ diverging from Vim's functionality.</p>
 </code></pre>
 <h2 id="jump-to-a-character">Jump to a Character</h2>
 <p>More advanced cursor motions in Vim include jump to character, which is really
-powerful when used with editing commands. With them you can apply edits upto or
+powerful when used with editing commands. With them we can apply edits upto or
 including a specified character. The same motions work also as jump commands in
 normal mode. We have to provide separate implementations for normal and visual
 mode, since we need to provide different parameters to the <code>modaledit.search</code>
@@ -588,7 +599,7 @@ these keybindings:</p>
 <div style="overflow: auto">
 <table><thead>
 <tr>
-<th>Key</th>
+<th>Keys</th>
 <th>Cursor Motion</th>
 </tr>
 </thead>
@@ -634,14 +645,65 @@ these keybindings:</p>
                 }
             ]
         },
-        // Switch to insert mode
-        "i": "modaledit.enterInsert",
+</code></pre>
+<h2 id="switching-between-modes">Switching between Modes</h2>
+<p>Next, we define keybindings that switch between normal, insert, and visual mode:</p>
+<div style="overflow: auto">
+<table><thead>
+<tr>
+<th>Keys</th>
+<th>Command</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>i</code></td>
+<td>Switch to insert mode</td>
+</tr>
+<tr>
+<td><code>I</code></td>
+<td>Move to start of line and switch to insert mode</td>
+</tr>
+<tr>
+<td><code>a</code></td>
+<td>Move to next character and switch to insert mode</td>
+</tr>
+<tr>
+<td><code>A</code></td>
+<td>Move to end of line and switch to insert mode</td>
+</tr>
+<tr>
+<td><code>o</code></td>
+<td>Insert line below current line, move on it, and switch to insert mode</td>
+</tr>
+<tr>
+<td><code>O</code></td>
+<td>Insert line above current line, move on it, and switch to insert mode</td>
+</tr>
+<tr>
+<td><code>v</code></td>
+<td>Switch to visual mode</td>
+</tr>
+<tr>
+<td><code>V</code></td>
+<td>Select current line and switch to visual mode</td>
+</tr>
+</tbody>
+</table>
+</div><p>These commands have more memorable names such as <code>i</code> = insert, <code>a</code> = append,
+and <code>o</code> = open, but above we describe what the commands do exactly instead
+of using these names.</p>
+
+<pre class="syntaxhighlight"><code>        "i": "modaledit.enterInsert",
         "I": [
             "cursorHome",
             "modaledit.enterInsert"
         ],
-        // Append text
-        "a": [
+</code></pre>
+<p>The <code>a</code> has to check if the cursor is at the end of line. If so, we don't move
+right because that would move to next line.</p>
+
+<pre class="syntaxhighlight"><code>        "a": [
             {
                 "condition": "__char == ''",
                 "false": "cursorRight"
@@ -652,14 +714,6 @@ these keybindings:</p>
             "cursorEnd",
             "modaledit.enterInsert"
         ],
-        // Append at the end of the word
-        "e": {
-            "a": [
-                "cursorWordEndRight",
-                "modaledit.enterInsert"
-            ]
-        },
-        // Open new line
         "o": [
             "editor.action.insertLineAfter",
             "modaledit.enterInsert"
@@ -668,23 +722,14 @@ these keybindings:</p>
             "editor.action.insertLineBefore",
             "modaledit.enterInsert"
         ],
-        // Editing
-        // Replace a character under cursor
-        "r": [
-            "deleteRight",
-            "modaledit.enterInsert"
-        ],
-        // Join lines
-        "J": "editor.action.joinLines",
-        // Undo
-        "u": [
-            "undo",
-            "modaledit.cancelSelection"
-        ],
-        // Repeat last change
-        ".": "modaledit.repeatLastChange",
-        // Selection mode on/off
-        "v": "modaledit.toggleSelection",
+</code></pre>
+<p>Note that visual mode is not really a mode. Basically we just set the
+<code>__selecting</code> flag that changes the behavior of normal mode commands. Nor is
+there a separate line selection mode. We just mimic Vim's behavior using
+VS Code's builtin commands that select ranges of text, when the <code>__selecting</code>
+flag is on.</p>
+
+<pre class="syntaxhighlight"><code>        "v": "modaledit.toggleSelection",
         "V": [
             {
                 "command": "cursorMove",
@@ -695,16 +740,265 @@ these keybindings:</p>
             "modaledit.toggleSelection",
             "cursorDownSelect"
         ],
-        // Edit (delete/yank/change/indent/outdent/reformat) with motion
-        "d,y,c,&lt;,&gt;,=": {
+</code></pre>
+<h2 id="editing-in-normal-mode">Editing in Normal Mode</h2>
+<p>Editing commands in normal mode typically either affect current character or
+line, or expect a motion key sequence at the end which specifies the scope of
+the edit. Let's first define simple commands that do not require a motion
+annex:</p>
+<div style="overflow: auto">
+<table><thead>
+<tr>
+<th>Keys</th>
+<th>Command</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>x</code></td>
+<td>Delete a character under cursor</td>
+</tr>
+<tr>
+<td><code>X</code></td>
+<td>Delete a character left of cursor (backspace)</td>
+</tr>
+<tr>
+<td><code>r</code></td>
+<td>Replace character under cursor (delete and switch to insert mode)</td>
+</tr>
+<tr>
+<td><code>s</code></td>
+<td>Substitute character under cursor (same as <code>r</code>)</td>
+</tr>
+<tr>
+<td><code>S</code></td>
+<td>Substitute current line (delete and switch to insert mode)</td>
+</tr>
+<tr>
+<td><code>D</code></td>
+<td>Delete rest of line</td>
+</tr>
+<tr>
+<td><code>C</code></td>
+<td>Change rest of line (delete and switch to insert mode)</td>
+</tr>
+<tr>
+<td><code>Y</code></td>
+<td>Yank (copy) rest of line</td>
+</tr>
+<tr>
+<td><code>p</code></td>
+<td>Paste contents of clipboard after cursor</td>
+</tr>
+<tr>
+<td><code>P</code></td>
+<td>Paste contents of clipboard at cursor</td>
+</tr>
+<tr>
+<td><code>J</code></td>
+<td>Join current and next line. Add space in between</td>
+</tr>
+<tr>
+<td><code>u</code></td>
+<td>Undo last change</td>
+</tr>
+<tr>
+<td><code>.</code></td>
+<td>Repeat last change</td>
+</tr>
+</tbody>
+</table>
+</div><p><key>x</key> and <key>X</key> commands do exactly what <key>Delete</key> and
+<key>Backspace</key> keys do.</p>
+
+<pre class="syntaxhighlight"><code>        "x": "deleteRight",
+        "X": "deleteLeft",
+</code></pre>
+<p><key>r</key> and <key>s</key> commands delete character under cursor and enter
+insert mode. In Vim <key>r</key> and <key>R</key> keys swith momentarily or
+permanently to overwrite mode. Since this mode does not exist in VS Code, we
+settle on mapping both keys to the same sequence.</p>
+
+<pre class="syntaxhighlight"><code>        "r,s": [
+            "deleteRight",
+            "modaledit.enterInsert"
+        ],
+</code></pre>
+<p><key>S</key> substitutes the whole line. We don't need to implement the command
+here as we can reuse the <key>c</key><key>c</key> command that we define later.</p>
+
+<pre class="syntaxhighlight"><code>        "S": {
+            "command": "modaledit.typeNormalKeys",
+            "args": {
+                "keys": "cc"
+            }
+        },
+</code></pre>
+<p>Deleting in Vim always copies the deleted text into clipboard, so we do that
+as well. If you are wondering why we don't use VS Code's cut command, it has a
+synchronization issue that sometimes causes the execution to advance to the
+next command in the sequence before cutting is done. This leads to strange
+random behavior that usually causes the whole line to disappear instead of the
+rest of line.</p>
+
+<pre class="syntaxhighlight"><code>        "D": [
+            "modaledit.cancelSelection",
+            "cursorEndSelect",
+            "editor.action.clipboardCopyAction",
+            "deleteRight",
+            "modaledit.cancelSelection"
+        ],
+</code></pre>
+<p>Again, we utilize existing mappings to implement the <key>C</key> command. It
+does same thing as keys <key>D</key><key>i</key> together.</p>
+
+<pre class="syntaxhighlight"><code>        "C": {
+            "command": "modaledit.typeNormalKeys",
+            "args": {
+                "keys": "Di"
+            }
+        },
+</code></pre>
+<p>Yanking or copying is always done on selected range. So, we make sure that only
+rest of line is selected before copying the range to clipboard. Afterwards we
+clear the selection again.</p>
+
+<pre class="syntaxhighlight"><code>        "Y": [
+            "modaledit.cancelSelection",
+            "cursorEndSelect",
+            "editor.action.clipboardCopyAction",
+            "modaledit.cancelSelection"
+        ],
+</code></pre>
+<p>Pasting text at cursor is done with <key>P</key> key. Following Vim convention
+<key>p</key> pastes text after cursor position. In both cases we clear the
+selection after paste, so that we don't accidently end up in visual mode.</p>
+
+<pre class="syntaxhighlight"><code>        "p": [
+            "cursorRight",
+            "editor.action.clipboardPasteAction",
+            "modaledit.cancelSelection"
+        ],
+        "P": [
+            "editor.action.clipboardPasteAction",
+            "modaledit.cancelSelection"
+        ],
+</code></pre>
+<p><key>J</key> joins current and next lines together adding a space in between.
+There is a built in command that does just this.</p>
+
+<pre class="syntaxhighlight"><code>        "J": "editor.action.joinLines",
+</code></pre>
+<p>Undoing last change is also a matter of calling built-in command. We clear the
+selection afterwards.</p>
+
+<pre class="syntaxhighlight"><code>        "u": [
+            "undo",
+            "modaledit.cancelSelection"
+        ],
+</code></pre>
+<p>The last &quot;simple&quot; keybinding we define is <key>`</key> that repeats the last
+command that changed the text somehow. This command is provided by ModalEdit. It
+checks after each key sequence is typed whether it caused a change in file.
+If so, it stores the seqeuence as a change. The command just runs the stored
+keysequence again.</p>
+
+<pre class="syntaxhighlight"><code>        ".": "modaledit.repeatLastChange",
+</code></pre>
+<h2 id="editing-with-motions">Editing with Motions</h2>
+<p>So, far we have kept the structure of keybindings quite simple. Now we tackle
+the types of keybinding that work in tandem with motion commands. Examples of
+such commands include:</p>
+<p><key>c</key><key>i</key><key>b</key> - Change text inside curly braces <code>{}</code></p>
+<p><key>&gt;</key><key>G</key> - Indent rest of the file</p>
+<p><key>y</key><key>`</key><key>a</key> - Yank text from cursor position to mark <code>a</code></p>
+<p>We can combine any editing command with any motion, which gives us thousands
+of possible combinations. First type the command key and then motion which
+specifies the position or range you want to apply the command to.</p>
+<div style="overflow: auto">
+<table><thead>
+<tr>
+<th>Keys</th>
+<th>Command</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>d</code>&lt;<em>motion</em>&gt;</td>
+<td>Delete range specified by motion</td>
+</tr>
+<tr>
+<td><code>c</code>&lt;<em>motion</em>&gt;</td>
+<td>Delete range specified by motion and switch to insert mode</td>
+</tr>
+<tr>
+<td><code>y</code>&lt;<em>motion</em>&gt;</td>
+<td>Yank range specified by motion to clipboard</td>
+</tr>
+<tr>
+<td><code>&gt;</code>&lt;<em>motion</em>&gt;</td>
+<td>Indent range specified by motion</td>
+</tr>
+<tr>
+<td><code>&gt;</code>&lt;<em>motion</em>&gt;</td>
+<td>Outdent range specified by motion</td>
+</tr>
+<tr>
+<td><code>=</code>&lt;<em>motion</em>&gt;</td>
+<td>Reindent (reformat) range specified by motion</td>
+</tr>
+</tbody>
+</table>
+</div><p>We can define all commands listed above in a single keybinding block. Remember
+that our strategy is just to map the key sequences of the edit commands that use
+motions to equivalent commands that work in visual mode. We do the specified
+motion in visual mode selecting a range of text, and then running the command
+on the selection. It does not matter which editing command we run, all of them
+can be mapped the same way.</p>
+
+<pre class="syntaxhighlight"><code>        "d,y,c,&lt;,&gt;,=": {
             "id": 2,
             "help": "Edit with motion",
-            // Motions possibly repeated &lt;_NUM_&gt; times
-            "d,y,c,&lt;,&gt;,=": {
+</code></pre>
+<p>The motions can be also divided to two categories: repeatable and non-repeatable.
+Some motions we can repeat, such as move to next character/word/line, but some
+we can only do once, such as move to end of line, beginning of file, or to a
+bookmark. Later on we make it possible to run repeatable motions <em>n</em> times by
+typing number <em>n</em> before a motion command or an editing command.</p>
+<p>We can run all editing commands on the current line by repeating the command
+key. For example <key>y</key><key>y</key> yanks current line, and
+<key>&lt;</key><key>&lt;</key> outdents current line. By prefixing these commands
+with a number, we repeat the command <em>n</em> times. To extract the number <em>n</em> we
+slice all but last 2 characters of the key sequence. Then we append <code>V</code> command
+to it and lastly the actual editing command. The whole logic resides in the JS
+expression in the <code>args</code> property below.</p>
+<p>If you are wondering where the number prefix comes from as we don't have any
+numbers in the path to our keybinding block, notice that we defined an <code>id</code> for
+our block above. We can use this <code>id</code> to jump to the block from other keybinding
+blocks. The entered key sequence <code>__cmd</code> contains the full sequence entered by
+the user, not just immediate sequence that lead to the block. So, we can extract
+the number from the start of the <code>__cmd</code> string.</p>
+
+<pre class="syntaxhighlight"><code>            "d,y,c,&lt;,&gt;,=": {
                 "command": "modaledit.typeNormalKeys",
                 "args": "{ keys: __cmd.slice(0, -2) + 'V' + (__rcmd[0] =='c' ? 'dO' : __rcmd[0]) }"
             },
-            "h,j,k,l,w,b,W,B,%": {
+</code></pre>
+<p>If you are wondering where the number prefix comes from as we don't have any
+numbers in the path to our keybinding block, notice that we defined an <code>id</code> for
+our block above. We can use this <code>id</code> to jump to the block from other binding
+blocks. The entered key sequence <code>__cmd</code> contains the full sequence entered by
+the user, not just immediate sequence that lead to the block. So, we can extract
+the number from the start of the <code>__cmd</code> string.</p>
+<p>Another thing to note is that we actually have some logic when choosing what
+command to run; we transform the <key>c</key> key to <key>d</key><key>O</key>
+sequence, which deletes the selected range and then inserts a new line above
+cursor. As an example command <key>2</key><key>c</key><key>c</key> actually
+maps to command <key>2</key><key>V</key><key>d</key><key>O</key>.</p>
+<p>As noted in the beginning, we have reduced the task of defining thousands of
+key combinations into a string mapping problem that can be solved generically.</p>
+
+<pre class="syntaxhighlight"><code>            "h,j,k,l,w,e,b,W,B,%": {
                 "command": "modaledit.typeNormalKeys",
                 "args": "{ keys: 'v' + __cmd.slice(0, -2) + __rcmd[0] + __rcmd[1] }"
             },
@@ -737,58 +1031,13 @@ these keybindings:</p>
             },
             // Apply until bookmark
             "`,'": {
-                "help": "Do until bookmark _",
+                "help": "Do until mark _",
                 "a-z": {
                     "command": "modaledit.typeNormalKeys",
                     "args": "{ keys: 'v' + __rcmd[1] + __rcmd[0] + __rcmd[2] }"
                 }
             }
         },
-        // Delete rest of line
-        "D": [
-            "modaledit.cancelSelection",
-            "cursorEndSelect",
-            "editor.action.clipboardCopyAction",
-            "deleteRight",
-            "modaledit.cancelSelection"
-        ],
-        // Delete single character
-        "x": "deleteRight",
-        // Yank rest of line
-        "Y": [
-            "modaledit.cancelSelection",
-            "cursorEndSelect",
-            "editor.action.clipboardCopyAction",
-            "modaledit.cancelSelection"
-        ],
-        // Change rest of line
-        "C": {
-            "command": "modaledit.typeNormalKeys",
-            "args": {
-                "keys": "Di"
-            }
-        },
-        // Substitute character (selection)
-        "s": [
-            "deleteRight",
-            "modaledit.enterInsert"
-        ],
-        "S": {
-            "command": "modaledit.typeNormalKeys",
-            "args": {
-                "keys": "cc"
-            }
-        },
-        // Paste commands
-        "p": [
-            "cursorRight",
-            "editor.action.clipboardPasteAction",
-            "modaledit.cancelSelection"
-        ],
-        "P": [
-            "editor.action.clipboardPasteAction",
-            "modaledit.cancelSelection"
-        ],
         // Repeat commands by prefixing with number(s)
         "1-9": {
             "id": 3,
@@ -907,9 +1156,16 @@ these keybindings:</p>
         "j": "cursorDownSelect",
         "k": "cursorUpSelect",
         "w": "cursorWordStartRightSelect",
-        "W": "cursorWordEndRightSelect",
+        "e": "cursorWordEndRightSelect",
         "b": "cursorWordStartLeftSelect",
-        "B": "cursorWordEndLeftSelect",
+        "W": {
+            "command": "cursorWordStartRightSelect",
+            "repeat": "__char.match(/\\W/)"
+        },
+        "B": {
+            "command": "cursorWordStartLeftSelect",
+            "repeat": "__char.match(/\\W/)"
+        },
         // Select forwards/backwards until a character is found
         "f": {
             "command": "modaledit.search",

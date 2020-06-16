@@ -10,6 +10,11 @@
         "desc": ""
     },
     {
+        "page": "Vim Presets",
+        "file": "presets/vim.html",
+        "desc": ""
+    },
+    {
         "page": "Implementation",
         "subs": [
             {
@@ -37,11 +42,6 @@
     {
         "page": "License",
         "file": "LICENSE.html",
-        "desc": ""
-    },
-    {
-        "page": "vim",
-        "file": "presets/vim.html",
         "desc": ""
     }
 ]
