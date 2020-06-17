@@ -415,7 +415,9 @@ commands require any arguments.
 | `modaledit.enterNormal`     | Switches to normal mode
 | `modaledit.enterInsert`     | Switches to insert mode
 | `modaledit.toggleSelection` | Toggles selection mode on or off. Selection mode is implicitly on whenever editor has text selected
+| `modaledit.enableSelection` | Turn selection mode on.
 | `modaledit.cancelSelection` | Cancel selection mode and clear selection.
+| `modaledit.resetSelection`  | Cancel selection mode and clear selection, but keep multiple cursors
 
 ### Incremental Search
 
