@@ -128,30 +128,31 @@
         <div class="scrollingarea closepopups">
             
     <div class="contentarea">
-        <h1 id="semi-complete-vim-keybindings-for-modal-edit">Semi-complete Vim Keybindings for ModalEdit</h1>
+        <h1 id="modal-edit-2-0-batteries-vimcluded">ModalEdit 2.0: Batteries Vimcluded</h1>
 <p><img src="../images/pooh.jpg" alt="" width="375" height="403">
-From get-go, providing full Vim emulation was a non-goal of ModalEdit. The idea
-of the extension is to provide an engine that allows the user to map any key
-combination to any command provided by VS Code. However, most users equate modal
-editing with Vim, and are familiar with its default keybindings. Vim users
-really love the powerful key sequences that combine editing operations with
-cursor motions or text ranges.</p>
-<p>ModalEdit has also evolved by taking inspiration mainly from Vim. Many
-capabilities were added with the motive to enable some Vim feature that was
-previously not possible to implement. With version 2.0 ModalEdit's functionality
-is now extensive enough to build a semi-complete Vim emulation. So, here we go...</p>
+Providing full Vim emulation was not originally a goal of ModalEdit. The idea of
+the extension is to provide an engine that allows the user to <a href="../README.html#configuration">map any key
+combination to any command provided by VS Code</a>.
+However, most users equate modal editing with Vim and are familiar with its
+default keybindings. Vim users really love the powerful key sequences that
+combine editing operations with cursor motions or text ranges.</p>
+<p>ModalEdit has also evolved by taking inspiration from Vim. Many capabilities
+were added with the motive to enable some Vim feature that was previously not
+possible to implement. With version 2.0 ModalEdit's functionality is now
+extensive enough to build a semi-complete Vim emulation. So, here we go...</p>
 <p>Adding Vim keybindings as optional presets serves two purposes: it lowers the
 barrier of entry for Vim users who don't want to spend the time defining
 bindings from ground up. Secondly, Vim presets serve as an example to show
 how you can build sophisticated command sequences using the machinery provided
 by ModalEdit.</p>
-<p>If you are not interested how the Vim keybindings are implemented and just want
-to use them, you can skip this discussion. Just import the presets by pressing
-<key>Ctrl</key><key>Shift</key><key>P</key> and running command <strong>ModalEdit:
-Import preset keybindings</strong>. You will be presented a choice to import either
-Vim bindings or any presets that you have created yourself. If you are planning
-to customize the bindings, or create Vim-style commands from scratch, this
-document gives you pointers how to go about doing so.</p>
+<p><img src="../images/import-preset.png" alt="importing presets" width="553" height="94">
+If you are not interested on how the Vim keybindings are implemented and just
+want to use them, you can skip this discussion. Just import the presets by
+pressing <key>Ctrl</key><key>Shift</key><key>P</key> and running command
+<strong>ModalEdit: Import preset keybindings</strong>. You will be presented a choice to
+import either Vim bindings or any presets that you have created yourself. If
+you are planning to customize the bindings, or create Vim-style commands from
+scratch, this document gives you pointers how to go about doing so.</p>
 <h2 id="game-plan">Game Plan</h2>
 <p>We start with basic motion commands which are mostly straightforward to
 implement. Motions have two modes of operation: normal mode (moving cursor), and
@@ -166,10 +167,9 @@ operation using visual mode by typing <key>v</key><key>i</key><key>p</key><key>U
 The trick we use is to convert key sequences that operate on character, word,
 line, paragraph, etc. to analagous key sequences that use visual mode. We can
 implement all the editing commands just to work on active selection and reuse
-these commands with the other key combinations. Consequently, the command
-definition then becomes a string mapping problem. And since we can use
-JavaScript to expressions to do string manipulation, these mappings are easy to
-formulate.</p>
+these commands with the other key combinations. Consequently, command definition
+becomes a string mapping problem. Since we can use JavaScript to expressions to
+do string manipulation, these mappings are easy to formulate.</p>
 <p><img src="../images/vim-uppercase.gif" alt=""></p>
 <p>Many ways to skin a cat...</p>
 <h2 id="motion-commands-in-normal-mode">Motion Commands in Normal Mode</h2>
@@ -334,7 +334,6 @@ them are basic motion commands, such as <key>g</key><key>_</key> and
 and <key>g</key><key>U</key>, and some switch between tabs 🤷‍♂️. Since we have to
 define all bindings with the same prefix in same place, we take a detour and add
 these commands before continuing with rest of the motion commands.</p>
-<p>The commands we define are.</p>
 <div style="overflow: auto">
 <table><thead>
 <tr>
@@ -374,7 +373,8 @@ command.</p>
             ],
 </code></pre>
 <p>The lower/uppercase transition works with any motion, but since we have not
-defined all of them yet, we explain the command structure later in the document.
+defined all of them yet, we explain the command structure
+<a href="#editing-with-motions">later in the document</a>.
 The structure we use here is exactly the same as with <key>d</key> command, for
 example.</p>
 
@@ -422,7 +422,8 @@ example.</p>
                 }
             },
 </code></pre>
-<p>These command switch to next/previous tab.</p>
+<p><key>g</key><key>t</key> and <key>g</key><key>T</key> switch to next/previous
+tab.</p>
 
 <pre class="syntaxhighlight"><code>            "t": "workbench.action.nextEditor",
             "T": "workbench.action.previousEditor"
@@ -489,13 +490,12 @@ diverging from Vim's functionality.</p>
         },
 </code></pre>
 <h2 id="jump-to-a-character">Jump to a Character</h2>
-<p>More advanced cursor motions in Vim include jump to character, which is really
-powerful when used with editing commands. With them we can apply edits upto or
-including a specified character. The same motions work also as jump commands in
-normal mode. We have to provide separate implementations for normal and visual
-mode, since we need to provide different parameters to the <code>modaledit.search</code>
-command that we utilizing.</p>
-<p>We define these commands.</p>
+<p>Advanced cursor motions in Vim include jump to character, which is especially
+powerful in connection with editing commands. With this motion, we can apply
+edits upto or including a specified character. The same motions work also as
+jump commands in normal mode. We have to provide separate implementations for
+normal and visual mode, since we need to provide different parameters to the
+<code>modaledit.search</code> command we are utilizing.</p>
 <div style="overflow: auto">
 <table><thead>
 <tr>
@@ -756,11 +756,11 @@ annex:</p>
 <tbody>
 <tr>
 <td><code>x</code></td>
-<td>Delete a character under cursor</td>
+<td>Delete character under cursor</td>
 </tr>
 <tr>
 <td><code>X</code></td>
-<td>Delete a character left of cursor (backspace)</td>
+<td>Delete character left of cursor (backspace)</td>
 </tr>
 <tr>
 <td><code>r</code></td>
@@ -1057,32 +1057,102 @@ the last key resides. Key sequence is rearranged exactly as above.</p>
             }
         },
 </code></pre>
-<h2 id="repeating-commands">Repeating Commands</h2>
+<h2 id="commands-prefixed-by-number">Commands Prefixed by Number</h2>
 <p>As stated above, you can repeat many motions and edit commands by prefixing
-them with number(s). All of the repeatable commands are mapped below. The trick
-is to define a <a href="../README.html#defining-recursive-keymaps">recursive keymap</a>
-that sticks in the same mapping while you type number keys. After you type the
-actual command we either just invoke the command as many times as you typed, or
-jump to either of the edit command keymaps defined above.</p>
-<p>The recursive part is defined below.</p>
+them with number(s). All of the repeatable commands are listed below. We use a
+<a href="../README.html#defining-recursive-keymaps">recursive keymap</a> that loops in the
+same mapping while you type number keys. After you type letter(s), we invoke the
+command designated by the letters &lt;<em>num</em>&gt; times, or perform a jump command to
+line &lt;<em>num</em>&gt;.</p>
+<div style="overflow: auto">
+<table><thead>
+<tr>
+<th>Keys</th>
+<th>Command</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>&lt;<em>num</em>&gt;<code>h|j|k|l|w|e|b|W|B|%</code></td>
+<td>Repeat motion &lt;<em>num</em>&gt; times</td>
+</tr>
+<tr>
+<td>&lt;<em>num</em>&gt;<code>u</code></td>
+<td>Undo &lt;<em>num</em>&gt; times</td>
+</tr>
+<tr>
+<td>&lt;<em>num</em>&gt;<code>v|V</code></td>
+<td>Select &lt;<em>num</em>&gt; characters/lines</td>
+</tr>
+<tr>
+<td>&lt;<em>num</em>&gt;<code>s|S</code></td>
+<td>Substitute (replace) &lt;<em>num</em>&gt; characters/lines</td>
+</tr>
+<tr>
+<td>&lt;<em>num</em>&gt;<code>J</code></td>
+<td>Join &lt;<em>num</em>&gt; lines</td>
+</tr>
+<tr>
+<td>&lt;<em>num</em>&gt;<code>gJ</code></td>
+<td>Join &lt;<em>num</em>&gt; lines without space in between</td>
+</tr>
+<tr>
+<td>&lt;<em>num</em>&gt;<code>G|gg</code></td>
+<td>Jump to line &lt;<em>num</em>&gt;</td>
+</tr>
+<tr>
+<td>&lt;<em>num</em>&gt;<code>gu</code>&lt;<em>motion</em>&gt;</td>
+<td>Convert the range specified by &lt;<em>motion</em>&gt; repeated &lt;<em>num</em>&gt; times to lowercase</td>
+</tr>
+<tr>
+<td>&lt;<em>num</em>&gt;<code>gU</code>&lt;<em>motion</em>&gt;</td>
+<td>Convert the range specified by &lt;<em>motion</em>&gt; repeated &lt;<em>num</em>&gt; times to uppercase</td>
+</tr>
+<tr>
+<td>&lt;<em>num</em>&gt;<code>d</code>&lt;<em>motion</em>&gt;</td>
+<td>Delete the range specified by &lt;<em>motion</em>&gt; repeated &lt;<em>num</em>&gt; times</td>
+</tr>
+<tr>
+<td>&lt;<em>num</em>&gt;<code>c</code>&lt;<em>motion</em>&gt;</td>
+<td>Change the range specified by &lt;<em>motion</em>&gt; repeated &lt;<em>num</em>&gt; times</td>
+</tr>
+<tr>
+<td>&lt;<em>num</em>&gt;<code>y</code>&lt;<em>motion</em>&gt;</td>
+<td>Yank the range specified by &lt;<em>motion</em>&gt; repeated &lt;<em>num</em>&gt; times</td>
+</tr>
+<tr>
+<td>&lt;<em>num</em>&gt;<code>&gt;</code>&lt;<em>motion</em>&gt;</td>
+<td>Indent the range specified by &lt;<em>motion</em>&gt; repeated &lt;<em>num</em>&gt; times</td>
+</tr>
+<tr>
+<td>&lt;<em>num</em>&gt;<code>&lt;</code>&lt;<em>motion</em>&gt;</td>
+<td>Outdent the range specified by &lt;<em>motion</em>&gt; repeated &lt;<em>num</em>&gt; times</td>
+</tr>
+<tr>
+<td>&lt;<em>num</em>&gt;<code>=</code>&lt;<em>motion</em>&gt;</td>
+<td>Reformat the range specified by &lt;<em>motion</em>&gt; repeated &lt;<em>num</em>&gt; times</td>
+</tr>
+</tbody>
+</table>
+</div><p>The recursive part of the keymap defined below.</p>
 
 <pre class="syntaxhighlight"><code>        "1-9": {
             "id": 3,
-            "help": "Repeat n times",
+            "help": "Repeat / go to line",
             "0-9": 3,
 </code></pre>
 <p>If any of the repeatable motions is typed after a number, we just do that motion
-<em>n</em> times. The <code>parseInt</code> function extracts the number from the beginning of the
-key sequence.</p>
+&lt;<em>num</em>&gt; times. The <code>parseInt</code> function extracts the number from the beginning of
+the key sequence.</p>
 
-<pre class="syntaxhighlight"><code>            "h,j,k,l,w,b,W,B,u,%": {
+<pre class="syntaxhighlight"><code>            "h,j,k,l,w,e,b,W,B,u,%": {
                 "command": "modaledit.typeNormalKeys",
                 "args": "{ keys: __rcmd[0] }",
                 "repeat": "parseInt(__cmd)"
             },
 </code></pre>
-<p>We can repeat <key>v</key> and <key>V</key> commands too. They will select <em>n</em>
-characters or lines.</p>
+<p>Repeating <key>v</key> or <key>V</key> command will select &lt;<em>num</em>&gt; characters or
+lines.</p>
 
 <pre class="syntaxhighlight"><code>            "v": {
                 "command": "cursorRightSelect",
@@ -1094,7 +1164,7 @@ characters or lines.</p>
             },
 </code></pre>
 <p>Also substitution commands can be repeated. In this case we just remap the
-key sequence and insert the repetition count in it.</p>
+key sequence with the parsed number in front.</p>
 
 <pre class="syntaxhighlight"><code>            "s": {
                 "command": "modaledit.typeNormalKeys",
@@ -1105,7 +1175,7 @@ key sequence and insert the repetition count in it.</p>
                 "args": "{ keys: parseInt(__cmd) + 'cc' }"
             },
 </code></pre>
-<p>We can join multiple lines at once too. This works because the
+<p>We can join multiple lines at once, too. This works because the
 <code>editor.action.joinLines</code> joins all selected lines. We just have to clear the
 selection afterwards.</p>
 
@@ -1116,8 +1186,13 @@ selection afterwards.</p>
                 },
                 "modaledit.cancelSelection"
             ],
-            // Two ways of jumping to a line &lt;_NUM_&gt;`G` or &lt;_NUM_&gt;`gg`
-            "G": [
+</code></pre>
+<p>Jumping to a line in Vim is also done by entering first a number and then eiter
+<key>G</key> or <key>g</key><key>g</key>. The first keybinding we actually
+implement, and the second one just remaps to the first one. Implementing jump
+to line in VS Code requires two commands</p>
+
+<pre class="syntaxhighlight"><code>            "G": [
                 {
                     "command": "revealLine",
                     "args": "{ lineNumber: parseInt(__cmd) - 1, at: 'top' }"
@@ -1132,18 +1207,77 @@ selection afterwards.</p>
             "g": {
                 "g": {
                     "command": "modaledit.typeNormalKeys",
-                    "args": "{ leys: parseInt(__cmd) + 'G' }"
+                    "args": "{ keys: parseInt(__cmd) + 'G' }"
                 },
-                // Repeat some `g` commands.
-                "u,U": 1,
-                "J": {
+</code></pre>
+<p>Joining lines without space in between is implemented by repeating the command.</p>
+
+<pre class="syntaxhighlight"><code>                "J": {
                     "command": "modaledit.typeNormalKeys",
                     "args": "{ keys: __cmd.slice(-2) }",
                     "repeat": "parseInt(__cmd)"
-                }
+                },
+</code></pre>
+<p>Repeating the complex editing commands is just a matter of jumping to their
+keymap blocks. If <key>u</key> or <key>U</key> is pressed we jump to block <code>1</code>.
+The rest of the editing commands are implemented in block <code>2</code>.</p>
+
+<pre class="syntaxhighlight"><code>                "u,U": 1
             },
             "d,c,y,&lt;,&gt;,=": 2
         },
+</code></pre>
+<h2 id="searching">Searching</h2>
+<p>Searching introduces a pseudo-mode that captures the keyboard and suspends other
+commands as long as search is on. Searching commands are shown below.</p>
+<div style="overflow: auto">
+<table><thead>
+<tr>
+<th>Keys</th>
+<th>Command</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>/</code></td>
+<td>Start case-sensitive search forwards</td>
+</tr>
+<tr>
+<td><code>?</code></td>
+<td>Start case-sensitive search backwards</td>
+</tr>
+<tr>
+<td><code>n</code></td>
+<td>Select the next match</td>
+</tr>
+<tr>
+<td><code>p</code></td>
+<td>Select the previous match</td>
+</tr>
+</tbody>
+</table>
+</div><p><strong>Note</strong>: Searching commands work also with multiple cursors. As in Vim, search
+wraps around if top or bottom of file is encountered.</p>
+
+<pre class="syntaxhighlight"><code>        "/": [
+            {
+                "command": "modaledit.search",
+                "args": {
+                    "caseSensitive": true,
+                    "wrapAround": true
+                }
+            }
+        ],
+        "?": {
+            "command": "modaledit.search",
+            "args": {
+                "backwards": true,
+                "caseSensitive": true,
+                "wrapAround": true
+            }
+        },
+        "n": "modaledit.nextMatch",
+        "N": "modaledit.previousMatch",
         // Center cursor on screen
         "z": {
             "z": {
@@ -1160,26 +1294,7 @@ selection afterwards.</p>
                 "workbench.action.closeActiveEditor"
             ],
             "Q": "workbench.action.closeActiveEditor"
-        },
-        // Searching
-        "/": [
-            {
-                "command": "modaledit.search",
-                "args": {
-                    "caseSensitive": true,
-                    "wrapAround": true
-                }
-            }
-        ],
-        "?": {
-            "command": "modaledit.search",
-            "args": {
-                "backwards": true,
-                "caseSensitive": true
-            }
-        },
-        "n": "modaledit.nextMatch",
-        "N": "modaledit.previousMatch"
+        }
     },
     // Select (visual) mode commands.
     "selectbindings": {
