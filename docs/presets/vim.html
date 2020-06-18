@@ -172,7 +172,7 @@ becomes a string mapping problem. Since we can use JavaScript to expressions to
 do string manipulation, these mappings are easy to formulate.</p>
 <p><img src="../images/vim-uppercase.gif" alt=""></p>
 <p>Many ways to skin a cat...</p>
-<h2 id="motion-commands-in-normal-mode">Motion Commands in Normal Mode</h2>
+<h2 id="motions-in-normal-mode">Motions in Normal Mode</h2>
 <p>The list of available cursor motion commands is shown below.</p>
 <div style="overflow: auto">
 <table><thead>
@@ -1278,15 +1278,46 @@ wraps around if top or bottom of file is encountered.</p>
         },
         "n": "modaledit.nextMatch",
         "N": "modaledit.previousMatch",
-        // Center cursor on screen
+</code></pre>
+<h2 id="miscellaneous-commands">Miscellaneous Commands</h2>
+<p>Rest of the normal mode commands are not motion or editing commands, but do
+miscellaenous things.</p>
+<div style="overflow: auto">
+<table><thead>
+<tr>
+<th>Keys</th>
+<th>Command</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>:</code></td>
+<td>Show command menu (same as <key>Ctrl</key><key>Shift</key><key>P</key>)</td>
+</tr>
+<tr>
+<td><code>zz</code></td>
+<td>Center cursor on screen</td>
+</tr>
+<tr>
+<td><code>ZZ</code></td>
+<td>Save file and close the current editor (tab)</td>
+</tr>
+<tr>
+<td><code>ZQ</code></td>
+<td>Close the current editor without saving</td>
+</tr>
+</tbody>
+</table>
+</div><p>Note that <key>Z</key><key>Q</key> command still asks to save the file, if
+it has been changed. There is no way to get around this in VS Code.</p>
+
+<pre class="syntaxhighlight"><code>        ":": "workbench.action.showCommands",
         "z": {
             "z": {
                 "command": "revealLine",
                 "args": "{ lineNumber: __line, at: 'center' }"
             }
         },
-        // Entering command mode and closing documents
-        ":": "workbench.action.showCommands",
         "Z": {
             "help": "Z - Close and save, Q - Close without saving",
             "Z": [
@@ -1296,8 +1327,134 @@ wraps around if top or bottom of file is encountered.</p>
             "Q": "workbench.action.closeActiveEditor"
         }
     },
-    // Select (visual) mode commands.
-    "selectbindings": {
+</code></pre>
+<h2 id="motions-in-visual-mode">Motions in Visual Mode</h2>
+<p>ModalEdit 2.0 adds a new configuration section called <code>selectbidings</code> that has
+the same structure as the <code>keybindings</code> section. With it you can now map keys
+that act as the lead key of a normal mode sequence to run a commands when
+pressed in visual mode. For example keys <key>d</key>, <key>c</key>, and
+<key>y</key> work this way. In normal mode they must be followed by a motion
+command to specify the range that they are applied, but in visual mode they
+run on the selected text.</p>
+<p><code>selectbindings</code> section is always checked first when ModalEdit looks for a
+mapping for a keypress. If there is no binding defined in <code>selectbindings</code>
+then it checks the <code>keybindings</code> section. Note that you can still define normal
+mode commands that work differently when selection is active. You can use either
+a conditional or parameterized command to check the <code>__selecting</code> flag, and
+perform a different action based on that.</p>
+<p>We define all the motions that do not yet work correctly in visual mode. The
+full list is below:</p>
+<div style="overflow: auto">
+<table><thead>
+<tr>
+<th>Keys</th>
+<th>Command</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>h|j|k|l</code></td>
+<td>Select text to left/down/up/right</td>
+</tr>
+<tr>
+<td><code>w</code></td>
+<td>Select until beginning of next word</td>
+</tr>
+<tr>
+<td><code>e</code></td>
+<td>Select until end of word</td>
+</tr>
+<tr>
+<td><code>b</code></td>
+<td>Select until beginning of previous word</td>
+</tr>
+<tr>
+<td><code>W</code></td>
+<td>Select until beginning of next alphanumeric word</td>
+</tr>
+<tr>
+<td><code>B</code></td>
+<td>Select unting beginning of previous alphanumeric word</td>
+</tr>
+<tr>
+<td><code>f</code>&lt;<em>char</em>&gt;</td>
+<td>Select until next occurrence of &lt;<em>char</em>&gt; including it</td>
+</tr>
+<tr>
+<td><code>F</code>&lt;<em>char</em>&gt;</td>
+<td>Select until previous occurrence of &lt;<em>char</em>&gt; including it</td>
+</tr>
+<tr>
+<td><code>t</code>&lt;<em>char</em>&gt;</td>
+<td>Select until next occurrence of &lt;<em>char</em>&gt; but not including it</td>
+</tr>
+<tr>
+<td><code>T</code>&lt;<em>char</em>&gt;</td>
+<td>Select until previous occurrence of &lt;<em>char</em>&gt; but not including it</td>
+</tr>
+<tr>
+<td><code>a</code>&lt;<em>char</em>&gt;</td>
+<td>Select text inside &lt;<em>char</em>&gt; including it</td>
+</tr>
+<tr>
+<td><code>i</code>&lt;<em>char</em>&gt;</td>
+<td>Select text inside &lt;<em>char</em>&gt; but not including it</td>
+</tr>
+<tr>
+<td><code>aw</code></td>
+<td>Select current word including the whitespace around it</td>
+</tr>
+<tr>
+<td><code>iw</code></td>
+<td>Select current word not including the whitespace around it</td>
+</tr>
+<tr>
+<td><code>ap</code></td>
+<td>Select current paragraph including the whitespace around it</td>
+</tr>
+<tr>
+<td><code>ip</code></td>
+<td>Select current paragraph not including the whitespace around it</td>
+</tr>
+<tr>
+<td><code>a( | a) | ab</code></td>
+<td>Select text inside parenthesis including them</td>
+</tr>
+<tr>
+<td><code>i( | i) | ib</code></td>
+<td>Select text inside parenthesis not including them</td>
+</tr>
+<tr>
+<td><code>a{ | a} | aB</code></td>
+<td>Select text inside curly braces including them</td>
+</tr>
+<tr>
+<td><code>i{ | i} | iB</code></td>
+<td>Select text inside curly braces not including them</td>
+</tr>
+<tr>
+<td><code>a[ | a]</code></td>
+<td>Select text inside brackets including them</td>
+</tr>
+<tr>
+<td><code>i[ | i]</code></td>
+<td>Select text inside brackets not including them</td>
+</tr>
+<tr>
+<td><code>a&lt; | a&gt; | at</code></td>
+<td>Select text inside ange brackets (tag) including them</td>
+</tr>
+<tr>
+<td><code>i[ | i] | at</code></td>
+<td>Select text inside angle brackets (tag) not including them</td>
+</tr>
+</tbody>
+</table>
+</div><p>The basic movement commands are otherwise identical to normal mode defintions,
+but the actual commands invoked are different. Roughly speaking, we just add
+<code>Select</code> at the end of each command.</p>
+
+<pre class="syntaxhighlight"><code>    "selectbindings": {
         "l": "cursorRightSelect",
         "h": "cursorLeftSelect",
         "j": "cursorDownSelect",
@@ -1313,8 +1470,13 @@ wraps around if top or bottom of file is encountered.</p>
             "command": "cursorWordStartLeftSelect",
             "repeat": "__char.match(/\\W/)"
         },
-        // Select forwards/backwards until a character is found
-        "f": {
+</code></pre>
+<p>Selecting forwards/backwards until a character is found can be implemented with
+the <code>modaledit.search</code> command as in normal mode. The difference is in what
+parameters we use; we include the <code>selectTillMatch</code> flag, and provide different
+<code>typeBefore...</code> and <code>typeAfter...</code> key sequences.</p>
+
+<pre class="syntaxhighlight"><code>        "f": {
             "command": "modaledit.search",
             "args": {
                 "acceptAfter": 1,
@@ -1354,8 +1516,19 @@ wraps around if top or bottom of file is encountered.</p>
                 "selectTillMatch": true
             }
         },
-        // Select around/inside
-        "a,i": {
+</code></pre>
+<p>Selecting text inside/around delimiters are motions that are only defined in
+visual mode. The motions can be used along with editing commands in normal mode,
+but obviously cannot be performed by themselves as they select ranges of text
+thus entering visual mode automatically.</p>
+<p>All variants of these motions are implemented with the
+<a href="../README.html#selecting-text-between-delimiters"><code>modaledit.selectBetween</code> command</a>.
+The command takes start and end delimiters, which can be also regular
+expressions, and selects the range between these delimiters. The scope of the
+search is by default the current line, but for some variants we specify the
+<code>docScope</code> parameter which causes the search to consider the whole file.</p>
+
+<pre class="syntaxhighlight"><code>        "a,i": {
             "help": "Select around/inside _",
             "w": [
                 {
@@ -1400,8 +1573,58 @@ wraps around if top or bottom of file is encountered.</p>
                 }
             ]
         },
-        // Indent/outdent/reformat selection
-        "&gt;": [
+</code></pre>
+<h2 id="editing-commands-in-visual-mode">Editing Commands in Visual Mode</h2>
+<p>The last pieces of puzzle are editing commands that operate on selected text in
+visual mode. They are the same editing operations we already defined in normal
+mode, but remarkable simpler in this context. Since VS Code's operations already
+work on selected text, we only need to call the built-in commands and clear the
+selection afterwards.</p>
+<div style="overflow: auto">
+<table><thead>
+<tr>
+<th>Keys</th>
+<th>Command</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>&gt;</code></td>
+<td>Indent selection</td>
+</tr>
+<tr>
+<td><code>&lt;</code></td>
+<td>Outdent selection</td>
+</tr>
+<tr>
+<td><code>=</code></td>
+<td>Reindent (reformat) selection</td>
+</tr>
+<tr>
+<td><code>d | x</code></td>
+<td>Delete (cut) selection</td>
+</tr>
+<tr>
+<td><code>c</code></td>
+<td>Change selection (cut and enter insert mode)</td>
+</tr>
+<tr>
+<td><code>y</code></td>
+<td>Yank (copy) selection</td>
+</tr>
+<tr>
+<td><code>u</code></td>
+<td>Transorm selection to lowercase</td>
+</tr>
+<tr>
+<td><code>U</code></td>
+<td>Transorm selection to upppercase</td>
+</tr>
+</tbody>
+</table>
+</div><p>Here are the implementations.</p>
+
+<pre class="syntaxhighlight"><code>        "&gt;": [
             "editor.action.indentLines",
             "modaledit.cancelSelection"
         ],
@@ -1413,24 +1636,20 @@ wraps around if top or bottom of file is encountered.</p>
             "editor.action.formatSelection",
             "modaledit.cancelSelection"
         ],
-        // Delete (cut) selection
         "d,x": [
             "editor.action.clipboardCopyAction",
             "deleteRight",
             "modaledit.cancelSelection"
         ],
-        // Change selection
         "c": [
             "editor.action.clipboardCopyAction",
             "deleteRight",
             "modaledit.enterInsert"
         ],
-        // Yank (copy) selection
         "y": [
             "editor.action.clipboardCopyAction",
             "modaledit.cancelSelection"
         ],
-        // Transform selection to lower/uppercase
         "u": [
             "editor.action.transformToLowercase",
             "modaledit.cancelSelection"
@@ -1442,6 +1661,13 @@ wraps around if top or bottom of file is encountered.</p>
     }
 }
 </code></pre>
+<h2 id="conclusion">Conclusion</h2>
+<p>The list of commands we provided is by no means exhaustive but still contains
+literally thousands of key combinations that cover the most commonly used Vim
+operations. This is quite a nice achievement considering that we only wrote
+about 600 lines of configuration, and most of it is pretty trivial. This
+demonstrates that ModalEdit's functionality is powerful enough to build all
+kinds of operations that make modal editors like Vim popular.</p>
 
         
     </div>

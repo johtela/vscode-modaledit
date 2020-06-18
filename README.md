@@ -1,24 +1,24 @@
 # Modal Editing in VS Code
 
 ModalEdit is a simple but powerful extension that adds configurable "normal"
-mode to VS Code. [Vim][2] made the concept of [modal editing][1] popular among
-developers and IT professionals. ModalEdit is not a Vim emulation, though. 
-It does not define any default key mappings out-of-the-box. Instead, it 
-encourages you to create your own keyboard layout and customize the editor to 
-suit your preferences.
+mode to VS Code. The most prominent [modal editor][1] is [Vim][2], which also 
+inspired the development of ModalEdit. It includes Vim commands as presets
+you can import, but ModalEdit's true power comes with its configurability. You 
+can emulate existing editors like Vim or [Kakoune][8] or build your keyboard 
+layout from ground up and add exactly the features you need.  
 
-As in Vim, the goal of the extension is to save your keystrokes and make editing 
-as fast as possible. Unlike most Vim emulators, ModalEdit leverages the 
-built-in features of VS Code. It uses commands provided by VS Code and other 
-extensions. You can build complex operations by arranging commands into 
-sequences. You can define conditional commands that do different things 
-based on editor state. Also, you can map these commands to arbitrarily long 
-keyboard sequences.
+As in Vim, the goal of the extension is to save your keystrokes and make 
+editing as efficient as possible. Unlike most Vim emulators, ModalEdit leverages 
+the built-in features of VS Code. You define your keybindings using commands 
+provided by VS Code and other extensions. You can build complex operations by 
+arranging commands into sequences. You can define conditional commands that do 
+different things based on editor state. Also, you can map these commands to 
+arbitrarily long keyboard sequences.
 
-> Check out the new features in version [1.5][11] and [1.6][12], and the updated 
-> [tutorial][9]. Now you can create even more complex commands than previously.
-> For example, commands that you can repeat by prefixing them with a number, and
-> commands that operate on text inside specified delimiters. 
+> Version 2.0 is the latest major release, and it contains many improvements
+> and new features that make ModalEdit more robust and flexible than before.
+> See the [change log][12] for full list of enhancements and changes in the
+> functionality.
 
 ## Getting Started
 
@@ -26,7 +26,7 @@ When extension is installed text documents will open in normal mode. The
 current mode is shown in the status bar. You can switch between modes by
 clicking the pane in the status bar.
 
-![Status bar](images/status-bar.gif)
+![Status bar](images/status-bar.gif =485x97)
 
 In normal mode keys don't output characters but invoke commands. You can 
 specify these commands in the `settings.json` file. To edit your user-level 
@@ -35,8 +35,9 @@ settings file, open command palette with `Ctrl+Shift+P` and look up command
 project specific, edit the `settings.json` that is located in the `.vscode` 
 directory under your project directory. 
 
-> You might want to skip to the [tutorial][9], if you prefer learning by example. 
-> Otherwise keep reading this document.
+> You might want to skip to the [tutorial][9], if you prefer learning by 
+> example. If you want to start with Vim keybindings, you'll find the 
+> instructions [here][14]. Otherwise keep reading this document.
 
 To define the key mappings used in normal mode, add a property named 
 `modaledit.keybindings`. You should define at least one binding that will switch 
@@ -52,18 +53,19 @@ ModalEdit adds a regular VS Code keyboard shortcut for `Esc` to return back to
 normal mode. If you wish, you can remap this command to another key by
 pressing `Ctrl+K Ctrl+S`. 
 
-### Selections
+### Selections/Visual Mode
 
 ModalEdit does not have a separate selection/visual mode as Vim has. It is
-possible to select text both in normal mode and insert mode. The `[S]` text in
-the status bar indicates when there is text selected.
+possible to select text both in normal mode and insert mode. However, since it 
+is typical that commands in normal have different behavior when selection is 
+active, the status bar text changes to indicate that. You can change the text 
+shown in status bar using [configuration parameters](#changing-status-bar)
 
 ![Selection active](images/selected-text.png)
 
 ModalEdit defines a new command `modaledit.toggleSelection` which allows
 you to start selecting text in normal mode without holding down the shift key.
 This imitates Vim's visual mode.
-
 
 ## Configuration
 
@@ -113,6 +115,8 @@ strings:
 | `__keySequence` | `string[]` | Array of keys that were pressed to invoke the command. 
 | `__keys`        | `string[]` | Alias to the `__keySequence` variable.
 | `__rkeys`       | `string[]` | Contains the `__keys` array reversed. This is handy when you want to access the last characters of the array as they will be first in `__rkeys`.
+| `__cmd`         | `string`   | Containst the `__keys` array joined together to a string. Now you don't have to do this explicitly in you expressions. 
+| `__rcmd`        | `string`   | Containst the `__rkeys` array joined together to a string.
 
 The `repeat` property allows you to run the command multiple times. If the value
 of the property is a number, it directly determines the repetition count. If it 
@@ -295,6 +299,25 @@ in the keymap. The contents of the property is shown in the status bar when the
 keymap is active. It makes using long keyboard sequences easier by providing a 
 hint what keys you can press next.
 
+### Keybindings in Selection/Visual Mode
+
+ModalEdit 2.0 adds a new configuration section called `selectbidings` that has
+the same structure as the `keybindings` section. With it you can now map keys
+that act as the lead key of a normal mode sequence to run a commands when 
+pressed in visual mode. 
+
+For example, you might want the key `d` to be the leader key for sequence `dw`
+in normal mode, but in selection mode `d` should delete the selection without
+expecting any following keys. Previously it was not possible to define this 
+behavior, but now you can do it with `selectbindings`. 
+
+`selectbindings` section is always checked first when ModalEdit looks for a 
+mapping for a keypress. If there is no binding defined in `selectbindings` 
+then it checks the `keybindings` section. Note that you can still define normal
+mode commands that work differently when selection is active. You can use either 
+a conditional or parameterized command to check the `__selecting` flag, and 
+perform a different action based on that.
+
 ### Debugging Keybindings
 
 If you are not sure that your bindings are correct, check the ModalEdit's
@@ -314,6 +337,7 @@ settings.
 | `insertCursorStyle`   | `line`        | Cursor shown in insert mode.
 | `normalCursorStyle`   | `block`       | Cursor shown in normal mode.
 | `searchCursorStyle`   | `underline`   | Cursor shown when incremental search is on.
+| `selectCursorStyle`   | `line-thin`   | Cursor shown when selection is active in normal mode.
 
 The possible values are:
 
@@ -323,6 +347,28 @@ The possible values are:
 - `line-thin`
 - `underline`
 - `underline-thin`
+
+### Changing Status Bar
+
+With version 2.0, you can also change the text shown in status bar in each mode
+along with the text color. Note that you can add icons in the text by using
+syntax `$(icon-name)` where `icon-name` is a valid name from the gallery of
+[built-in icons][15].
+
+The color of the status text is specified in HTML format, such as `#ffeeff`, 
+`cyan`, or `rgb(50, 50, 50)`. By default these colors are not defined, and thus
+they are same as the rest of text in the status bar.
+
+| Setting            | Default                   | Description
+| ------------------ | ------------------------- | -------------------------------------
+| `insertStatusText` | `-- $(edit) INSERT --`    | Status text shown in insert mode
+| `normalStatusText` | `-- $(move) NORMAL --`    | Status text shown in normal mode
+| `searchStatusText` | `$(search) SEARCH`        | Status text shown when search is active
+| `selectStatusText` | `-- $(paintcan) VISUAL --`| Status text shown when selection is active in normal mode
+| `insertStatusColor`| `undefined`               | Status text color in insert mode
+| `normalStatusColor`| `undefined`               | Status text color in normal mode
+| `searchStatusColor`| `undefined`               | Status text color when search is active
+| `selectStatusColor`| `undefined`               | Status text color when selection is active in normal mode
 
 ### Start in Normal Mode
 
@@ -433,15 +479,17 @@ To quickly jump inside documents ModalEdit provides two bookmark commands:
 
 - `modaledit.defineBookmark` stores the current position in a bookmark, and 
 - `modaledit.goToBookmark` jumps to the given bookmark.
+- `modaledit.showBookmarks` shows the defined bookmarks in the command bar and
+  allows jumping to them by selecting one.
 
-Both commands take one argument which contains the bookmark index. It can be any 
-number, so you can define unlimited number of bookmarks. If the argument is 
-omitted, default value `0` is assumed. 
+The first two commands take one argument which contains the bookmark name. It 
+can be any string (or number), so you can define unlimited number of bookmarks.
+If the argument is omitted, default value `0` is assumed. 
 ```js
 {
     "command": "modaledit.defineBookmark",
     "args": {
-        "bookmark": 0
+        "bookmark": "0"
     }
 }
 ```
@@ -553,6 +601,32 @@ advanced examples check the [tutorial][9].
 caused text in the editor to change. It corresponds to the [dot `.` command][13] 
 in Vim. The command takes no arguments.
 
+### Importing Presets
+
+In version 2.0, new command `modaledit.importPresets` was introduced. It reads
+keybindings from a file and copies them to the global `settings.json` file. It
+overrides existing keybindings, so back them up somewhere before running the
+command, if you want to preserve them.
+
+In 2.0, also Vim keybindings were added as built-in presets. You can learn more 
+about Vim bindings [here][14]. Built-in presets are located under the `presets` 
+folder under the extension installation folder. The command scans and lists all 
+the files there. It also provides an option to browse for any other file you 
+want to import.
+
+Presets are stored either in a JSON or JavaScript file. In either case, the
+file to be imported should evaluate to an object which should have at least one
+of the following properties:
+```json
+{
+    "keybindings": { ... },
+    "selectbindings": { ... }
+}
+```
+Both of the properties must follow the configuration structure defined above.
+It is also possible to define the object in JS. In that case the object should
+be the expression that the whole script evaluates to.
+
 ## Acknowledgements
 
 I was using the [Simple Vim][3] extension for a long time, but was never fully 
@@ -585,5 +659,7 @@ great idea and helping me jump start my project.
 [9]: https://johtela.github.io/vscode-modaledit/docs/.vscode/settings.html
 [10]: https://johtela.github.io/vscode-modaledit/docs/src/actions.html
 [11]: https://johtela.github.io/vscode-modaledit/docs/CHANGELOG.html#version-1-5
-[12]: https://johtela.github.io/vscode-modaledit/docs/CHANGELOG.html#version-1-6
+[12]: https://johtela.github.io/vscode-modaledit/docs/CHANGELOG.html#version-2-0
 [13]: https://vim.fandom.com/wiki/Repeat_last_change
+[14]: https://johtela.github.io/vscode-modaledit/docs/presets/vim.html
+[15]: https://microsoft.github.io/vscode-codicons/dist/codicon.html
