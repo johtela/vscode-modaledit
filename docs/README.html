@@ -448,10 +448,10 @@ hint what keys you can press next.</p>
 the same structure as the <code>keybindings</code> section. With it you can now map keys
 that act as the lead key of a normal mode sequence to run a commands when
 pressed in visual mode.</p>
-<p>For example, you might want the key <code>d</code> to be the leader key for sequence <code>dw</code>
-in normal mode, but in selection mode <code>d</code> should delete the selection without
-expecting any following keys. Previously it was not possible to define this
-behavior, but now you can do it with <code>selectbindings</code>.</p>
+<p>For example, you might want the <code>d</code> key to be the leader key for sequence
+&quot;delete word&quot; <code>dw</code> in normal mode, but in selection mode <code>d</code> should delete the selection
+without expecting any following keys. Previously it was not possible to define
+this behavior, but now you can do it with <code>selectbindings</code>.</p>
 <p><code>selectbindings</code> section is always checked first when ModalEdit looks for a
 mapping for a keypress. If there is no binding defined in <code>selectbindings</code>
 then it checks the <code>keybindings</code> section. Note that you can still define normal

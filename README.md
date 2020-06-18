@@ -306,10 +306,10 @@ the same structure as the `keybindings` section. With it you can now map keys
 that act as the lead key of a normal mode sequence to run a commands when 
 pressed in visual mode. 
 
-For example, you might want the key `d` to be the leader key for sequence `dw`
-in normal mode, but in selection mode `d` should delete the selection without
-expecting any following keys. Previously it was not possible to define this 
-behavior, but now you can do it with `selectbindings`. 
+For example, you might want the `d` key to be the leader key for sequence 
+"delete word" `dw` in normal mode, but in selection mode `d` should delete the selection 
+without expecting any following keys. Previously it was not possible to define 
+this behavior, but now you can do it with `selectbindings`. 
 
 `selectbindings` section is always checked first when ModalEdit looks for a 
 mapping for a keypress. If there is no binding defined in `selectbindings` 
