@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>ModalEdit - Changelog</title>
+    <title>ModalEdit - Change Log</title>
     <link rel="icon" type="image/icon" href="images/favicon.png" />
     <link rel="stylesheet" href="css/main.css" />
     
@@ -98,7 +98,7 @@
     </li>
     <li>
         
-        <a href="CHANGELOG.html" class="highlight">Changelog</a>
+        <a href="CHANGELOG.html" class="highlight">Change Log</a>
         
     </li>
     <li>
@@ -203,6 +203,100 @@ to access the last keys in the sequence. They are conveniently the first ones
 in <code>__rkeys</code>.</li>
 <li>Removed unneeded images from the extension package. The package is now 3 MBs
 smaller.</li>
+</ul>
+<h2 id="version-2-0">Version 2.0</h2>
+<p>Major release containing lot of new features and improvements.</p>
+<h3 id="preset-keybindings">Preset keybindings</h3>
+<p>It is possible now to import keybindings through the <code>modaledit.importPresets</code>
+command. <a href="preset/vim.html">Vim presets</a> are included in the extension
+(<a href="https://github.com/johtela/vscode-modaledit/issues/7">#7</a>). The presets can be
+also defined as JavaScript (<a href="https://github.com/johtela/vscode-modaledit/issues/9">#9</a>).
+They are evaluated or &quot;compiled&quot; to JSON when import is run.</p>
+<h3 id="improvements-to-search">Improvements to Search</h3>
+<p>Search command has several new features:</p>
+<ul>
+<li>
+<p>Multicursor search (<a href="https://github.com/johtela/vscode-modaledit/issues/5">#5</a>,
+<a href="https://github.com/johtela/vscode-modaledit/pull/12">#12</a>) is now working.</p>
+</li>
+<li>
+<p>There are four new parameters: <code>typeBeforeNextMatch</code>, <code>typeAfterNextMatch</code>,
+<code>typeBeforePreviousMatch</code>, and <code>typeAfterPreviousMatch</code>. These can be used to
+run key commands after <code>modaledit.nextMatch</code> and <code>modaledit.previousMathch</code>
+commands. The need for these parameters arose when implementing Vim's <code>t</code> and
+<code>f</code> key commands. These commands look for specified character and place the
+cursor either on it or before it. Without the new parameters, it would not
+be possible to emulate Vim's behavior using <code>modaledit.search</code>. This is
+because by default, it selects the search string and search always starts from
+the current cursor position. To make jumping to next and previous character
+possible, we need to adjust the cursor position before and after the commands.</p>
+</li>
+<li>
+<p>New parameter <code>wrapAround</code> causes the search to jump the beginning/end of
+the file if it hits bottom/top. This closes issue <a href="https://github.com/johtela/vscode-modaledit/issues/8">#8</a></p>
+</li>
+<li>
+<p>The implementation of <code>modaledit.search</code> and <code>modaledit.selectBetween</code>
+commands have been refactored. Adding the new parameters described above made
+it possible to simplify the implementation and remove hacky code. The changes
+should not break existing functionality but make these commands work more
+logically and consistently. For example, both of the commands now work
+properly when they are used to extend the existing selection.</p>
+</li>
+</ul>
+<h3 id="cursor-and-status-bar-configuration">Cursor and Status Bar Configuration</h3>
+<p>You can now define a different cursor shape when selection is active in normal
+mode using the <code>selectCursorStyle</code>. Also, you can
+<a href="README.html#changing-status-bar">change the status bar text</a> shown in each
+mode. It is possible to include icons in the status bar, if you like. This
+should be sufficient to close issue
+<a href="https://github.com/johtela/vscode-modaledit/issues/13">#13</a></p>
+<p>A secondary status bar was added to show the keys that have been pressed so far.
+It also shows help messages defined in bindings and  warnings from the search
+command.</p>
+<h3 id="bookmark-improvements">Bookmark Improvements</h3>
+<p>There is a new command <code>modaledit.showBookmarks</code> that shows all the defined
+bookmarks. You can jump to any of them by selecting one in the list. Also,
+the bookmark can now be any string instead of a number. This actually worked
+previously, but now documentation about this is updated too.</p>
+<p>New parameter <code>select</code> in the <code>modaledit.goToBookmark</code> command extends selection
+till the bookmark instead of putting the cursor on it. This makes it possible to
+use bookmarks as selection scoping mechanism à la Vim.</p>
+<h3 id="changes-concerning-js-expressions">Changes Concerning JS Expressions</h3>
+<p>New variables <code>__cmd</code> and <code>__rcmd</code> can be used in JS expressions. They contain
+the key sequence that was pressed as a string. They correspond to expressions:</p>
+
+<pre class="syntaxhighlight"><code>__cmd = __keys.join(<span class="string">''</span>)
+__rcmd = __rkeys.join(<span class="string">''</span>)
+</code></pre>
+<p>In many cases, these variables allow you to write expressions that inspect the
+key sequence in a shorter form.</p>
+<p>All the variants of <code>__keys</code> or <code>__keySequence</code> variables now contain the actual
+key sequence that was used to invoke the command. Previously they contained the
+sequence that <em>the user</em> pressed. Since you can also invoke key commands
+programmatically using <code>modaledit.typeNormalKeys</code>, this made implementing
+reusable commands more difficult. You could not rely on the key sequence to
+correspond to the path to the keybinding you were defining. Now you can rely
+that the <code>__keys</code> variable and its variants contain the path to the binding,
+which should make sure that commands work correctly when invoked through
+<code>modaledit.typeNormalKeys</code>.</p>
+<h3 id="other-changes">Other Changes</h3>
+<ul>
+<li>
+<p>Configuration section called <code>selectbindings</code> can be used to define key
+bindings that are in effect when selection is active. This allows you to
+define different key sequences for same leader keys in normal mode and
+selecion mode.</p>
+<p>For example in Vim, the <code>d</code> key is in normal mode the leader key for sequences
+such as <code>dw</code> (delete word) or <code>dip</code> (delete inside paragraph). In visual
+(selection) mode, <code>d</code> deletes the selected text. Previously it was not
+possible to have such keymaps, but with <code>selectbindings</code> you can now define
+them.</p>
+</li>
+<li>
+<p><code>selecting</code> flag is now refreshed when you switch between files. The select
+mode no longer &quot;sticks&quot; between tabs.</p>
+</li>
 </ul>
 
         

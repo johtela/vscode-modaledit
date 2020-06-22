@@ -47,19 +47,20 @@ for key bindings to be added.
 ## Switching Between Modes
 
 First things first: we need to be able to enter the normal mode somehow. The
-`Esc` key is mapped to the `modaledit.enterNormal` command by default, so we 
-dont't need to do anything for that. If you like, you can map other keys to
-this command using VS Code's standard keymappings pressing `Ctrl+K Ctrl+S`.
+<key>Esc</key> key is mapped to the `modaledit.enterNormal` command by default, 
+so we dont't need to do anything for that. If you like, you can map other keys to
+this command using VS Code's standard keymappings pressing 
+<key>Ctrl</key>+<key>K</key> <key>Ctrl</key>+<key>S</key>.
 
 ### Insert Text
 
 There are multiple ways to enter insert mode. If you want to insert text in the 
-current cursor position, you press `i`.
+current cursor position, you press <key>i</key>.
 ```js
         "i": "modaledit.enterInsert",
 ```
-To insert text at the beginning of line, you press `I`. For this operation, we
-need a command sequence, i.e. an array of commands.
+To insert text at the beginning of line, you press <key>I</key>. For this 
+operation, we need a command sequence, i.e. an array of commands.
 ```js
         "I": [
             "cursorHome",
@@ -68,15 +69,15 @@ need a command sequence, i.e. an array of commands.
 ```
 ### Append Text
 
-_Appending_ text works analogously; `a` appends text after current character
-and `A` at the end of the line. There is a special case, though. If cursor is 
-already at the last character of the line, it should not move. This is why we
-use a conditional command to move the cursor only, if the current character
-is not an empty string which marks the end of the line. A conditional command 
-is an object that contains the `condition` property. The value of the property 
-is a JS expression which ModalEdit evaluates. It selects the command based on 
-the result. In this case, the result `false` will execute the `cursorRight` 
-command.
+_Appending_ text works analogously; <key>a</key> appends text after current 
+character and <key>A</key> at the end of the line. There is a special case, 
+though. If cursor is already at the last character of the line, it should not 
+move. This is why we use a conditional command to move the cursor only, if the 
+current character is not an empty string which marks the end of the line. A 
+conditional command is an object that contains the `condition` property. The 
+value of the property is a JS expression which ModalEdit evaluates. It selects 
+the command based on the result. In this case, the result `false` will execute 
+the `cursorRight` command.
 ```js
         "a": [
             {
@@ -94,8 +95,8 @@ command.
 
 The third way to enter insert mode is to _open_ a line. This means creating an
 empty line, and putting the cursor on it. There are two variants of this command 
-as well: `o` opens a new line below the current line whereas `O` opens it on the 
-current line.
+as well: <key>o</key> opens a new line below the current line whereas 
+<key>O</key> opens it on the current line.
 ```js
         "o": [
             "editor.action.insertLineAfter",
@@ -113,15 +114,16 @@ Now we can test the commands we just created.
 ## Cursor Movement
 
 The next task in hand is to add commands for moving the cursor. As all Vim users
-know, instead of arrow keys, we move the cursor with `h`, `j`, `k`, and `l`
-keys. Before implementing these, let's talk a bit about text selection.
+know, instead of arrow keys, we move the cursor with <key>h</key>, <key>j</key>, 
+<key>k</key>, and <key>l</key> keys. Before implementing these, let's talk a bit 
+about text selection.
 
 ### Selecting Text
 
 In Vim, there is a separate "visual" mode that you activate when you want to 
 select text. Visual mode can be characterwise or linewise. VS Code has no
-simillar concept. By contrast, to select text you move the cursor with `Shift` 
-key depressed.
+simillar concept. By contrast, to select text you move the cursor with 
+<key>Shift</key> key depressed.
 
 ModalEdit bridges this gap by providing the special command 
 `modaledit.toggleSelection` which toggles selection mode on and off. Selection
@@ -139,10 +141,11 @@ the main difference being that selection mode is not automatically turned off
 when you enter insert mode.
 
 So, let's add a binding to toggle selection mode on or off. We use the familiar 
-`v` key for this. 
+<key>v</key> key for this.
 ```js
         "v": "modaledit.toggleSelection",
 ```
+
 Now we can add commands for cursor movement. These commands use the generic 
 [`cursorMove` command][commands] which takes arguments. The arguments we use
 are partly constant and partly dynamic. Therefore, we use ModalEdit's feature 
@@ -176,7 +179,9 @@ as selection mode is turned on automatically.
 ### Moving Inside Screen
 
 To move cursor quickly to the top, middle, or bottom of the screen we use keys
-`H`, `M`, and `L`. Again, we need to use the [`cursorMove` command][commands]. 
+<key>H</key>, <key>M</key>, and <key>L</key>. Again, we need to use the 
+[`cursorMove` command][commands]. 
+
 ```js
         "H": {
             "command": "cursorMove",
@@ -194,9 +199,11 @@ To move cursor quickly to the top, middle, or bottom of the screen we use keys
 
 ### Jumping to Previous/Next Word
 
-Other commonly used navigation commands in Vim include `w` and `b` which move 
-the cursor to the start of the next and previous word. For these we need to use
-conditional commands because `cursorMove` falls short in this use case.
+Other commonly used navigation commands in Vim include <key>w</key> and 
+<key>b</key> which move the cursor to the start of the next and previous word. 
+For these we need to use conditional commands because `cursorMove` falls short 
+in this use case.
+
 ```js
         "w": {
             "condition": "__selecting",
@@ -209,7 +216,9 @@ conditional commands because `cursorMove` falls short in this use case.
             "false": "cursorWordStartLeft"
         },
 ```
-`e` jumps to the end of the next word.
+
+<key>e</key> jumps to the end of the next word.
+
 ```js
         "e": {
             "condition": "__selecting",
@@ -217,15 +226,18 @@ conditional commands because `cursorMove` falls short in this use case.
             "false": "cursorWordEndRight"
         },
 ```
-> **Note**: We omit variants of these commands `W`, `B`, and `E` which skip the 
-> punctuation characters. There are no built-in commands in VS Code that work
-> exactly like those in Vim. This is one of the subtle differences between the 
-> editors.
+
+> **Note**: We omit variants of these commands <key>W</key>, <key>B</key>, and 
+> <key>E</key> which skip the punctuation characters. There are no built-in 
+> commands in VS Code that work exactly like those in Vim. This is one of the 
+> subtle differences between the editors.
 
 ### Jumping to Start/End of Line
 
-In the similar vein, we'll throw in commands for jumping to the beginning `0`, 
-to the first non-blank character `^`, and to the end of line `$`.
+In the similar vein, we'll throw in commands for jumping to the beginning 
+<key>0</key>, to the first non-blank character <key>^</key>, and to the end of 
+line <key>$</key>.
+
 ```js
         "0": {
             "command": "cursorMove",
@@ -240,9 +252,10 @@ to the first non-blank character `^`, and to the end of line `$`.
             "args": "{ to: 'wrappedLineEnd', select: __selecting }"
         },
 ```
-A lesser known variant of above commands is `g_` that jumps to the last 
-non-blank character of the line. Since it is a two key sequence we need to 
-open a block for all commands beginning with `g`.
+
+A lesser known variant of above commands is <key>g</key><key>_</key> that jumps 
+to the last non-blank character of the line. Since it is a two key sequence we 
+need to open a block for all commands beginning with <key>g</key>.
 ```js
         "g": {
             "_": {
@@ -252,8 +265,8 @@ open a block for all commands beginning with `g`.
 ```
 ### Jumping to Start/End of Document
 
-Another command beginning with `g` is `gg` which jumps to the beginning of the
-file.
+Another motion command is <key>g</key><key>g</key> which jumps to the beginning 
+of the file.
 ```js
             "g": {
                 "condition": "__selecting",
@@ -262,7 +275,7 @@ file.
             },
         },
 ```
-The opposite of that is `G` wich jumps to the end of file.
+The opposite of that is <key>G</key> wich jumps to the end of file.
 ```js
         "G": {
             "condition": "__selecting",
@@ -270,13 +283,14 @@ The opposite of that is `G` wich jumps to the end of file.
             "false": "cursorBottom"
         },
 ```
+
 ### Jump to Character
 
 We have the basic movement commands covered, so let's move on to more 
 sophisticated ones. Seasoned Vim users avoid hitting movement commands
-repeatedly by using `f` and `F` keys which move directly to a given character.
-VS Code provides no built-in command for this, but ModalEdit includes an 
-incremental search command which can be customized to this purpose.
+repeatedly by using <key>f</key> and <key>F</key> keys which move directly to a 
+given character. VS Code provides no built-in command for this, but ModalEdit 
+includes an incremental search command which can be customized to this purpose.
 ```js
         "f": {
             "condition": "__selecting",
@@ -302,17 +316,17 @@ The command is a bit involved, so let's explain what each argument does.
 
 - `caseSensitive` sets the search mode to case sensitive (as in Vim).
 - `acceptAfter` ends the incremental search as soon as first entered character
-  is found. Normally the user needs to press `Enter` to accept the search or
-  `Esc` to cancel it.
+  is found. Normally the user needs to press <key>Enter</key> to accept the 
+  search or <key>Esc</key> to cancel it.
 - `selectTillMatch` argument controls whether selection is extended until the
   searched character. This depends on whether we have selection mode on or not.
 - `typeAfterAccept` argument allows you to run other commands (using their key
   bindings) after the search is done. By default, `modalEdit.search` command 
-  selects the found character(s). With `h` command we move the cursor over the
-  searched character.
+  selects the found character(s). With <key>h</key> command we move the cursor 
+  over the searched character.
   
-Now we can implement the opposite `F` command which searches for the previous 
-character. The `backwards` parameter switches the search direction.
+Now we can implement the opposite <key>F</key> command which searches for the 
+previous character. The `backwards` parameter switches the search direction.
 ```js
         "F": {
             "condition": "__selecting",
@@ -336,21 +350,23 @@ character. The `backwards` parameter switches the search direction.
             },
         },
 ```
-With `;` and `,` keys you can repeat the previous `f` or `F` commands either 
-forwards or backwards.
+With <key>;</key> and <key>,</key> keys you can repeat the previous <key>f</key> 
+or <key>F</key> commands either forwards or backwards.
 ```js
         ";": "modaledit.nextMatch",
         ",": "modaledit.previousMatch",
 ```
-> We omitted few useful jump commands, like `t`, `T`, `{`, and `}` as there are
-> no corresponding commands in available in VS Code. You can always look for 
-> other [extensions][] that provide similar functionality.
+> We omitted few useful jump commands, like <key>t</key>, <key>T</key>, 
+> <key>{</key>, and <key>}</key> as there are no corresponding commands in 
+> available in VS Code. You can always look for other [extensions][] that 
+> provide similar functionality.
 
 ### Center Cursor on Screen
 
-The last movement command we add is `zz` that scrolls the screen so that cursor
-is at the center. Again, the ability to use JS expression in arguments comes in 
-handy. We use the `__line` parameter to get the line where the cursor is.
+The last movement command we add is <key>z</key><key>z</key> that scrolls the 
+screen so that cursor is at the center. Again, the ability to use JS expression 
+in arguments comes in handy. We use the `__line` parameter to get the line where 
+the cursor is.
 ```js
         "z": {
             "z": {
@@ -360,18 +376,19 @@ handy. We use the `__line` parameter to get the line where the cursor is.
         },
 ```
 Let's test some of the movement commands. We should be able to navigate now 
-without using arrow keys or `Home` and `End` keys.
+without using arrow keys or <key>Home</key> and <key>End</key> keys.
 
 ![Navigation](../images/cursor-movement.gif)
 
 We skipped commands that move cursor up and down on page at the time. The
-reason for this is that these commands are bound to `Ctrl+b` and `Ctrl+f` in
-Vim. Since these are "normal" VS Code shortcuts we cannot remap them in 
-ModalEdit. If you want to use these shortcuts, you need to add the bindings to 
-the VS Code's `keybindings.json` file. Below is an example that uses the
-`modaledit.normal` context to make the shortcuts work only in normal mode. Most 
-of the Vim's standard `Ctrl`+key combinations are already in use, so you 
-need to decide whether you want to remap the existing commands first.
+reason for this is that these commands are bound to <key>Ctrl</key>+<key>b</key> 
+and <key>Ctrl</key>+<key>f</key> in Vim. Since these are "normal" VS Code 
+shortcuts we cannot remap them in ModalEdit. If you want to use these shortcuts, 
+you need to add the bindings to the VS Code's `keybindings.json` file. Below is 
+an example that uses the `modaledit.normal` context to make the shortcuts work 
+only in normal mode. Most of the Vim's standard <key>Ctrl</key>+key combinations 
+are already in use, so you need to decide whether you want to remap the existing 
+commands first.
 ```js
 // keybindings.json
 {
@@ -389,22 +406,22 @@ need to decide whether you want to remap the existing commands first.
 ```
 ## Commands with Counts
 
-Some commands allow repeating them by typing first a number. For example, `3j`
-moves the cursor down three lines. Implementing these kind of commands is 
-possible starting from ModalEdit version 1.5 which introduced key ranges and 
-[recursive keymaps][].
+Some commands allow repeating them by typing first a number. For example, 
+<key>3</key><key>j</key> moves the cursor down three lines. Implementing these 
+kind of commands is possible starting from ModalEdit version 1.5 which 
+introduced key ranges and [recursive keymaps][].
 
 First of all, we define a keymap that is activated when pressing a number key
-`1-9`. We give the keymap an unique `id` which we can then recursively "call".
-We also add a `help` string that is shown in the status when the keymap is 
-active (after user has pressed a number key).
+<key>1</key>-<key>9</key>. We give the keymap an unique `id` which we can then 
+recursively "call". We also add a `help` string that is shown in the status when 
+the keymap is active (after user has pressed a number key).
 
 Then we define the recursive part; we want to stay in the same keymap as long
 as user presses another number key. We implement this by defining inner key 
-range `0-9` which maps to the `id` 1. Whenever you specify a number as the 
-target for a mapping, ModalEdit treats it as an `id` that has to be assigned to 
-a previously defined keymap. In this case we map back to the same keymap, but
-you can also jump to other keymaps too.
+range <key>0</key>-<key>9</key> which maps to the `id` 1. Whenever you specify a 
+number as the target for a mapping, ModalEdit treats it as an `id` that has to 
+be assigned to a previously defined keymap. In this case we map back to the same 
+keymap, but you can also jump to other keymaps too.
 
 When the user presses some other than numeric key, we break out from the loop
 and run an actual command. The number that was typed is stored in the `__keys`
@@ -429,12 +446,12 @@ functionality for any command that we have already defined.
 
 ### Jumping to Line
 
-Another command that has a number prefix is _x_`G` where _x_ is the line number
-you want to jump to. Let's add that as well in the same keymap. While the 
-mapping is trivial the command itself is a bit involved, because we need to use
-two commands to do the jumping. First we move the target line to the top of the
-screen, and then we move the cursor to the same line. Unfortunately the 
-built-in command `workbench.action.gotoLine` does not take any arguments, so 
+Another command that has a number prefix is _x_<key>G</key> where _x_ is the 
+line number you want to jump to. Let's add that as well in the same keymap. 
+While the mapping is trivial the command itself is a bit involved, because we 
+need to use two commands to do the jumping. First we move the target line to the 
+top of the screen, and then we move the cursor to the same line. Unfortunately 
+the built-in command `workbench.action.gotoLine` does not take any arguments, so 
 we have to reinvent the wheel.
 ```js
             "G": [
@@ -458,16 +475,17 @@ have counterparts in VS Code.
 
 ### Joining Lines
 
-`J` joins current and next line together.
+<key>J</key> joins current and next line together.
 ```js
         "J": "editor.action.joinLines",
 ```
 ### Changing Text
 
-_Change_ commands delete some text and then enter insert mode. `cc` changes the 
-current line (or all selected lines), `c$` changes the text from the cursor to 
-the end of line, and `cw` changes the end of the word. Three key sequnce `ciw`
-changes the whole word under the cursor.
+_Change_ commands delete some text and then enter insert mode. 
+<key>c</key><key>c</key> changes the current line (or all selected lines), 
+<key>c</key><key>$</key> changes the text from the cursor to the end of line, 
+and <key>c</key><key>w</key> changes the end of the word. Three key sequnce 
+<key>c</key><key>i</key><key>w</key> changes the whole word under the cursor.
 ```js
         "c": {
             "c": [
@@ -487,16 +505,18 @@ changes the whole word under the cursor.
 ### Change Until/Around/Inside
 
 Very useful variants of change commands are those which allow changing text
-upto a given character or between given characters. For example, `ct_` changes 
-the text until next underscore, and `ci"` changes the text inside quotation 
+upto a given character or between given characters. For example, 
+<key>c</key><key>t</key><key>_</key> changes the text until next underscore, and 
+<key>c</key><key>i</key><key>"</key> changes the text inside quotation 
 marks. The cursor can be anywhere inside the quotation marks and the command 
 still works.
 
 To help implement these type of operations version 1.6 included the 
 [`modaledit.selectBetween` command][selectBetween]. It is a swiss army knife 
 type of command that serves many use cases. We use it first to implement the 
-"change until" commands: `ct`_x_ changes the text fromthe cursor till the next 
-occurrence of _x_. `cf`_x_ does the same and deletes _x_ too.
+"change until" commands: <key>c</key><key>t</key>_x_ changes the text from the 
+cursor till the next occurrence of _x_. <key>c</key><key>f</key>_x_ does the 
+same and deletes _x_ too.
 ```js
             "t,f": {
                 "help": "Change until _",
@@ -517,9 +537,9 @@ the end of the current line by default. If you want to search till the end of
 the whole document, set the `docScope` flag to `true`. When only the `to` 
 argument is specified, the selection starts from the cursor position.
 
-If the user pressed `f` instead of `t` as the second key in the sequence, we
-set the `inclusive` flag to true. That extends the selection over the searched
-character.
+If the user pressed <key>f</key> instead of <key>t</key> as the second key in 
+the sequence, we set the `inclusive` flag to true. That extends the selection 
+over the searched character.
 
 Next we add the change around/inside commands. The first variant takes care of
 the characters that are not braces.
@@ -540,8 +560,9 @@ characters. The rest of the command is exactly same as in the previous example.
 The only difference is that we store the character to be searched into both 
 `from` and `to` arguments.
 
-Now we can add the commands that change text inside braces, such as `ci{` or
-`ca]`.
+Now we can add the commands that change text inside braces, such as 
+<key>c</key><key>i</key><key>{</key> or <key>c</key><key>a</key><key>]</key>.
+
 ```js
                 "(,)": [
                     {
@@ -577,9 +598,10 @@ Now we can add the commands that change text inside braces, such as `ci{` or
                 ],
 ```
 It is also useful to be able to change the current word the cursor is on. You
-can do this by typing `ciw` (preserves separators) or `caw`. We use regular
-expressions as the delimiters in this case. The `\N` regular expression matches
-all non-alphanumeric characters (except underscore). Note the double escaping 
+can do this by typing <key>c</key><key>i</key><key>w</key> (preserves separators) 
+or <key>c</key><key>a</key><key>w</key>. We use regular expressions as the 
+delimiters in this case. The `\W` regular expression matches all 
+non-alphanumeric characters (except underscore). Note the double escaping 
 needed to enter the `\` character. There are other commands we could use to 
 implement the operation, but this version works reliably in all scenarios. 
 ```js
@@ -594,19 +616,20 @@ implement the operation, but this version works reliably in all scenarios.
             }
         },
 ```
-> We could also implement delete commands `diw`, `dt-`, etc. in the similar
-> fashion. But for the sake of keeping the tutorial short, we'll leave those
-> as an exercise.
+> We could also implement delete commands <key>d</key><key>i</key><key>w</key>, 
+> <key>d</key><key>t</key><key>-</key>, etc. in the similar fashion. But for the 
+> sake of keeping the tutorial short, we'll leave those as an exercise.
 
-A shorthand for `c$` command is `C`.
+A shorthand for  <key>c</key><key>$</key> command is <key>C</key>.
 ```js
         "C": [
             "deleteAllRight",
             "modaledit.enterInsert"
         ],
 ```
-_Substitution_ commands do  basically same things as change commands; `s` 
-changes the character under cursor, and `S` is same as `cc`.
+_Substitution_ commands do  basically same things as change commands; 
+<key>s</key> changes the character under cursor, and <key>S</key> is same as 
+<key>c</key><key>c</key>.
 ```js
         "s": [
             "deleteRight",
@@ -620,21 +643,21 @@ changes the character under cursor, and `S` is same as `cc`.
 ```
 ### Undo & Redo
 
-You can undo the last change with `u`. We also clear the selection to copy Vim's 
-operation.
+You can undo the last change with <key>u</key>. We also clear the selection to 
+copy Vim's operation.
 ```js
         "u": [
             "undo",
             "modaledit.cancelSelection"
         ],
 ```
-Since redo is mapped to `Ctrl+r" by default, we leave this binding as an 
-exercise to the reader.
+Since redo is mapped to <key>Ctrl</key>+<key>r</key> by default, we leave this 
+binding as an exercise to the reader.
 
 ## Visual (Selection) Commands
 
-Visual commands operate on the selected text. `<` and `>` shift selected text
-left or right (indent/outdent).
+Visual commands operate on the selected text. <key><</key> and <key>></key> 
+shift selected text left or right (indent/outdent).
 ```js
         "<": "editor.action.outdentLines",
         ">": "editor.action.indentLines",
@@ -642,16 +665,20 @@ left or right (indent/outdent).
 
 ### Clipboard Commands
 
-`y` yanks, i.e. copies, selected text to clipboard. Following Vim convention, we 
-also clear the selection.
+<key>y</key> yanks, i.e. copies, selected text to clipboard. Following Vim 
+convention, we also clear the selection.
+
 ```js
         "y": [
             "editor.action.clipboardCopyAction",
             "modaledit.cancelSelection"
         ],
 ```
-`d` deletes (cuts) the selected text and puts it to clipboard. Capital `D` 
-deletes the rest of the line. `x` deletes just the character under the cursor.
+
+<key>d</key> deletes (cuts) the selected text and puts it to clipboard. Capital 
+<key>D</key> deletes the rest of the line. <key>x</key> deletes just the 
+character under the cursor.
+
 ```js
         "d": "editor.action.clipboardCutAction",
         "D": [
@@ -663,13 +690,14 @@ deletes the rest of the line. `x` deletes just the character under the cursor.
             "editor.action.clipboardCutAction"
         ],
 ```
-> **Note**: If there is no text selected, `y` and `d` commands perform exactly
-> the same actions as `yy` and `dd` in Vim. That is, they yank or delete the 
-> current line. Again, one of the subtle differences that is futile to try to
-> unify.
+> **Note**: If there is no text selected, <key>y</key> and <key>d</key> commands 
+> perform exactly the same actions as <key>y</key><key>y</key> and 
+> <key>d</key><key>d</key> in Vim. That is, they yank or delete the current 
+> line. Again, one of the subtle differences that is futile to try to unify.
 
 For pasting (or _putting_ in Vim parlance) the text in clipboard you have two 
-commands: `p` puts the text after the cursor, and `P` puts it before.
+commands: <key>p</key> puts the text after the cursor, and <key>P</key> puts it 
+before.
 ```js
         "p": [
             "cursorRight",
@@ -681,8 +709,8 @@ commands: `p` puts the text after the cursor, and `P` puts it before.
 
 Switching selected text to upper or lower case is done with a nifty trick.
 We can examine the selection in a conditional command that calls different VS 
-Code commands based on the expression. The command is bound to the tilde `~` 
-character. 
+Code commands based on the expression. The command is bound to the tilde 
+<key>~</key> character. 
 ```js
         "~": {
             "condition": "__selection == __selection.toUpperCase()",
@@ -699,8 +727,8 @@ and adds two simple commands: `modaledit.defineBookmark` and
 `modaledit.goToBookmark`. Using these we can implement Vim's mark commands.
 
 We can support dozens of bookmarks with one mapping using a character range.
-To define a bookmark, you type `ma`, for example, and to jump to that mark, 
-type `` `a``.
+To define a bookmark, you type <key>m</key><key>a</key>, for example, and to 
+jump to that mark, type <key>\`</key><key>a</key>.
 ```js
         "m": {
             "a-z": {
@@ -718,8 +746,8 @@ type `` `a``.
 ## Searching
 
 The last category of commands we implement is searching. We use the incremental
-search command provided by ModalEdit for this. As in Vim, typing `/` starts an 
-incremental search. `?` starts a search backwards.
+search command provided by ModalEdit for this. As in Vim, typing <key>/</key> 
+starts an incremental search. <key>?</key> starts a search backwards.
 ```js
         "/": {
             "command": "modaledit.search",
@@ -735,7 +763,7 @@ incremental search. `?` starts a search backwards.
             }
         },
 ```
-Jumping to next previous match is done with keys `n` and `N`.
+Jumping to next previous match is done with keys <key>n</key> and <key>N</key>.
 ```js
         "n": "modaledit.nextMatch",
         "N": "modaledit.previousMatch",
