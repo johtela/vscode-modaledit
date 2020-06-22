@@ -26,7 +26,7 @@ When extension is installed text documents will open in normal mode. The
 current mode is shown in the status bar. You can switch between modes by
 clicking the pane in the status bar.
 
-![Status bar](images/status-bar.gif =485x97)
+![Status bar](images/status-bar.gif)
 
 In normal mode keys don't output characters but invoke commands. You can 
 specify these commands in the `settings.json` file. To edit your user-level 
