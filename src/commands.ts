@@ -935,12 +935,12 @@ async function repeatLastChange(): Promise<void> {
  * in the file system. If the user selects a file, its contents will replace 
  * the key binding in the global `settings.json` file.
  * 
- * The presets can be defined as JSON or JavaScript. The code checks if the file
- * start with `{` and surrounds it with parenthesis in that case. Then it 
- * evaluates the contents of the file as JavaScript. This allows the user to use 
- * non-standard JSON files that include comments. Or, if the user likes to
- * define the whole shebang in code, he/she just has to make sure that the code
- * evaluates to an object that has `keybindings` and/or `selectbindings` member.
+ * The presets can be defined as JSON or JavaScript. The code checks the file
+ * extension and surrounds JSON with with parenthesis. Then it can evaluate the 
+ * contents of the file as JavaScript. This allows to use non-standard JSON 
+ * files that include comments. Or, if the user likes to define the whole 
+ * shebang in code, he/she just has to make sure that the code evaluates to an 
+ * object that has `keybindings` and/or `selectbindings` properties.
  */
 async function importPresets() {
     const browse = "Browse..."
