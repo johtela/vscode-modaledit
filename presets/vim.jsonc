@@ -316,9 +316,9 @@ key.
             "command": "modaledit.search",
             "args": {
                 "acceptAfter": 1,
-                "typeAfterAccept": "h",
+                "typeAfterAccept": "hv",
                 "typeBeforeNextMatch": "l",
-                "typeAfterNextMatch": "h",
+                "typeAfterNextMatch": "hv",
                 "typeAfterPreviousMatch": "v"
             }
         },
@@ -330,7 +330,7 @@ key.
                 "typeAfterAccept": "v",
                 "typeAfterNextMatch": "v",
                 "typeBeforePreviousMatch": "l",
-                "typeAfterPreviousMatch": "h"
+                "typeAfterPreviousMatch": "hv"
             }
         },
         "t": {
