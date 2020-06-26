@@ -936,7 +936,7 @@ async function repeatLastChange(): Promise<void> {
  * the key binding in the global `settings.json` file.
  * 
  * The presets can be defined as JSON or JavaScript. The code checks the file
- * extension and surrounds JSON with with parenthesis. Then it can evaluate the 
+ * extension and surrounds JSON with parenthesis. Then it can evaluate the 
  * contents of the file as JavaScript. This allows to use non-standard JSON 
  * files that include comments. Or, if the user likes to define the whole 
  * shebang in code, he/she just has to make sure that the code evaluates to an 
