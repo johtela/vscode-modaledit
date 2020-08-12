@@ -2,7 +2,7 @@
 	"name": "vscode-modaledit",
 	"displayName": "ModalEdit",
 	"description": "Configurable modal editing engine with built-in Vim keymaps",
-	"version": "2.0.0",
+	"version": "2.1.0",
 	"publisher": "johtela",
 	"engines": {
 		"vscode": "^1.47.0"
