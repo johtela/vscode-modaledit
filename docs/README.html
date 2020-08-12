@@ -366,7 +366,7 @@ the command you first press <code>&lt;key1&gt;</code> in normal mode followed by
         <span class="string">"command"</span>: <span class="string">"modaledit.search"</span>,
         <span class="string">"args"</span>: {}
     },
-    <span class="string">"b"</span>: 
+    <span class="string">"b"</span>:
         <span class="string">"command"</span>: <span class="string">"modaledit.search"</span>,
         <span class="string">"args"</span>: {
             <span class="string">"backwards"</span>: <span class="literal">true</span>
@@ -603,23 +603,31 @@ commands require any arguments.</p>
 <tbody>
 <tr>
 <td><code>modaledit.toggle</code></td>
-<td>Toggles between modes</td>
+<td>Toggles between modes.</td>
 </tr>
 <tr>
 <td><code>modaledit.enterNormal</code></td>
-<td>Switches to normal mode</td>
+<td>Switches to normal mode.</td>
 </tr>
 <tr>
 <td><code>modaledit.enterInsert</code></td>
-<td>Switches to insert mode</td>
+<td>Switches to insert mode.</td>
 </tr>
 <tr>
 <td><code>modaledit.toggleSelection</code></td>
-<td>Toggles selection mode on or off. Selection mode is implicitly on whenever editor has text selected</td>
+<td>Toggles selection mode on or off. Selection mode is implicitly on whenever editor has text selected.</td>
+</tr>
+<tr>
+<td><code>modaledit.enableSelection</code></td>
+<td>Turn selection mode on.</td>
 </tr>
 <tr>
 <td><code>modaledit.cancelSelection</code></td>
 <td>Cancel selection mode and clear selection.</td>
+</tr>
+<tr>
+<td><code>modaledit.cancelMultipleSelections</code></td>
+<td>Cancel selection mode and clear selections, but preserve multiple cursors.</td>
 </tr>
 </tbody>
 </table>
@@ -827,8 +835,8 @@ advanced examples check the <a href="https://johtela.github.io/vscode-modaledit/
 
 <pre class="syntaxhighlight"><code>{
     <span class="string">"command"</span>: <span class="string">"modaledit.selectBetween"</span>,
-    <span class="string">"args"</span>: { 
-        <span class="string">"from"</span>: <span class="string">"("</span>, 
+    <span class="string">"args"</span>: {
+        <span class="string">"from"</span>: <span class="string">"("</span>,
         <span class="string">"to"</span>: <span class="string">")"</span>
     }
 }

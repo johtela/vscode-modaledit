@@ -179,3 +179,11 @@ which should make sure that commands work correctly when invoked through
   
 - `selecting` flag is now refreshed when you switch between files. The select
   mode no longer "sticks" between tabs.
+
+## Version 2.1
+
+Two new commands (courtesy of [David Little](https://github.com/haberdashPI)):
+
+- `modaledit.enableSelection` turns selection mode on.
+- `modaledit.cancelMultipleSelections` cancels selection mode preserving
+  multiple cursors.

@@ -1,5 +1,5 @@
 /**
-# ModalEdit 2.0: Batteries Vimcluded 
+# New Vimproved ModalEdit 2.0
 
 ![](../images/pooh.jpg =375x403)
 Providing full Vim emulation was not originally a goal of ModalEdit. The idea of 
@@ -15,7 +15,7 @@ possible to implement. With version 2.0 ModalEdit's functionality is now
 extensive enough to build a semi-complete Vim emulation. So, here we go...
 
 Adding Vim keybindings as optional presets serves two purposes: it lowers the
-barrier of entry for Vim users who don't want to spend the time defining 
+barrier to entry for Vim users who don't want to spend the time defining 
 bindings from ground up. Secondly, Vim presets serve as an example to show
 how you can build sophisticated command sequences using the machinery provided 
 by ModalEdit. 
@@ -27,7 +27,7 @@ pressing <key>Ctrl</key>+<key>Shift</key>+<key>P</key> and running command
 **ModalEdit: Import preset keybindings**. You will be presented a choice to 
 import either Vim bindings or any presets that you have created yourself. If 
 you are planning to customize the bindings, or create Vim-style commands from 
-scratch, this document gives you pointers how to go about doing so.
+scratch, this document gives you pointers how to go about with that.
 
 ## Game Plan
 
