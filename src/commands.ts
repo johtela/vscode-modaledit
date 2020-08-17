@@ -686,10 +686,8 @@ function highlightMatches(editor: vscode.TextEditor,
             while(offset > 0){
                 let start = doc.positionAt(offset + baseOffset);
                 let range = new vscode.Range(start, start.translate(0,target.length));
-                if(searchRanges.find(x => 
+                if(!searchRanges.find(x => 
                     x.start.isEqual(range.start) && x.end.isEqual(range.end))){
-                    searchRanges.push(range);
-                }else{
                     searchOtherRanges.push(range);
                 }
 
