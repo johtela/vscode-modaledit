@@ -250,6 +250,22 @@
 					"type": "boolean",
 					"default": true,
 					"description": "Is editor initially in normal mode?"
+				},
+				"modaledit.searchMatchBackground": {
+					"type": "string",
+					"description": "A html format color styling to highlight the current search match(if left blank defaults to built-in search style)."
+				},
+				"modaledit.searchMatchBorder": {
+					"type": "string",
+					"description": "A html format color styling for the border of the current search match (if left blank defaults to built-in search style)."
+				},
+				"modaledit.searchOtherMatchesBackground": {
+					"type": "string",
+					"description": "A html format color styling to highlight other search matches (if left blank defaults to built-in search style)."
+				},
+				"modaledit.searchOtherMatchesBorder": {
+					"type": "string",
+					"description": "A html format color styling for the border of other search matches (if left blank defaults to built-in search style)."
 				}
 			}
 		},
