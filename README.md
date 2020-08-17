@@ -348,6 +348,19 @@ The possible values are:
 - `underline`
 - `underline-thin`
 
+### Changing Search Highlight Colors
+
+By default, incremental search highlights matches in the same way that the built-in search
+command does. You can configure it to use a different set of colors using the following
+settings. Leave these blanks to use the theme colors for built-in search commands.
+
+| Setting                        | Default | Description
+| ------------------------------ | ------- | ---------------------------------------------
+| `searchMatchBackground`        | ``      | Background color for current search match.
+| `searchMatchBorder`            | ``      | Border color for current search match.
+| `searchOtherMatchesBackground` | ``      | Background color for other visible search matches.
+| `searchOtherMatchesBorder`     | ``      | Border color for other visible search matches .
+
 ### Changing Status Bar
 
 With version 2.0, you can also change the text shown in status bar in each mode
