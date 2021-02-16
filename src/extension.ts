@@ -34,8 +34,7 @@ export function activate(context: vscode.ExtensionContext) {
 		channel,
 		vscode.workspace.onDidChangeConfiguration(actions.updateFromConfig),
 		vscode.window.onDidChangeVisibleTextEditors(commands.resetSelecting),
-		vscode.window.onDidChangeTextEditorSelection(e =>
-			commands.updateCursorAndStatusBar(e.textEditor)),
+		vscode.window.onDidChangeTextEditorSelection(e => commands.updateModeOnSelection(e.kind === 2, e.textEditor)),
 		vscode.workspace.onDidChangeTextDocument(commands.onTextChanged))
 	/**
 	 * Next we update the active settings from the config file, and at last, 

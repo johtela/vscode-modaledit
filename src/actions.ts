@@ -105,6 +105,10 @@ let selectStatusColor: string | undefined
  */
 let errorStatusColor: string | undefined
 /**
+ * You can set in the config if you'd like mouse selection to put you in insert mode
+ */
+let mouseSelectionEntersInputMode: boolean
+/**
  * Another thing you can set in config, is whether ModalEdit starts in normal
  * mode. 
  */
@@ -165,6 +169,10 @@ export function getSelectStyles():
 
 export function getErrorStatusColor(): string | undefined {
     return errorStatusColor
+}
+
+export function getMouseSelectionEntersInputMode(): boolean {
+    return mouseSelectionEntersInputMode
 }
 
 export function getStartInNormalMode(): boolean {
@@ -229,6 +237,7 @@ export function updateFromConfig(): void {
     searchStatusColor = config.get("searchStatusColor") || undefined
     selectStatusColor = config.get("selectStatusColor") || undefined
     errorStatusColor = config.get("errorStatusColor") || undefined
+    mouseSelectionEntersInputMode = config.get<boolean>("mouseSelectionEntersInputMode", false)
     startInNormalMode = config.get<boolean>("startInNormalMode", true)
 }
 /**

@@ -471,6 +471,17 @@ export function resetSelecting() {
     selecting = false
 }
 /**
+ * This function gets triggered each time the current editor selections get
+ * updated. If it was a mouse selection and the config mouseSelectionEntersInputMode
+ * is on we enter input mode. We updated the status bar accordingly.
+ */
+export function updateModeOnSelection(isMouseSelection: boolean, editor: vscode.TextEditor) {
+    if (isMouseSelection && actions.getMouseSelectionEntersInputMode()) {
+        enterInsert()
+    }
+    updateCursorAndStatusBar(editor)
+}
+/**
  * ## Search Commands
  *
  * Incremental search is by far the most complicated part of this extension.

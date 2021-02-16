@@ -250,6 +250,11 @@
 					"type": "string",
 					"description": "Color of the secondary status bar text when showing an error"
 				},
+				"modaledit.mouseSelectionEntersInputMode": {
+					"type": "boolean",
+					"default": true,
+					"description": "Does mouse selection put you in insert mode?"
+				},
 				"modaledit.startInNormalMode": {
 					"type": "boolean",
 					"default": true,
