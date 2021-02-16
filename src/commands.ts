@@ -252,11 +252,19 @@ async function onType(event: { text: string }) {
         textChanged = false
     }
     currentKeySequence.push(event.text)
-    if (await runActionForKey(event.text)) {
-        lastKeySequence = currentKeySequence
-        currentKeySequence = []
+    try {
+        if (await runActionForKey(event.text)) {
+            lastKeySequence = currentKeySequence
+            currentKeySequence = []
+        }
+        updateCursorAndStatusBar(vscode.window.activeTextEditor,
+            actions.getHelp())
+    } catch(e) {
+        currentKeySequence = [];
+        secondaryStatusBar.color = actions.getErrorStatusColor()
+        secondaryStatusBar.text = e.message
+        secondaryStatusBar.show()
     }
-    updateCursorAndStatusBar(vscode.window.activeTextEditor, actions.getHelp())
 }
 /**
  * Whenever text changes in an active editor, we set a flag. This flag is
@@ -295,6 +303,7 @@ export function toggle() {
  * 2. subscribe to the `type` event,
  * 3. handle the rest of the mode setup with `setNormalMode` function, and
  * 4. clear the selection.
+ * 5. clear eventual key sequence previously entered
  */
 export function enterNormal() {
     cancelSearch()
@@ -302,6 +311,7 @@ export function enterNormal() {
         typeSubscription = vscode.commands.registerCommand("type", onType)
     setNormalMode(true)
     cancelSelection()
+    currentKeySequence = [], actions.clearKeys()
 }
 /**
  * Conversely, when entering insert mode, we:
@@ -381,6 +391,7 @@ export function updateCursorAndStatusBar(editor: vscode.TextEditor | undefined,
             else
                 searchInfo = null
         }
+        secondaryStatusBar.color = undefined
         secondaryStatusBar.text = sec
         secondaryStatusBar.show()
     }
@@ -458,6 +469,17 @@ function isSelecting(): boolean {
  */
 export function resetSelecting() {
     selecting = false
+}
+/**
+ * This function gets triggered each time the current editor selections get
+ * updated. If it was a mouse selection and the config mouseSelectionEntersInputMode
+ * is on we enter input mode. We updated the status bar accordingly.
+ */
+export function updateModeOnSelection(isMouseSelection: boolean, editor: vscode.TextEditor) {
+    if (isMouseSelection && actions.getMouseSelectionEntersInputMode()) {
+        enterInsert()
+    }
+    updateCursorAndStatusBar(editor)
 }
 /**
  * ## Search Commands
