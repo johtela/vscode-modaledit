@@ -246,6 +246,10 @@
 					"type": "string",
 					"description": "Color of the status bar mode text when selection is active in normal mode (in HTML format)."
 				},
+				"modaledit.errorStatusColor": {
+					"type": "string",
+					"description": "Color of the secondary status bar text when showing an error"
+				},
 				"modaledit.startInNormalMode": {
 					"type": "boolean",
 					"default": true,

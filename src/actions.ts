@@ -101,6 +101,10 @@ let normalStatusColor: string | undefined
 let searchStatusColor: string | undefined
 let selectStatusColor: string | undefined
 /**
+ * Error status color
+ */
+let errorStatusColor: string | undefined
+/**
  * Another thing you can set in config, is whether ModalEdit starts in normal
  * mode. 
  */
@@ -159,8 +163,18 @@ export function getSelectStyles():
     return [ selectCursorStyle, selectStatusText, selectStatusColor ]
 }
 
+export function getErrorStatusColor(): string | undefined {
+    return errorStatusColor
+}
+
 export function getStartInNormalMode(): boolean {
     return startInNormalMode
+}
+/**
+ * Force clear current keymap 
+ */
+export function clearKeys() {
+    currentKeymap = null;
 }
 /**
  * You can also set the last command from outside the module.
@@ -214,6 +228,7 @@ export function updateFromConfig(): void {
     normalStatusColor = config.get("normalStatusColor") || undefined
     searchStatusColor = config.get("searchStatusColor") || undefined
     selectStatusColor = config.get("selectStatusColor") || undefined
+    errorStatusColor = config.get("errorStatusColor") || undefined
     startInNormalMode = config.get<boolean>("startInNormalMode", true)
 }
 /**
@@ -534,9 +549,8 @@ export async function handleKey(key: string, selecting: boolean,
     capture: boolean): Promise<boolean> {
 
     function error() {
-        vscode.window.showWarningMessage("ModalEdit: Undefined key binding: " +
-            keySequence.join(" - "))
-        currentKeymap = null
+        clearKeys()
+        throw new Error(`Undefined key binding: ${keySequence.join(" - ")}`)
     }
 
     if (!currentKeymap) {
