@@ -401,9 +401,18 @@ async function executeVSCommand(command: string, ...rest: any[]): Promise<void> 
         lastCommand = command
     }
     catch (error) {
-        vscode.window.showErrorMessage(error.message)
+        vscode.window.showErrorMessage(getMessage(error))
     }
 }
+/**
+ * Dig out the error message from unknown error object.
+ */
+function getMessage(error: unknown) {
+    return error instanceof Error ? error.message :
+        error instanceof Object ? error.toString() :
+        typeof error == 'string' ? error : "Unknown error"
+}
+
 /**
  * `evalString` function evaluates JavaScript expressions. Before doing so, it
  * defines some variables that can be used in the evaluated text.
@@ -433,7 +442,7 @@ function evalString(str: string, __selecting: boolean): any {
         return eval(`(${str})`)
     }
     catch (error) {
-        vscode.window.showErrorMessage("Evaluation error: " + error.message)
+        vscode.window.showErrorMessage("Evaluation error: " + getMessage(error))
     }
 }
 /**

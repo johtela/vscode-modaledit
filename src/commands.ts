@@ -505,7 +505,7 @@ async function search(args: SearchArgs | string): Promise<void> {
             enterNormal()
         setSearching(true)
         searchString = ""
-        searchStartSelections = editor.selections
+        searchStartSelections = Array.from(editor.selections)
         searchBackwards = args.backwards || false
         searchCaseSensitive = args.caseSensitive || false
         searchWrapAround = args.wrapAround || false
@@ -697,7 +697,7 @@ async function nextMatch(): Promise<void> {
     if (editor && searchString) {
         if (searchTypeBeforeNextMatch)
             await typeNormalKeys({ keys: searchTypeBeforeNextMatch })
-        highlightMatches(editor, editor.selections)
+        highlightMatches(editor, Array.from(editor.selections))
         if (searchTypeAfterNextMatch)
             await typeNormalKeys({ keys: searchTypeAfterNextMatch })
     }
@@ -712,7 +712,7 @@ async function previousMatch(): Promise<void> {
         if (searchTypeBeforePreviousMatch)
             await typeNormalKeys({ keys: searchTypeBeforePreviousMatch })
         searchBackwards = !searchBackwards
-        highlightMatches(editor, editor.selections)
+        highlightMatches(editor, Array.from(editor.selections))
         searchBackwards = !searchBackwards
         if (searchTypeAfterPreviousMatch)
             await typeNormalKeys({ keys: searchTypeAfterPreviousMatch })
