@@ -1065,8 +1065,11 @@ selection.</li>
 missing or false the search is case-insensitive.</li>
 <li>By default the search scope is the current line. If you want search inside
 the whole document, set the <code>docScope</code> flag.</li>
+<li>The <code>nested</code> makes sure that <code>from</code> and <code>to</code> are balanced. I.e. if there are
+nested <code>from</code> → <code>to</code> blocks, the command selects the block where the cursor
+currently resides. Deeper level blocks will be included in the selection.</li>
 </ul>
-<p>Below is an example that selects all text inside quotation marks. For more
+<p>Below is an example that selects all text inside matching parentheses. For more
 advanced examples check the <a href="https://johtela.github.io/vscode-modaledit/docs/.vscode/settings.html">tutorial</a>.</p>
 
 <pre class="syntaxhighlight narrow-scrollbars"><code>{
@@ -1074,6 +1077,7 @@ advanced examples check the <a href="https://johtela.github.io/vscode-modaledit/
     <span class="string">&quot;args&quot;</span>: {
         <span class="string">&quot;from&quot;</span>: <span class="string">&quot;(&quot;</span>,
         <span class="string">&quot;to&quot;</span>: <span class="string">&quot;)&quot;</span>
+        <span class="string">&quot;nested&quot;</span>: <span class="literal">true</span>
     }
 }
 </code></pre>

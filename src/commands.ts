@@ -96,6 +96,11 @@ interface TypeNormalKeysArgs {
  *
  * By default the search scope is the current line. If you want search inside
  * the whole document, set the `docScope` flag.
+ * 
+ * The `nested` flag makes sure that `from` and `to` are balanced. I.e. if there 
+ * are nested `from` → `to` blocks, the command selects the block where the 
+ * cursor currently resides. Deeper level blocks will be included in the 
+ * selection.
  */
 interface SelectBetweenArgs {
     from: string
@@ -104,6 +109,7 @@ interface SelectBetweenArgs {
     inclusive: boolean
     caseSensitive: boolean
     docScope: boolean
+    nested: boolean
 }
 /**
  * ## State Variables
@@ -827,7 +833,22 @@ async function typeNormalKeys(args: TypeNormalKeysArgs): Promise<void> {
 }
 /**
  * ## Advanced Selection Command
- *
+ * 
+ * First we define a helper function that converts a plain search string to a 
+ * RegExp. With that we can implement both RegExp and plain text search using 
+ * the same code.
+ */
+function escapeRegexp(str?: string): string {
+    return ensureRegexp(str?.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'))
+}
+/**
+ * It the search string is undefined we construct a regexp that never matches 
+ * any input.
+ */
+function ensureRegexp(str?: string): string {
+    return str || "^$a"
+}
+/**
  * For selecting ranges of text between two characters (inside parenthesis, for
  * example) we add the `modaledit.selectBetween` command. See the
  * [instructions](../README.html#selecting-text-between-delimiters) for the list
@@ -856,78 +877,68 @@ function selectBetween(args: SelectBetweenArgs) {
         [cursorPos, anchorPos] : [anchorPos, cursorPos]
     let highOffs = doc.offsetAt(highPos)
     let lowOffs = doc.offsetAt(lowPos)
-    let fromOffs = lowOffs
-    let toOffs = highOffs
     /**
      * Next we determine the search range. The `startOffs` marks the starting
      * offset and `endOffs` the end. Depending on the specified scope these
      * variables are either set to start/end of the current line or the whole
      * document.
-     *
-     * In the actual search, we have two main branches: one for the case when
-     * regex search is used and another for the normal text search.
      */
     let startPos = new vscode.Position(args.docScope ? 0 : lowPos.line, 0)
     let endPos = doc.lineAt(args.docScope ? doc.lineCount - 1 : highPos.line)
         .range.end
     let startOffs = doc.offsetAt(startPos)
-    let endOffs = doc.offsetAt(endPos)
-    if (args.regex) {
-        if (args.from) {
-            /**
-             * This branch searches for regex in the `from` parameter starting
-             * from `startPos` continuing until `lowPos`. We need to find the
-             * last occurrence of the regex, so we have to add a global modifier
-             * `g` and iterate through all the matches. In case there are no
-             * matches `fromOffs` gets the same offset as `startOffs` meaning
-             * that the selection will extend to the start of the search scope.
-             */
-            fromOffs = startOffs
-            let text = doc.getText(new vscode.Range(startPos, lowPos))
-            let re = new RegExp(args.from, args.caseSensitive ? "g" : "gi")
-            let match: RegExpExecArray | null = null
-            while ((match = re.exec(text)) != null)
-                fromOffs = startOffs + match.index +
-                    (args.inclusive ? 0 : match[0].length)
-        }
-        if (args.to) {
-            /**
-             * This block finds the regex in the `to` parameter starting from
-             * the range `[highPos, endPos]`. Since we want to find the first
-             * occurrence, we don't need to iterate over the matches in this
-             * case.
-             */
-            toOffs = endOffs
-            let text = doc.getText(new vscode.Range(highPos, endPos))
-            let re = new RegExp(args.to, args.caseSensitive ? undefined : "i")
-            let match = re.exec(text)
-            if (match)
-                toOffs = highOffs + match.index +
-                    (args.inclusive ? match[0].length : 0)
+    /**
+     * Convert `from` and `to` arguments to regexps, and then construct a 
+     * combined regexp that matches either of them.
+     */
+    let [open, close] = args.regex ? 
+        [ensureRegexp(args.from), ensureRegexp(args.to)] : 
+        [escapeRegexp(args.from), escapeRegexp(args.to)]
+    let fromOffs = lowOffs
+    if (args.from) {
+        /**
+         * This branch searches for the `from` and `to` regexes in the range 
+         * from `startPos` to `lowPos`. It finds the last occurrence of either 
+         * delimiter, handling nesting if `nested` is true. If no match is 
+         * found, `fromOffs` defaults to `lowOffs`, so the selection start is
+         * not changed. 
+         */
+        let regexp = new RegExp(`(${open})|(${close})`, 
+            args.caseSensitive ? "g" : "gi")
+        let text = doc.getText(new vscode.Range(startPos, lowPos))
+        let matches = Array.from(text.matchAll(regexp))
+        for (let i = matches.length - 1, openCnt = 1; i >= 0 && openCnt > 0; 
+            --i) {
+            let match = matches[i]
+            fromOffs = startOffs + match.index +
+                (args.inclusive ? 0 : match[0].length)
+            if (match[1])
+                openCnt--
+            else if (args.nested && match[2])
+                openCnt++
         }
     }
-    else {
+    let toOffs = highOffs
+    if (args.to) {
         /**
-         * This branch does the regular text search. We retrieve the whole
-         * search range as string and use `indexOf` and `lastIndexOf` methods
-         * to find the strings in `to` and `from` parameters. Case insensitivity
-         * is done by converting both the search range and search string to
-         * lowercase.
+         * This block finds the `to` regex (or string) in the range 
+         * `[highPos, endPos]`. If `nested` is true, it handles nested 
+         * delimiters by tracking open/close counts. The search proceeds 
+         * forward, updating `toOffs` to the end (or start, if not inclusive)
+         * of the first matching delimiter at the correct nesting level.
          */
-        let text = doc.getText(new vscode.Range(startPos, endPos))
-        if (!args.caseSensitive)
-            text = text.toLowerCase()
-        if (args.from) {
-            fromOffs = text.lastIndexOf(args.caseSensitive ?
-                args.from : args.from.toLowerCase(), lowOffs - startOffs)
-            fromOffs = fromOffs < 0 ? startOffs :
-                startOffs + fromOffs + (args.inclusive ? 0 : args.from.length)
-        }
-        if (args.to) {
-            toOffs = text.indexOf(args.caseSensitive ?
-                args.to : args.to.toLowerCase(), highOffs - startOffs)
-            toOffs = toOffs < 0 ? endOffs :
-                startOffs + toOffs + (args.inclusive ? args.to.length : 0)
+        let regexp = new RegExp(`(${close})|(${open})`, 
+            args.caseSensitive ? "g" : "gi")
+        let text = doc.getText(new vscode.Range(highPos, endPos))
+        for (let match = regexp.exec(text), openCnt = 1; 
+            match && openCnt > 0;
+            match = regexp.exec(text)) {
+            toOffs = highOffs + match.index +
+                (args.inclusive ? match[0].length : 0)
+            if (match[1])
+                openCnt--
+            else if (args.nested && match[2])
+                openCnt++
         }
     }
     if (cursorPos.isAfterOrEqual(anchorPos))

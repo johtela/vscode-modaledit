@@ -951,14 +951,14 @@ full list is below:
 | `iw`              | Select current word not including the whitespace around it
 | `ap`              | Select current paragraph including the whitespace around it
 | `ip`              | Select current paragraph not including the whitespace around it
-| `a( | a) | ab`    | Select text inside parenthesis including them
-| `i( | i) | ib`    | Select text inside parenthesis not including them
-| `a{ | a} | aB`    | Select text inside curly braces including them
-| `i{ | i} | iB`    | Select text inside curly braces not including them
-| `a[ | a]`         | Select text inside brackets including them
-| `i[ | i]`         | Select text inside brackets not including them
-| `a< | a> | at`    | Select text inside ange brackets (tag) including them
-| `i[ | i] | at`    | Select text inside angle brackets (tag) not including them
+| `a( \| a) \| ab`  | Select text inside parenthesis including them
+| `i( \| i) \| ib`  | Select text inside parenthesis not including them
+| `a{ \| a} \| aB`  | Select text inside curly braces including them
+| `i{ \| i} \| iB`  | Select text inside curly braces not including them
+| `a[ \| a]`        | Select text inside brackets including them
+| `i[ \| i]`        | Select text inside brackets not including them
+| `a< \| a> \| at`  | Select text inside ange brackets (tag) including them
+| `i[ \| i] \| at`  | Select text inside angle brackets (tag) not including them
 
 The basic movement commands are otherwise identical to normal mode defintions, 
 but the actual commands invoked are different. Roughly speaking, we just add 
@@ -1062,25 +1062,25 @@ search is by default the current line, but for some variants we specify the
             "(,),b": [
                 {
                     "command": "modaledit.selectBetween",
-                    "args": "{ from: '(', to: ')', inclusive: __rcmd[1] == 'a', docScope: true }"
+                    "args": "{ from: '(', to: ')', inclusive: __rcmd[1] == 'a', docScope: true, nested: true }"
                 }
             ],
             "{,},B": [
                 {
                     "command": "modaledit.selectBetween",
-                    "args": "{ from: '{', to: '}', inclusive: __rcmd[1] == 'a', docScope: true }"
+                    "args": "{ from: '{', to: '}', inclusive: __rcmd[1] == 'a', docScope: true, nested: true }"
                 }
             ],
             "[,]": [
                 {
                     "command": "modaledit.selectBetween",
-                    "args": "{ from: '[', to: ']', inclusive: __rcmd[1] == 'a', docScope: true }"
+                    "args": "{ from: '[', to: ']', inclusive: __rcmd[1] == 'a', docScope: true, nested: true }"
                 }
             ],
             "<,>,t": [
                 {
                     "command": "modaledit.selectBetween",
-                    "args": "{ from: '<', to: '>', inclusive: __rcmd[1] == 'a' }"
+                    "args": "{ from: '<', to: '>', inclusive: __rcmd[1] == 'a', nested: true }"
                 }
             ]
         },

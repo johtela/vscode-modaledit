@@ -13,7 +13,7 @@ key {
 	display: inline;
 	display: inline-block;
 	min-width: 2em;
-    padding: 0 1ex;
+    padding: 0 2px;
 	margin: 0 2px;    
     font-family: var(--sans-font);
     font-size: 0.75em;

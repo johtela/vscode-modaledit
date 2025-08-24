@@ -1654,36 +1654,36 @@ full list is below:</p>
 <td>Select current paragraph not including the whitespace around it</td>
 </tr>
 <tr>
-<td>`a(</td>
-<td>a)</td>
+<td><code>a( | a) | ab</code></td>
+<td>Select text inside parenthesis including them</td>
 </tr>
 <tr>
-<td>`i(</td>
-<td>i)</td>
+<td><code>i( | i) | ib</code></td>
+<td>Select text inside parenthesis not including them</td>
 </tr>
 <tr>
-<td>`a{</td>
-<td>a}</td>
+<td><code>a{ | a} | aB</code></td>
+<td>Select text inside curly braces including them</td>
 </tr>
 <tr>
-<td>`i{</td>
-<td>i}</td>
+<td><code>i{ | i} | iB</code></td>
+<td>Select text inside curly braces not including them</td>
 </tr>
 <tr>
-<td>`a[</td>
-<td>a]`</td>
+<td><code>a[ | a]</code></td>
+<td>Select text inside brackets including them</td>
 </tr>
 <tr>
-<td>`i[</td>
-<td>i]`</td>
+<td><code>i[ | i]</code></td>
+<td>Select text inside brackets not including them</td>
 </tr>
 <tr>
-<td>`a&lt;</td>
-<td>a&gt;</td>
+<td><code>a&lt; | a&gt; | at</code></td>
+<td>Select text inside ange brackets (tag) including them</td>
 </tr>
 <tr>
-<td>`i[</td>
-<td>i]</td>
+<td><code>i[ | i] | at</code></td>
+<td>Select text inside angle brackets (tag) not including them</td>
 </tr>
 </tbody>
 </table>
@@ -1788,25 +1788,25 @@ search is by default the current line, but for some variants we specify the
             <span class="attr">&quot;(,),b&quot;</span><span class="punctuation">:</span> <span class="punctuation">[</span>
                 <span class="punctuation">{</span>
                     <span class="attr">&quot;command&quot;</span><span class="punctuation">:</span> <span class="string">&quot;modaledit.selectBetween&quot;</span><span class="punctuation">,</span>
-                    <span class="attr">&quot;args&quot;</span><span class="punctuation">:</span> <span class="string">&quot;{ from: &#x27;(&#x27;, to: &#x27;)&#x27;, inclusive: __rcmd[1] == &#x27;a&#x27;, docScope: true }&quot;</span>
+                    <span class="attr">&quot;args&quot;</span><span class="punctuation">:</span> <span class="string">&quot;{ from: &#x27;(&#x27;, to: &#x27;)&#x27;, inclusive: __rcmd[1] == &#x27;a&#x27;, docScope: true, nested: true }&quot;</span>
                 <span class="punctuation">}</span>
             <span class="punctuation">]</span><span class="punctuation">,</span>
             <span class="attr">&quot;{,},B&quot;</span><span class="punctuation">:</span> <span class="punctuation">[</span>
                 <span class="punctuation">{</span>
                     <span class="attr">&quot;command&quot;</span><span class="punctuation">:</span> <span class="string">&quot;modaledit.selectBetween&quot;</span><span class="punctuation">,</span>
-                    <span class="attr">&quot;args&quot;</span><span class="punctuation">:</span> <span class="string">&quot;{ from: &#x27;{&#x27;, to: &#x27;}&#x27;, inclusive: __rcmd[1] == &#x27;a&#x27;, docScope: true }&quot;</span>
+                    <span class="attr">&quot;args&quot;</span><span class="punctuation">:</span> <span class="string">&quot;{ from: &#x27;{&#x27;, to: &#x27;}&#x27;, inclusive: __rcmd[1] == &#x27;a&#x27;, docScope: true, nested: true }&quot;</span>
                 <span class="punctuation">}</span>
             <span class="punctuation">]</span><span class="punctuation">,</span>
             <span class="attr">&quot;[,]&quot;</span><span class="punctuation">:</span> <span class="punctuation">[</span>
                 <span class="punctuation">{</span>
                     <span class="attr">&quot;command&quot;</span><span class="punctuation">:</span> <span class="string">&quot;modaledit.selectBetween&quot;</span><span class="punctuation">,</span>
-                    <span class="attr">&quot;args&quot;</span><span class="punctuation">:</span> <span class="string">&quot;{ from: &#x27;[&#x27;, to: &#x27;]&#x27;, inclusive: __rcmd[1] == &#x27;a&#x27;, docScope: true }&quot;</span>
+                    <span class="attr">&quot;args&quot;</span><span class="punctuation">:</span> <span class="string">&quot;{ from: &#x27;[&#x27;, to: &#x27;]&#x27;, inclusive: __rcmd[1] == &#x27;a&#x27;, docScope: true, nested: true }&quot;</span>
                 <span class="punctuation">}</span>
             <span class="punctuation">]</span><span class="punctuation">,</span>
             <span class="attr">&quot;&lt;,&gt;,t&quot;</span><span class="punctuation">:</span> <span class="punctuation">[</span>
                 <span class="punctuation">{</span>
                     <span class="attr">&quot;command&quot;</span><span class="punctuation">:</span> <span class="string">&quot;modaledit.selectBetween&quot;</span><span class="punctuation">,</span>
-                    <span class="attr">&quot;args&quot;</span><span class="punctuation">:</span> <span class="string">&quot;{ from: &#x27;&lt;&#x27;, to: &#x27;&gt;&#x27;, inclusive: __rcmd[1] == &#x27;a&#x27; }&quot;</span>
+                    <span class="attr">&quot;args&quot;</span><span class="punctuation">:</span> <span class="string">&quot;{ from: &#x27;&lt;&#x27;, to: &#x27;&gt;&#x27;, inclusive: __rcmd[1] == &#x27;a&#x27;, nested: true }&quot;</span>
                 <span class="punctuation">}</span>
             <span class="punctuation">]</span>
         <span class="punctuation">}</span><span class="punctuation">,</span>

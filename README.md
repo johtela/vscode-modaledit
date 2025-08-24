@@ -584,8 +584,11 @@ string. In addition to these parameters, the command has four flags:
   missing or false the search is case-insensitive.
 - By default the search scope is the current line. If you want search inside
   the whole document, set the `docScope` flag.
+- The `nested` makes sure that `from` and `to` are balanced. I.e. if there are 
+  nested `from` → `to` blocks, the command selects the block where the cursor 
+  currently resides. Deeper level blocks will be included in the selection.
 
-Below is an example that selects all text inside quotation marks. For more
+Below is an example that selects all text inside matching parentheses. For more 
 advanced examples check the [tutorial][9].
 ```js
 {
@@ -593,6 +596,7 @@ advanced examples check the [tutorial][9].
     "args": {
         "from": "(",
         "to": ")"
+        "nested": true
     }
 }
 ```

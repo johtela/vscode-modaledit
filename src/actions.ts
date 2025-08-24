@@ -1,5 +1,5 @@
 /**
- * # Converting Keybinding Definitions to Actions
+ * # Converting Keybindings to Actions
  * 
  * This module defines the schema of the configuration file using TypeScript
  * interfaces. We parse the configuration JSON to TypeScript objects which
@@ -459,9 +459,11 @@ async function executeConditional(cond: Conditional, selecting: boolean):
 }
 /**
  * Since repeated commands can potentially put VSCode in a busy loop, we provide 
- * a way to abort them. For this purpose, we define a flag that is set by the 
- * `enterNormalMode` function. Effectively, when the user presses `Esc` we abort 
- * the repeat loop.
+ * a way to abort them. For this purpose, we define the `abort' flag. It's
+ * reset when an action starts and ends.
+ * 
+ * The `abortActions` function sets the flag, and effectively aborts the repeat
+ * loop, if we are inside it.
  */
 let abort = false
 export function abortActions() {
@@ -480,6 +482,7 @@ export function abortActions() {
 async function executeParameterized(action: Parameterized, selecting: boolean) {
     let repeat: string | number = 1
     async function exec(args?: any) {
+        abort = false
         let cont = true
         if (isString(repeat))
             do {
