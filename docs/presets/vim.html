@@ -1,134 +1,369 @@
 
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>ModalEdit - Vim Presets</title>
-    <link rel="icon" type="image/icon" href="../images/favicon.png" />
-    <link rel="stylesheet" href="../css/main.css" />
-    
-    
-</head>
-<body>
-    
-    <div class="navbar">
-        <div class="navmenu">
-            
-    <a class="title enabled" href="../index.html">
-        <img src="../images/escape.svg" />
-        <span>ModalEdit</span>
-    </a>
-    <a class="enabled" href="https://marketplace.visualstudio.com/items?itemName=johtela.vscode-modaledit">
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 512"><path d="M537.6 226.6c4.1-10.7 6.4-22.4 6.4-34.6 0-53-43-96-96-96-19.7 0-38.1 6-53.3 16.2C367 64.2 315.3 32 256 32c-88.4 0-160 71.6-160 160 0 2.7.1 5.4.2 8.1C40.2 219.8 0 273.2 0 336c0 79.5 64.5 144 144 144h368c70.7 0 128-57.3 128-128 0-61.9-44-113.6-102.4-125.4zm-132.9 88.7L299.3 420.7c-6.2 6.2-16.4 6.2-22.6 0L171.3 315.3c-10.1-10.1-2.9-27.3 11.3-27.3H248V176c0-8.8 7.2-16 16-16h48c8.8 0 16 7.2 16 16v112h65.4c14.2 0 21.4 17.2 11.3 27.3z"/></svg>
-        <span>Download</span>
-    </a>
-    <a class="enabled" href="https://github.com/johtela/vscode-modaledit">
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 496 512"><path d="M165.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6zm-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3zm44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9zM244.8 8C106.1 8 0 113.3 0 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C428.2 457.8 496 362.9 496 252 496 113.3 383.5 8 244.8 8zM97.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1zm-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7zm32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1zm-11.4-14.7c-1.6 1-1.6 3.6 0 5.9 1.6 2.3 4.3 3.3 5.6 2.3 1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2z"/></svg>
-        <span>GitHub</span>
-    </a>
-    <a class="enabled" href="../LICENSE.html">
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 384 512"><path d="M224 136V0H24C10.7 0 0 10.7 0 24v464c0 13.3 10.7 24 24 24h336c13.3 0 24-10.7 24-24V160H248c-13.2 0-24-10.8-24-24zM64 72c0-4.42 3.58-8 8-8h80c4.42 0 8 3.58 8 8v16c0 4.42-3.58 8-8 8H72c-4.42 0-8-3.58-8-8V72zm0 64c0-4.42 3.58-8 8-8h80c4.42 0 8 3.58 8 8v16c0 4.42-3.58 8-8 8H72c-4.42 0-8-3.58-8-8v-16zm192.81 248H304c8.84 0 16 7.16 16 16s-7.16 16-16 16h-47.19c-16.45 0-31.27-9.14-38.64-23.86-2.95-5.92-8.09-6.52-10.17-6.52s-7.22.59-10.02 6.19l-7.67 15.34a15.986 15.986 0 0 1-14.31 8.84c-.38 0-.75-.02-1.14-.05-6.45-.45-12-4.75-14.03-10.89L144 354.59l-10.61 31.88c-5.89 17.66-22.38 29.53-41 29.53H80c-8.84 0-16-7.16-16-16s7.16-16 16-16h12.39c4.83 0 9.11-3.08 10.64-7.66l18.19-54.64c3.3-9.81 12.44-16.41 22.78-16.41s19.48 6.59 22.77 16.41l13.88 41.64c19.77-16.19 54.05-9.7 66 14.16 2.02 4.06 5.96 6.5 10.16 6.5zM377 105L279.1 7c-4.5-4.5-10.6-7-17-7H256v128h128v-6.1c0-6.3-2.5-12.4-7-16.9z"/></svg>
-        <span>License</span>
-    </a>
-    <a class="enabled" href="../tutorial.html">
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path d="M223.7 239l136-136c9.4-9.4 24.6-9.4 33.9 0l22.6 22.6c9.4 9.4 9.4 24.6 0 33.9L319.9 256l96.4 96.4c9.4 9.4 9.4 24.6 0 33.9L393.7 409c-9.4 9.4-24.6 9.4-33.9 0l-136-136c-9.5-9.4-9.5-24.6-.1-34zm-192 34l136 136c9.4 9.4 24.6 9.4 33.9 0l22.6-22.6c9.4-9.4 9.4-24.6 0-33.9L127.9 256l96.4-96.4c9.4-9.4 9.4-24.6 0-33.9L201.7 103c-9.4-9.4-24.6-9.4-33.9 0l-136 136c-9.5 9.4-9.5 24.6-.1 34z"/></svg>
-        <span>Previous: Tutorial</span>
-    </a>
-    <a class="enabled" href="../src/extension.html">
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path d="M224.3 273l-136 136c-9.4 9.4-24.6 9.4-33.9 0l-22.6-22.6c-9.4-9.4-9.4-24.6 0-33.9l96.4-96.4-96.4-96.4c-9.4-9.4-9.4-24.6 0-33.9L54.3 103c9.4-9.4 24.6-9.4 33.9 0l136 136c9.5 9.4 9.5 24.6.1 34zm192-34l-136-136c-9.4-9.4-24.6-9.4-33.9 0l-22.6 22.6c-9.4 9.4-9.4 24.6 0 33.9l96.4 96.4-96.4 96.4c-9.4 9.4-9.4 24.6 0 33.9l22.6 22.6c9.4 9.4 24.6 9.4 33.9 0l136-136c9.4-9.2 9.4-24.4 0-33.8z"/></svg>
-        <span>Next: Extension</span>
-    </a>
-        </div>
+    <!DOCTYPE html>
+    <html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta http-equiv="X-UA-Compatible" content="ie=edge">
+        <title>
+            ModalEdit - Vim Presets
+        </title>
+        <link rel="icon" type="image/icon" href="../images/favicon.svg" />
+        <link rel="stylesheet" href="../dist/normal.css" />
         
+    </head>
+    <body data-syntax-highlight="monokai"
+        data-theme="purple-rain">
+        
+        <div id="navbar">
+            
+    <div class="navmenu ">
+        
+    <div class="navitem " >
+        <a class="title enabled" href="../index.html" >
+            <img src="../images/escape.svg" />
+            <span>ModalEdit</span>
+        </a>
+        
+    </div>
+    <div class="navitem " >
+        <a class="enabled" href="https://marketplace.visualstudio.com/items?itemName=johtela.vscode-modaledit" >
+            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-cloud-download" viewBox="0 0 24 24" stroke-width="1.5" stroke="#2c3e50" fill="none" stroke-linecap="round" stroke-linejoin="round">
+            <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+            <path d="M19 18a3.5 3.5 0 0 0 0 -7h-1a5 4.5 0 0 0 -11 -2a4.6 4.4 0 0 0 -2.1 8.4" />
+            <path d="M12 13l0 9" />
+            <path d="M9 19l3 3l3 -3" />
+        </svg>
+            <span>Download</span>
+        </a>
+        
+    </div>
+    <div class="navitem " >
+        <a class="enabled" href="https://github.com/johtela/vscode-modaledit" >
+            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-brand-github" viewBox="0 0 24 24" stroke-width="1.5" stroke="#2c3e50" fill="none" stroke-linecap="round" stroke-linejoin="round">
+            <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+            <path d="M9 19c-4.3 1.4 -4.3 -2.5 -6 -3m12 5v-3.5c0 -1 .1 -1.4 -.5 -2c2.8 -.3 5.5 -1.4 5.5 -6a4.6 4.6 0 0 0 -1.3 -3.2a4.2 4.2 0 0 0 -.1 -3.2s-1.1 -.3 -3.5 1.3a12.3 12.3 0 0 0 -6.2 0c-2.4 -1.6 -3.5 -1.3 -3.5 -1.3a4.2 4.2 0 0 0 -.1 3.2a4.6 4.6 0 0 0 -1.3 3.2c0 4.6 2.7 5.7 5.5 6c-.6 .6 -.6 1.2 -.5 2v3.5" />
+        </svg>
+            <span>GitHub</span>
+        </a>
+        
+    </div>
+    <div class="navitem " >
+        <a class="enabled" href="../LICENSE.html" >
+            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-license" viewBox="0 0 24 24" stroke-width="1.5" stroke="#2c3e50" fill="none" stroke-linecap="round" stroke-linejoin="round">
+            <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+            <path d="M15 21h-9a3 3 0 0 1 -3 -3v-1h10v2a2 2 0 0 0 4 0v-14a2 2 0 1 1 2 2h-2m2 -4h-11a3 3 0 0 0 -3 3v11" />
+            <path d="M9 7l4 0" />
+            <path d="M9 11l4 0" />
+        </svg>
+            <span>License</span>
+        </a>
+        
+    </div>
+    <div class="navitem " >
+        <a   >
+            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-caret-down" viewBox="0 0 24 24" stroke-width="1.5" stroke="#2c3e50" fill="none" stroke-linecap="round" stroke-linejoin="round">
+            <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+            <path d="M6 10l6 6l6 -6h-12" />
+        </svg>
+            <span>Syntax Highlight</span>
+        </a>
+        
+    <div class="navmenu toggle">
+        
+    <div class="navitem " id="coding-horror">
+        <a   onclick="document.body.syntaxHighlight('coding-horror')">
+            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-palette" viewBox="0 0 24 24" stroke-width="1.5" stroke="#2c3e50" fill="none" stroke-linecap="round" stroke-linejoin="round">
+            <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+            <path d="M12 21a9 9 0 0 1 0 -18c4.97 0 9 3.582 9 8c0 1.06 -.474 2.078 -1.318 2.828c-.844 .75 -1.989 1.172 -3.182 1.172h-2.5a2 2 0 0 0 -1 3.75a1.3 1.3 0 0 1 -1 2.25" />
+            <path d="M8.5 10.5m-1 0a1 1 0 1 0 2 0a1 1 0 1 0 -2 0" />
+            <path d="M12.5 7.5m-1 0a1 1 0 1 0 2 0a1 1 0 1 0 -2 0" />
+            <path d="M16.5 10.5m-1 0a1 1 0 1 0 2 0a1 1 0 1 0 -2 0" />
+        </svg>
+            <span>Coding Horror</span>
+        </a>
+        
+    </div>
+    <div class="navitem active" id="monokai">
+        <a   onclick="document.body.syntaxHighlight('monokai')">
+            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-palette" viewBox="0 0 24 24" stroke-width="1.5" stroke="#2c3e50" fill="none" stroke-linecap="round" stroke-linejoin="round">
+            <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+            <path d="M12 21a9 9 0 0 1 0 -18c4.97 0 9 3.582 9 8c0 1.06 -.474 2.078 -1.318 2.828c-.844 .75 -1.989 1.172 -3.182 1.172h-2.5a2 2 0 0 0 -1 3.75a1.3 1.3 0 0 1 -1 2.25" />
+            <path d="M8.5 10.5m-1 0a1 1 0 1 0 2 0a1 1 0 1 0 -2 0" />
+            <path d="M12.5 7.5m-1 0a1 1 0 1 0 2 0a1 1 0 1 0 -2 0" />
+            <path d="M16.5 10.5m-1 0a1 1 0 1 0 2 0a1 1 0 1 0 -2 0" />
+        </svg>
+            <span>Monokai</span>
+        </a>
+        
+    </div>
+    <div class="navitem " id="solarized-light">
+        <a   onclick="document.body.syntaxHighlight('solarized-light')">
+            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-palette" viewBox="0 0 24 24" stroke-width="1.5" stroke="#2c3e50" fill="none" stroke-linecap="round" stroke-linejoin="round">
+            <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+            <path d="M12 21a9 9 0 0 1 0 -18c4.97 0 9 3.582 9 8c0 1.06 -.474 2.078 -1.318 2.828c-.844 .75 -1.989 1.172 -3.182 1.172h-2.5a2 2 0 0 0 -1 3.75a1.3 1.3 0 0 1 -1 2.25" />
+            <path d="M8.5 10.5m-1 0a1 1 0 1 0 2 0a1 1 0 1 0 -2 0" />
+            <path d="M12.5 7.5m-1 0a1 1 0 1 0 2 0a1 1 0 1 0 -2 0" />
+            <path d="M16.5 10.5m-1 0a1 1 0 1 0 2 0a1 1 0 1 0 -2 0" />
+        </svg>
+            <span>Solarized Light</span>
+        </a>
+        
+    </div>
+    <div class="navitem " id="son-of-obsidian">
+        <a   onclick="document.body.syntaxHighlight('son-of-obsidian')">
+            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-palette" viewBox="0 0 24 24" stroke-width="1.5" stroke="#2c3e50" fill="none" stroke-linecap="round" stroke-linejoin="round">
+            <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+            <path d="M12 21a9 9 0 0 1 0 -18c4.97 0 9 3.582 9 8c0 1.06 -.474 2.078 -1.318 2.828c-.844 .75 -1.989 1.172 -3.182 1.172h-2.5a2 2 0 0 0 -1 3.75a1.3 1.3 0 0 1 -1 2.25" />
+            <path d="M8.5 10.5m-1 0a1 1 0 1 0 2 0a1 1 0 1 0 -2 0" />
+            <path d="M12.5 7.5m-1 0a1 1 0 1 0 2 0a1 1 0 1 0 -2 0" />
+            <path d="M16.5 10.5m-1 0a1 1 0 1 0 2 0a1 1 0 1 0 -2 0" />
+        </svg>
+            <span>Son of Obsidian</span>
+        </a>
+        
+    </div>
+    </div>
+    </div>
+    <div class="navitem " >
+        <a   >
+            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-caret-down" viewBox="0 0 24 24" stroke-width="1.5" stroke="#2c3e50" fill="none" stroke-linecap="round" stroke-linejoin="round">
+            <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+            <path d="M6 10l6 6l6 -6h-12" />
+        </svg>
+            <span>Theme</span>
+        </a>
+        
+    <div class="navmenu toggle">
+        
+    <div class="navitem " id="blueberry">
+        <a   onclick="document.body.theme('blueberry')">
+            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-paint" viewBox="0 0 24 24" stroke-width="1.5" stroke="#2c3e50" fill="none" stroke-linecap="round" stroke-linejoin="round">
+            <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+            <path d="M5 3m0 2a2 2 0 0 1 2 -2h10a2 2 0 0 1 2 2v2a2 2 0 0 1 -2 2h-10a2 2 0 0 1 -2 -2z" />
+            <path d="M19 6h1a2 2 0 0 1 2 2a5 5 0 0 1 -5 5l-5 0v2" />
+            <path d="M10 15m0 1a1 1 0 0 1 1 -1h2a1 1 0 0 1 1 1v4a1 1 0 0 1 -1 1h-2a1 1 0 0 1 -1 -1z" />
+        </svg>
+            <span>Blueberry</span>
+        </a>
+        
+    </div>
+    <div class="navitem " id="book-cover">
+        <a   onclick="document.body.theme('book-cover')">
+            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-paint" viewBox="0 0 24 24" stroke-width="1.5" stroke="#2c3e50" fill="none" stroke-linecap="round" stroke-linejoin="round">
+            <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+            <path d="M5 3m0 2a2 2 0 0 1 2 -2h10a2 2 0 0 1 2 2v2a2 2 0 0 1 -2 2h-10a2 2 0 0 1 -2 -2z" />
+            <path d="M19 6h1a2 2 0 0 1 2 2a5 5 0 0 1 -5 5l-5 0v2" />
+            <path d="M10 15m0 1a1 1 0 0 1 1 -1h2a1 1 0 0 1 1 1v4a1 1 0 0 1 -1 1h-2a1 1 0 0 1 -1 -1z" />
+        </svg>
+            <span>Book Cover</span>
+        </a>
+        
+    </div>
+    <div class="navitem " id="brownie">
+        <a   onclick="document.body.theme('brownie')">
+            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-paint" viewBox="0 0 24 24" stroke-width="1.5" stroke="#2c3e50" fill="none" stroke-linecap="round" stroke-linejoin="round">
+            <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+            <path d="M5 3m0 2a2 2 0 0 1 2 -2h10a2 2 0 0 1 2 2v2a2 2 0 0 1 -2 2h-10a2 2 0 0 1 -2 -2z" />
+            <path d="M19 6h1a2 2 0 0 1 2 2a5 5 0 0 1 -5 5l-5 0v2" />
+            <path d="M10 15m0 1a1 1 0 0 1 1 -1h2a1 1 0 0 1 1 1v4a1 1 0 0 1 -1 1h-2a1 1 0 0 1 -1 -1z" />
+        </svg>
+            <span>Brownie</span>
+        </a>
+        
+    </div>
+    <div class="navitem " id="camouflage">
+        <a   onclick="document.body.theme('camouflage')">
+            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-paint" viewBox="0 0 24 24" stroke-width="1.5" stroke="#2c3e50" fill="none" stroke-linecap="round" stroke-linejoin="round">
+            <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+            <path d="M5 3m0 2a2 2 0 0 1 2 -2h10a2 2 0 0 1 2 2v2a2 2 0 0 1 -2 2h-10a2 2 0 0 1 -2 -2z" />
+            <path d="M19 6h1a2 2 0 0 1 2 2a5 5 0 0 1 -5 5l-5 0v2" />
+            <path d="M10 15m0 1a1 1 0 0 1 1 -1h2a1 1 0 0 1 1 1v4a1 1 0 0 1 -1 1h-2a1 1 0 0 1 -1 -1z" />
+        </svg>
+            <span>Camouflage</span>
+        </a>
+        
+    </div>
+    <div class="navitem " id="chocolate">
+        <a   onclick="document.body.theme('chocolate')">
+            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-paint" viewBox="0 0 24 24" stroke-width="1.5" stroke="#2c3e50" fill="none" stroke-linecap="round" stroke-linejoin="round">
+            <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+            <path d="M5 3m0 2a2 2 0 0 1 2 -2h10a2 2 0 0 1 2 2v2a2 2 0 0 1 -2 2h-10a2 2 0 0 1 -2 -2z" />
+            <path d="M19 6h1a2 2 0 0 1 2 2a5 5 0 0 1 -5 5l-5 0v2" />
+            <path d="M10 15m0 1a1 1 0 0 1 1 -1h2a1 1 0 0 1 1 1v4a1 1 0 0 1 -1 1h-2a1 1 0 0 1 -1 -1z" />
+        </svg>
+            <span>Chocolate</span>
+        </a>
+        
+    </div>
+    <div class="navitem " id="greyhound">
+        <a   onclick="document.body.theme('greyhound')">
+            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-paint" viewBox="0 0 24 24" stroke-width="1.5" stroke="#2c3e50" fill="none" stroke-linecap="round" stroke-linejoin="round">
+            <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+            <path d="M5 3m0 2a2 2 0 0 1 2 -2h10a2 2 0 0 1 2 2v2a2 2 0 0 1 -2 2h-10a2 2 0 0 1 -2 -2z" />
+            <path d="M19 6h1a2 2 0 0 1 2 2a5 5 0 0 1 -5 5l-5 0v2" />
+            <path d="M10 15m0 1a1 1 0 0 1 1 -1h2a1 1 0 0 1 1 1v4a1 1 0 0 1 -1 1h-2a1 1 0 0 1 -1 -1z" />
+        </svg>
+            <span>Greyhound</span>
+        </a>
+        
+    </div>
+    <div class="navitem " id="ice-age">
+        <a   onclick="document.body.theme('ice-age')">
+            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-paint" viewBox="0 0 24 24" stroke-width="1.5" stroke="#2c3e50" fill="none" stroke-linecap="round" stroke-linejoin="round">
+            <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+            <path d="M5 3m0 2a2 2 0 0 1 2 -2h10a2 2 0 0 1 2 2v2a2 2 0 0 1 -2 2h-10a2 2 0 0 1 -2 -2z" />
+            <path d="M19 6h1a2 2 0 0 1 2 2a5 5 0 0 1 -5 5l-5 0v2" />
+            <path d="M10 15m0 1a1 1 0 0 1 1 -1h2a1 1 0 0 1 1 1v4a1 1 0 0 1 -1 1h-2a1 1 0 0 1 -1 -1z" />
+        </svg>
+            <span>Ice Age</span>
+        </a>
+        
+    </div>
+    <div class="navitem " id="mustard">
+        <a   onclick="document.body.theme('mustard')">
+            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-paint" viewBox="0 0 24 24" stroke-width="1.5" stroke="#2c3e50" fill="none" stroke-linecap="round" stroke-linejoin="round">
+            <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+            <path d="M5 3m0 2a2 2 0 0 1 2 -2h10a2 2 0 0 1 2 2v2a2 2 0 0 1 -2 2h-10a2 2 0 0 1 -2 -2z" />
+            <path d="M19 6h1a2 2 0 0 1 2 2a5 5 0 0 1 -5 5l-5 0v2" />
+            <path d="M10 15m0 1a1 1 0 0 1 1 -1h2a1 1 0 0 1 1 1v4a1 1 0 0 1 -1 1h-2a1 1 0 0 1 -1 -1z" />
+        </svg>
+            <span>Mustard</span>
+        </a>
+        
+    </div>
+    <div class="navitem " id="peachy">
+        <a   onclick="document.body.theme('peachy')">
+            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-paint" viewBox="0 0 24 24" stroke-width="1.5" stroke="#2c3e50" fill="none" stroke-linecap="round" stroke-linejoin="round">
+            <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+            <path d="M5 3m0 2a2 2 0 0 1 2 -2h10a2 2 0 0 1 2 2v2a2 2 0 0 1 -2 2h-10a2 2 0 0 1 -2 -2z" />
+            <path d="M19 6h1a2 2 0 0 1 2 2a5 5 0 0 1 -5 5l-5 0v2" />
+            <path d="M10 15m0 1a1 1 0 0 1 1 -1h2a1 1 0 0 1 1 1v4a1 1 0 0 1 -1 1h-2a1 1 0 0 1 -1 -1z" />
+        </svg>
+            <span>Peachy</span>
+        </a>
+        
+    </div>
+    <div class="navitem " id="red-alert">
+        <a   onclick="document.body.theme('red-alert')">
+            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-paint" viewBox="0 0 24 24" stroke-width="1.5" stroke="#2c3e50" fill="none" stroke-linecap="round" stroke-linejoin="round">
+            <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+            <path d="M5 3m0 2a2 2 0 0 1 2 -2h10a2 2 0 0 1 2 2v2a2 2 0 0 1 -2 2h-10a2 2 0 0 1 -2 -2z" />
+            <path d="M19 6h1a2 2 0 0 1 2 2a5 5 0 0 1 -5 5l-5 0v2" />
+            <path d="M10 15m0 1a1 1 0 0 1 1 -1h2a1 1 0 0 1 1 1v4a1 1 0 0 1 -1 1h-2a1 1 0 0 1 -1 -1z" />
+        </svg>
+            <span>Red Alert</span>
+        </a>
+        
+    </div>
+    <div class="navitem " id="ultra-violet">
+        <a   onclick="document.body.theme('ultra-violet')">
+            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-paint" viewBox="0 0 24 24" stroke-width="1.5" stroke="#2c3e50" fill="none" stroke-linecap="round" stroke-linejoin="round">
+            <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+            <path d="M5 3m0 2a2 2 0 0 1 2 -2h10a2 2 0 0 1 2 2v2a2 2 0 0 1 -2 2h-10a2 2 0 0 1 -2 -2z" />
+            <path d="M19 6h1a2 2 0 0 1 2 2a5 5 0 0 1 -5 5l-5 0v2" />
+            <path d="M10 15m0 1a1 1 0 0 1 1 -1h2a1 1 0 0 1 1 1v4a1 1 0 0 1 -1 1h-2a1 1 0 0 1 -1 -1z" />
+        </svg>
+            <span>Ultra Violet</span>
+        </a>
+        
+    </div>
+    <div class="navitem " id="vintage">
+        <a   onclick="document.body.theme('vintage')">
+            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-paint" viewBox="0 0 24 24" stroke-width="1.5" stroke="#2c3e50" fill="none" stroke-linecap="round" stroke-linejoin="round">
+            <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+            <path d="M5 3m0 2a2 2 0 0 1 2 -2h10a2 2 0 0 1 2 2v2a2 2 0 0 1 -2 2h-10a2 2 0 0 1 -2 -2z" />
+            <path d="M19 6h1a2 2 0 0 1 2 2a5 5 0 0 1 -5 5l-5 0v2" />
+            <path d="M10 15m0 1a1 1 0 0 1 1 -1h2a1 1 0 0 1 1 1v4a1 1 0 0 1 -1 1h-2a1 1 0 0 1 -1 -1z" />
+        </svg>
+            <span>Vintage</span>
+        </a>
+        
+    </div>
+    </div>
+    </div>
+    </div>
+            
     <a class="hamburger">
         <div class="bar1"></div>
         <div class="bar2"></div>
         <div class="bar3"></div>
     </a>
-    </div>
-    
-    <div class="layout">
-        <div class="sidepane collapsible">
-            
-    <div class="tocmenu">
-        <h3>Table of Contents</h3>
+        </div>
         
+        <div class="layout">
+            <div class="sidepane narrow-scrollbars">
+                
+        <div class="tocmenu">
+            <h3>Table of Contents</h3>
+            
     <ul>
         
     <li>
-        
-        <a href="../README.html">Home</a>
-        
+        <a href="../README.html"><span>🏠</span><span data-toggle="tooltip" data-title="Home page">
+            Home
+        </span></a>
+    </li>
+    <li>
+        <a href="../tutorial.html"><span>🎓</span><span data-toggle="tooltip" data-title="How to create your own keymaps">
+            Tutorial
+        </span></a>
+    </li>
+    <li>
+        <a href="vim.html" class="highlight"><span>🦈</span><span data-toggle="tooltip" data-title="Built-in Vim presets">
+            Vim Presets
+        </span></a>
     </li>
     <li>
         
-        <a href="../tutorial.html">Tutorial</a>
-        
-    </li>
-    <li>
-        
-        <a href="vim.html" class="highlight">Vim Presets</a>
-        
-    </li>
-    <li>
-        <button class="accordion">
+    <div class="accordion">
         Implementation
-        </button>
-            
+        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-chevron-up" viewBox="0 0 24 24" stroke-width="1.5" stroke="#2c3e50" fill="none" stroke-linecap="round" stroke-linejoin="round">
+            <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+            <path d="M6 15l6 -6l6 6" />
+        </svg>
+    </div>
+    
     <ul>
         
     <li>
-        
-        <a href="../src/extension.html">Extension</a>
-        
+        <a href="../src/extension.html"><span>🔌</span><span data-toggle="tooltip" data-title="Main extension module">
+            Extension
+        </span></a>
     </li>
     <li>
-        
-        <a href="../src/actions.html">Actions</a>
-        
+        <a href="../src/actions.html"><span>⌨️</span><span data-toggle="tooltip" data-title="Keymap management">
+            Actions
+        </span></a>
     </li>
     <li>
-        
-        <a href="../src/commands.html">Commands</a>
-        
+        <a href="../src/commands.html"><span>📢</span><span data-toggle="tooltip" data-title="Registered commands">
+            Commands
+        </span></a>
     </li>
     </ul>
     </li>
     <li>
-        
-        <a href="../CHANGELOG.html">Change Log</a>
-        
+        <a href="../CHANGELOG.html"><span>📅</span><span data-toggle="tooltip" data-title="Version history">
+            Change Log
+        </span></a>
     </li>
     <li>
-        
-        <a href="../LICENSE.html">License</a>
-        
+        <a href="../LICENSE.html"><span>📜</span><span data-toggle="tooltip" data-title="MIT license">
+            License
+        </span></a>
     </li>
     </ul>
-    </div>
-            
-    <div class="footer">
-        Copyright © 2020 Tommi Johtela
-        <div class="ad">
-            Created with <a href="https://github.com/johtela/litscript">LiTScript</a>
         </div>
-    </div>
-
-        </div>
-        <div class="sideicon collapsible">
+                <div class="toc-button"><svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-chevrons-right" viewBox="0 0 24 24" stroke-width="1.5" stroke="#2c3e50" fill="none" stroke-linecap="round" stroke-linejoin="round">
+            <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+            <path d="M7 7l5 5l-5 5" />
+            <path d="M13 7l5 5l-5 5" />
+        </svg></div>
+            </div>
             
-    <a class="hamburger">
-        <div class="bar1"></div>
-        <div class="bar2"></div>
-        <div class="bar3"></div>
-    </a>
-        </div>
-        <div class="scrollingarea closepopups">
-            
-    <div class="contentarea">
-        <h1 id="new-vimproved-modal-edit-2-0">New Vimproved ModalEdit 2.0</h1>
+        <div class="contentarea closepopups">
+            <h1 id="new-vimproved-modal-edit-2-0">New Vimproved ModalEdit 2.0</h1>
 <p><img src="../images/pooh.jpg" alt="" width="375" height="403">
 Providing full Vim emulation was not originally a goal of ModalEdit. The idea of
 the extension is to provide an engine that allows the user to <a href="../README.html#configuration">map any key
@@ -270,62 +505,62 @@ do string manipulation, these mappings are easy to formulate.</p>
 </table>
 </div><p>Now, lets implement all the keybindings listed above.</p>
 
-<pre class="syntaxhighlight"><code>{
-    <span class="attr">"keybindings"</span>: {
+<pre class="syntaxhighlight narrow-scrollbars"><code><span class="punctuation">{</span>
+    <span class="attr">&quot;keybindings&quot;</span><span class="punctuation">:</span> <span class="punctuation">{</span>
 </code></pre>
 <p>Cursor can be advanced in a file with with enter and space. These are not
 technically motion commands but included for compatibility.</p>
 
-<pre class="syntaxhighlight"><code>        "\n": [
-            "cursorDown",
-            {
-                "command": "cursorMove",
-                "args": {
-                    "to": "wrappedLineFirstNonWhitespaceCharacter"
-                }
-            }
-        ],
-        " ": "cursorRight",
+<pre class="syntaxhighlight narrow-scrollbars"><code>        <span class="attr">&quot;\n&quot;</span><span class="punctuation">:</span> <span class="punctuation">[</span>
+            <span class="string">&quot;cursorDown&quot;</span><span class="punctuation">,</span>
+            <span class="punctuation">{</span>
+                <span class="attr">&quot;command&quot;</span><span class="punctuation">:</span> <span class="string">&quot;cursorMove&quot;</span><span class="punctuation">,</span>
+                <span class="attr">&quot;args&quot;</span><span class="punctuation">:</span> <span class="punctuation">{</span>
+                    <span class="attr">&quot;to&quot;</span><span class="punctuation">:</span> <span class="string">&quot;wrappedLineFirstNonWhitespaceCharacter&quot;</span>
+                <span class="punctuation">}</span>
+            <span class="punctuation">}</span>
+        <span class="punctuation">]</span><span class="punctuation">,</span>
+        <span class="attr">&quot; &quot;</span><span class="punctuation">:</span> <span class="string">&quot;cursorRight&quot;</span><span class="punctuation">,</span>
 </code></pre>
 <p>Move cursor up/down/left/right.</p>
 
-<pre class="syntaxhighlight"><code>        "h": "cursorLeft",
-        "j": "cursorDown",
-        "k": "cursorUp",
-        "l": "cursorRight",
+<pre class="syntaxhighlight narrow-scrollbars"><code>        <span class="attr">&quot;h&quot;</span><span class="punctuation">:</span> <span class="string">&quot;cursorLeft&quot;</span><span class="punctuation">,</span>
+        <span class="attr">&quot;j&quot;</span><span class="punctuation">:</span> <span class="string">&quot;cursorDown&quot;</span><span class="punctuation">,</span>
+        <span class="attr">&quot;k&quot;</span><span class="punctuation">:</span> <span class="string">&quot;cursorUp&quot;</span><span class="punctuation">,</span>
+        <span class="attr">&quot;l&quot;</span><span class="punctuation">:</span> <span class="string">&quot;cursorRight&quot;</span><span class="punctuation">,</span>
 </code></pre>
 <p>Move to first/last character on line. These work also in visual mode.</p>
 
-<pre class="syntaxhighlight"><code>        "0": {
-            "command": "cursorMove",
-            "args": "{ to: 'wrappedLineStart', select: __selecting }"
-        },
-        "$": {
-            "command": "cursorMove",
-            "args": "{ to: 'wrappedLineEnd', select: __selecting }"
-        },
+<pre class="syntaxhighlight narrow-scrollbars"><code>        <span class="attr">&quot;0&quot;</span><span class="punctuation">:</span> <span class="punctuation">{</span>
+            <span class="attr">&quot;command&quot;</span><span class="punctuation">:</span> <span class="string">&quot;cursorMove&quot;</span><span class="punctuation">,</span>
+            <span class="attr">&quot;args&quot;</span><span class="punctuation">:</span> <span class="string">&quot;{ to: &#x27;wrappedLineStart&#x27;, select: __selecting }&quot;</span>
+        <span class="punctuation">}</span><span class="punctuation">,</span>
+        <span class="attr">&quot;$&quot;</span><span class="punctuation">:</span> <span class="punctuation">{</span>
+            <span class="attr">&quot;command&quot;</span><span class="punctuation">:</span> <span class="string">&quot;cursorMove&quot;</span><span class="punctuation">,</span>
+            <span class="attr">&quot;args&quot;</span><span class="punctuation">:</span> <span class="string">&quot;{ to: &#x27;wrappedLineEnd&#x27;, select: __selecting }&quot;</span>
+        <span class="punctuation">}</span><span class="punctuation">,</span>
 </code></pre>
 <p>Move to first/last non-blank character on line. Also these ones use the
 <code>__selecting</code> flag to check whether we are in visual mode.</p>
 
-<pre class="syntaxhighlight"><code>        "^": {
-            "command": "cursorMove",
-            "args": "{ to: 'wrappedLineFirstNonWhitespaceCharacter', select: __selecting }"
-        },
-        "g": {
-            "_": {
-                "command": "cursorMove",
-                "args": "{ to: 'wrappedLineLastNonWhitespaceCharacter', select: __selecting }"
-            },
+<pre class="syntaxhighlight narrow-scrollbars"><code>        <span class="attr">&quot;^&quot;</span><span class="punctuation">:</span> <span class="punctuation">{</span>
+            <span class="attr">&quot;command&quot;</span><span class="punctuation">:</span> <span class="string">&quot;cursorMove&quot;</span><span class="punctuation">,</span>
+            <span class="attr">&quot;args&quot;</span><span class="punctuation">:</span> <span class="string">&quot;{ to: &#x27;wrappedLineFirstNonWhitespaceCharacter&#x27;, select: __selecting }&quot;</span>
+        <span class="punctuation">}</span><span class="punctuation">,</span>
+        <span class="attr">&quot;g&quot;</span><span class="punctuation">:</span> <span class="punctuation">{</span>
+            <span class="attr">&quot;_&quot;</span><span class="punctuation">:</span> <span class="punctuation">{</span>
+                <span class="attr">&quot;command&quot;</span><span class="punctuation">:</span> <span class="string">&quot;cursorMove&quot;</span><span class="punctuation">,</span>
+                <span class="attr">&quot;args&quot;</span><span class="punctuation">:</span> <span class="string">&quot;{ to: &#x27;wrappedLineLastNonWhitespaceCharacter&#x27;, select: __selecting }&quot;</span>
+            <span class="punctuation">}</span><span class="punctuation">,</span>
 </code></pre>
 <p>Moving to the beginning of file is defined as a conditional command to make
 it work in visual mode.</p>
 
-<pre class="syntaxhighlight"><code>            "g": {
-                "condition": "__selecting",
-                "true": "cursorTopSelect",
-                "false": "cursorTop"
-            },
+<pre class="syntaxhighlight narrow-scrollbars"><code>            <span class="attr">&quot;g&quot;</span><span class="punctuation">:</span> <span class="punctuation">{</span>
+                <span class="attr">&quot;condition&quot;</span><span class="punctuation">:</span> <span class="string">&quot;__selecting&quot;</span><span class="punctuation">,</span>
+                <span class="attr">&quot;true&quot;</span><span class="punctuation">:</span> <span class="string">&quot;cursorTopSelect&quot;</span><span class="punctuation">,</span>
+                <span class="attr">&quot;false&quot;</span><span class="punctuation">:</span> <span class="string">&quot;cursorTop&quot;</span>
+            <span class="punctuation">}</span><span class="punctuation">,</span>
 </code></pre>
 <h2 id="other-commands-starting-with-key-g-key">Other Commands Starting with <key>g</key></h2>
 <p>Commands starting with <key>g</key> key are bit inconsistent in Vim. Some of
@@ -367,10 +602,10 @@ these commands before continuing with rest of the motion commands.</p>
 </div><p>Joining lines without space is done by deleting a character after the join
 command.</p>
 
-<pre class="syntaxhighlight"><code>            "J": [
-                "editor.action.joinLines",
-                "deleteRight"
-            ],
+<pre class="syntaxhighlight narrow-scrollbars"><code>            <span class="attr">&quot;J&quot;</span><span class="punctuation">:</span> <span class="punctuation">[</span>
+                <span class="string">&quot;editor.action.joinLines&quot;</span><span class="punctuation">,</span>
+                <span class="string">&quot;deleteRight&quot;</span>
+            <span class="punctuation">]</span><span class="punctuation">,</span>
 </code></pre>
 <p>The lower/uppercase transition works with any motion, but since we have not
 defined all of them yet, we explain the command structure
@@ -378,100 +613,100 @@ defined all of them yet, we explain the command structure
 The structure we use here is exactly the same as with <key>d</key> command, for
 example.</p>
 
-<pre class="syntaxhighlight"><code>            "u,U": {
-                "id": 1,
-                "help": "Change case with motion",
-                "u,U": {
-                    "command": "modaledit.typeNormalKeys",
-                    "args": "{ keys: __cmd.slice(0, -3) + 'V' + __rcmd[0] }"
-                },
-                "h,j,k,l,w,e,b,W,B,%": {
-                    "command": "modaledit.typeNormalKeys",
-                    "args": "{ keys: 'v' + __cmd.slice(0, -3) + __rcmd[0] + __rcmd[1] }"
-                },
-                "^,$,0,G,H,M,L": {
-                    "command": "modaledit.typeNormalKeys",
-                    "args": "{ keys: 'v' + __rcmd[0] + __rcmd[1] }"
-                },
-                "g": {
-                    "g,_": {
-                        "command": "modaledit.typeNormalKeys",
-                        "args": "{ keys: 'v' + __rcmd[1] + __rcmd[0] + __rcmd[2] }"
-                    }
-                },
-                "f,t,F,T": {
-                    "help": "Do until _",
-                    " -~": {
-                        "command": "modaledit.typeNormalKeys",
-                        "args": "{ keys: 'v' + __rcmd[1] + __rcmd[0] + __rcmd[2] }"
-                    }
-                },
-                "a,i": {
-                    "help": "Do around/inside _",
-                    "w,p,b,B,t, -/,:-@,[-`,{-~": {
-                        "command": "modaledit.typeNormalKeys",
-                        "args": "{ keys: 'v' + __rcmd[1] + __rcmd[0] + __rcmd[2] }"
-                    }
-                },
-                "`,'": {
-                    "help": "Do until mark _",
-                    "a-z": {
-                        "command": "modaledit.typeNormalKeys",
-                        "args": "{ keys: 'v' + __rcmd[1] + __rcmd[0] + __rcmd[2] }"
-                    }
-                }
-            },
+<pre class="syntaxhighlight narrow-scrollbars"><code>            <span class="attr">&quot;u,U&quot;</span><span class="punctuation">:</span> <span class="punctuation">{</span>
+                <span class="attr">&quot;id&quot;</span><span class="punctuation">:</span> <span class="number">1</span><span class="punctuation">,</span>
+                <span class="attr">&quot;help&quot;</span><span class="punctuation">:</span> <span class="string">&quot;Change case with motion&quot;</span><span class="punctuation">,</span>
+                <span class="attr">&quot;u,U&quot;</span><span class="punctuation">:</span> <span class="punctuation">{</span>
+                    <span class="attr">&quot;command&quot;</span><span class="punctuation">:</span> <span class="string">&quot;modaledit.typeNormalKeys&quot;</span><span class="punctuation">,</span>
+                    <span class="attr">&quot;args&quot;</span><span class="punctuation">:</span> <span class="string">&quot;{ keys: __cmd.slice(0, -3) + &#x27;V&#x27; + __rcmd[0] }&quot;</span>
+                <span class="punctuation">}</span><span class="punctuation">,</span>
+                <span class="attr">&quot;h,j,k,l,w,e,b,W,B,%&quot;</span><span class="punctuation">:</span> <span class="punctuation">{</span>
+                    <span class="attr">&quot;command&quot;</span><span class="punctuation">:</span> <span class="string">&quot;modaledit.typeNormalKeys&quot;</span><span class="punctuation">,</span>
+                    <span class="attr">&quot;args&quot;</span><span class="punctuation">:</span> <span class="string">&quot;{ keys: &#x27;v&#x27; + __cmd.slice(0, -3) + __rcmd[0] + __rcmd[1] }&quot;</span>
+                <span class="punctuation">}</span><span class="punctuation">,</span>
+                <span class="attr">&quot;^,$,0,G,H,M,L&quot;</span><span class="punctuation">:</span> <span class="punctuation">{</span>
+                    <span class="attr">&quot;command&quot;</span><span class="punctuation">:</span> <span class="string">&quot;modaledit.typeNormalKeys&quot;</span><span class="punctuation">,</span>
+                    <span class="attr">&quot;args&quot;</span><span class="punctuation">:</span> <span class="string">&quot;{ keys: &#x27;v&#x27; + __rcmd[0] + __rcmd[1] }&quot;</span>
+                <span class="punctuation">}</span><span class="punctuation">,</span>
+                <span class="attr">&quot;g&quot;</span><span class="punctuation">:</span> <span class="punctuation">{</span>
+                    <span class="attr">&quot;g,_&quot;</span><span class="punctuation">:</span> <span class="punctuation">{</span>
+                        <span class="attr">&quot;command&quot;</span><span class="punctuation">:</span> <span class="string">&quot;modaledit.typeNormalKeys&quot;</span><span class="punctuation">,</span>
+                        <span class="attr">&quot;args&quot;</span><span class="punctuation">:</span> <span class="string">&quot;{ keys: &#x27;v&#x27; + __rcmd[1] + __rcmd[0] + __rcmd[2] }&quot;</span>
+                    <span class="punctuation">}</span>
+                <span class="punctuation">}</span><span class="punctuation">,</span>
+                <span class="attr">&quot;f,t,F,T&quot;</span><span class="punctuation">:</span> <span class="punctuation">{</span>
+                    <span class="attr">&quot;help&quot;</span><span class="punctuation">:</span> <span class="string">&quot;Do until _&quot;</span><span class="punctuation">,</span>
+                    <span class="attr">&quot; -~&quot;</span><span class="punctuation">:</span> <span class="punctuation">{</span>
+                        <span class="attr">&quot;command&quot;</span><span class="punctuation">:</span> <span class="string">&quot;modaledit.typeNormalKeys&quot;</span><span class="punctuation">,</span>
+                        <span class="attr">&quot;args&quot;</span><span class="punctuation">:</span> <span class="string">&quot;{ keys: &#x27;v&#x27; + __rcmd[1] + __rcmd[0] + __rcmd[2] }&quot;</span>
+                    <span class="punctuation">}</span>
+                <span class="punctuation">}</span><span class="punctuation">,</span>
+                <span class="attr">&quot;a,i&quot;</span><span class="punctuation">:</span> <span class="punctuation">{</span>
+                    <span class="attr">&quot;help&quot;</span><span class="punctuation">:</span> <span class="string">&quot;Do around/inside _&quot;</span><span class="punctuation">,</span>
+                    <span class="attr">&quot;w,p,b,B,t, -/,:-@,[-`,{-~&quot;</span><span class="punctuation">:</span> <span class="punctuation">{</span>
+                        <span class="attr">&quot;command&quot;</span><span class="punctuation">:</span> <span class="string">&quot;modaledit.typeNormalKeys&quot;</span><span class="punctuation">,</span>
+                        <span class="attr">&quot;args&quot;</span><span class="punctuation">:</span> <span class="string">&quot;{ keys: &#x27;v&#x27; + __rcmd[1] + __rcmd[0] + __rcmd[2] }&quot;</span>
+                    <span class="punctuation">}</span>
+                <span class="punctuation">}</span><span class="punctuation">,</span>
+                <span class="attr">&quot;`,&#x27;&quot;</span><span class="punctuation">:</span> <span class="punctuation">{</span>
+                    <span class="attr">&quot;help&quot;</span><span class="punctuation">:</span> <span class="string">&quot;Do until mark _&quot;</span><span class="punctuation">,</span>
+                    <span class="attr">&quot;a-z&quot;</span><span class="punctuation">:</span> <span class="punctuation">{</span>
+                        <span class="attr">&quot;command&quot;</span><span class="punctuation">:</span> <span class="string">&quot;modaledit.typeNormalKeys&quot;</span><span class="punctuation">,</span>
+                        <span class="attr">&quot;args&quot;</span><span class="punctuation">:</span> <span class="string">&quot;{ keys: &#x27;v&#x27; + __rcmd[1] + __rcmd[0] + __rcmd[2] }&quot;</span>
+                    <span class="punctuation">}</span>
+                <span class="punctuation">}</span>
+            <span class="punctuation">}</span><span class="punctuation">,</span>
 </code></pre>
 <p><key>g</key><key>t</key> and <key>g</key><key>T</key> switch to next/previous
 tab.</p>
 
-<pre class="syntaxhighlight"><code>            "t": "workbench.action.nextEditor",
-            "T": "workbench.action.previousEditor"
-        },
+<pre class="syntaxhighlight narrow-scrollbars"><code>            <span class="attr">&quot;t&quot;</span><span class="punctuation">:</span> <span class="string">&quot;workbench.action.nextEditor&quot;</span><span class="punctuation">,</span>
+            <span class="attr">&quot;T&quot;</span><span class="punctuation">:</span> <span class="string">&quot;workbench.action.previousEditor&quot;</span>
+        <span class="punctuation">}</span><span class="punctuation">,</span>
 </code></pre>
 <h2 id="rest-of-the-motion-commands">Rest of the Motion Commands</h2>
 <p>Now we can complete the list of basic motion commands. This one movest the
 cursor at the end of the file and selects the range, if visual mode is on.</p>
 
-<pre class="syntaxhighlight"><code>        "G": {
-            "condition": "__selecting",
-            "true": "cursorBottomSelect",
-            "false": "cursorBottom"
-        },
+<pre class="syntaxhighlight narrow-scrollbars"><code>        <span class="attr">&quot;G&quot;</span><span class="punctuation">:</span> <span class="punctuation">{</span>
+            <span class="attr">&quot;condition&quot;</span><span class="punctuation">:</span> <span class="string">&quot;__selecting&quot;</span><span class="punctuation">,</span>
+            <span class="attr">&quot;true&quot;</span><span class="punctuation">:</span> <span class="string">&quot;cursorBottomSelect&quot;</span><span class="punctuation">,</span>
+            <span class="attr">&quot;false&quot;</span><span class="punctuation">:</span> <span class="string">&quot;cursorBottom&quot;</span>
+        <span class="punctuation">}</span><span class="punctuation">,</span>
 </code></pre>
 <p>The logic of separating words is bit different in VS Code and Vim, so we will
 not try to imitate Vim behavior here. These keys are mapped to the most similar
 motion available. The <key>W</key> and <key>B</key> commands skip separator
 characters, and move to the start of the next/previous alphanumeric word.</p>
 
-<pre class="syntaxhighlight"><code>        "w": "cursorWordStartRight",
-        "e": "cursorWordEndRight",
-        "b": "cursorWordStartLeft",
-        "W": {
-            "command": "cursorWordStartRight",
-            "repeat": "__char.match(/\\W/)"
-        },
-        "B": {
-            "command": "cursorWordStartLeft",
-            "repeat": "__char.match(/\\W/)"
-        },
+<pre class="syntaxhighlight narrow-scrollbars"><code>        <span class="attr">&quot;w&quot;</span><span class="punctuation">:</span> <span class="string">&quot;cursorWordStartRight&quot;</span><span class="punctuation">,</span>
+        <span class="attr">&quot;e&quot;</span><span class="punctuation">:</span> <span class="string">&quot;cursorWordEndRight&quot;</span><span class="punctuation">,</span>
+        <span class="attr">&quot;b&quot;</span><span class="punctuation">:</span> <span class="string">&quot;cursorWordStartLeft&quot;</span><span class="punctuation">,</span>
+        <span class="attr">&quot;W&quot;</span><span class="punctuation">:</span> <span class="punctuation">{</span>
+            <span class="attr">&quot;command&quot;</span><span class="punctuation">:</span> <span class="string">&quot;cursorWordStartRight&quot;</span><span class="punctuation">,</span>
+            <span class="attr">&quot;repeat&quot;</span><span class="punctuation">:</span> <span class="string">&quot;__char.match(/\\W/)&quot;</span>
+        <span class="punctuation">}</span><span class="punctuation">,</span>
+        <span class="attr">&quot;B&quot;</span><span class="punctuation">:</span> <span class="punctuation">{</span>
+            <span class="attr">&quot;command&quot;</span><span class="punctuation">:</span> <span class="string">&quot;cursorWordStartLeft&quot;</span><span class="punctuation">,</span>
+            <span class="attr">&quot;repeat&quot;</span><span class="punctuation">:</span> <span class="string">&quot;__char.match(/\\W/)&quot;</span>
+        <span class="punctuation">}</span><span class="punctuation">,</span>
 </code></pre>
 <p>Moving cursor to the top, middle, and bottom of the screen is mapped to
 <key>H</key> (high), <key>M</key> (middle), and <key>L</key> (low) keys. These
 mappings also work in visual mode.</p>
 
-<pre class="syntaxhighlight"><code>        "H": {
-            "command": "cursorMove",
-            "args": "{ to: 'viewPortTop', select: __selecting }"
-        },
-        "M": {
-            "command": "cursorMove",
-            "args": "{ to: 'viewPortCenter', select: __selecting }"
-        },
-        "L": {
-            "command": "cursorMove",
-            "args": "{ to: 'viewPortBottom', select: __selecting }"
-        },
+<pre class="syntaxhighlight narrow-scrollbars"><code>        <span class="attr">&quot;H&quot;</span><span class="punctuation">:</span> <span class="punctuation">{</span>
+            <span class="attr">&quot;command&quot;</span><span class="punctuation">:</span> <span class="string">&quot;cursorMove&quot;</span><span class="punctuation">,</span>
+            <span class="attr">&quot;args&quot;</span><span class="punctuation">:</span> <span class="string">&quot;{ to: &#x27;viewPortTop&#x27;, select: __selecting }&quot;</span>
+        <span class="punctuation">}</span><span class="punctuation">,</span>
+        <span class="attr">&quot;M&quot;</span><span class="punctuation">:</span> <span class="punctuation">{</span>
+            <span class="attr">&quot;command&quot;</span><span class="punctuation">:</span> <span class="string">&quot;cursorMove&quot;</span><span class="punctuation">,</span>
+            <span class="attr">&quot;args&quot;</span><span class="punctuation">:</span> <span class="string">&quot;{ to: &#x27;viewPortCenter&#x27;, select: __selecting }&quot;</span>
+        <span class="punctuation">}</span><span class="punctuation">,</span>
+        <span class="attr">&quot;L&quot;</span><span class="punctuation">:</span> <span class="punctuation">{</span>
+            <span class="attr">&quot;command&quot;</span><span class="punctuation">:</span> <span class="string">&quot;cursorMove&quot;</span><span class="punctuation">,</span>
+            <span class="attr">&quot;args&quot;</span><span class="punctuation">:</span> <span class="string">&quot;{ to: &#x27;viewPortBottom&#x27;, select: __selecting }&quot;</span>
+        <span class="punctuation">}</span><span class="punctuation">,</span>
 </code></pre>
 <p>Move to matching bracket command is somewhat challenging to implement
 consistently in VS Code. This is due to the problem that there are no commands
@@ -483,11 +718,11 @@ syntactic scope is above the current selection. In many cases, it is more useful
 motion than jumping to a matching bracket, but using it means that we are
 diverging from Vim's functionality.</p>
 
-<pre class="syntaxhighlight"><code>        "%": {
-            "condition": "__selecting",
-            "true": "editor.action.smartSelect.expand",
-            "false": "editor.action.jumpToBracket"
-        },
+<pre class="syntaxhighlight narrow-scrollbars"><code>        <span class="attr">&quot;%&quot;</span><span class="punctuation">:</span> <span class="punctuation">{</span>
+            <span class="attr">&quot;condition&quot;</span><span class="punctuation">:</span> <span class="string">&quot;__selecting&quot;</span><span class="punctuation">,</span>
+            <span class="attr">&quot;true&quot;</span><span class="punctuation">:</span> <span class="string">&quot;editor.action.smartSelect.expand&quot;</span><span class="punctuation">,</span>
+            <span class="attr">&quot;false&quot;</span><span class="punctuation">:</span> <span class="string">&quot;editor.action.jumpToBracket&quot;</span>
+        <span class="punctuation">}</span><span class="punctuation">,</span>
 </code></pre>
 <h2 id="jump-to-a-character">Jump to a Character</h2>
 <p>Advanced cursor motions in Vim include jump to character, which is especially
@@ -540,56 +775,56 @@ search.</p>
 <key>l</key> (right), or sometimes by clearing the selection with <key>v</key>
 key.</p>
 
-<pre class="syntaxhighlight"><code>        "f": {
-            "command": "modaledit.search",
-            "args": {
-                "acceptAfter": 1,
-                "typeAfterAccept": "hv",
-                "typeBeforeNextMatch": "l",
-                "typeAfterNextMatch": "hv",
-                "typeAfterPreviousMatch": "v"
-            }
-        },
-        "F": {
-            "command": "modaledit.search",
-            "args": {
-                "acceptAfter": 1,
-                "backwards": true,
-                "typeAfterAccept": "v",
-                "typeAfterNextMatch": "v",
-                "typeBeforePreviousMatch": "l",
-                "typeAfterPreviousMatch": "hv"
-            }
-        },
-        "t": {
-            "command": "modaledit.search",
-            "args": {
-                "acceptAfter": 1,
-                "typeAfterAccept": "hhv",
-                "typeBeforeNextMatch": "ll",
-                "typeAfterNextMatch": "hhv",
-                "typeBeforePreviousMatch": "h",
-                "typeAfterPreviousMatch": "lv"
-            }
-        },
-        "T": {
-            "command": "modaledit.search",
-            "args": {
-                "acceptAfter": 1,
-                "backwards": true,
-                "typeAfterAccept": "lv",
-                "typeBeforeNextMatch": "h",
-                "typeAfterNextMatch": "lv",
-                "typeBeforePreviousMatch": "ll",
-                "typeAfterPreviousMatch": "hhv"
-            }
-        },
+<pre class="syntaxhighlight narrow-scrollbars"><code>        <span class="attr">&quot;f&quot;</span><span class="punctuation">:</span> <span class="punctuation">{</span>
+            <span class="attr">&quot;command&quot;</span><span class="punctuation">:</span> <span class="string">&quot;modaledit.search&quot;</span><span class="punctuation">,</span>
+            <span class="attr">&quot;args&quot;</span><span class="punctuation">:</span> <span class="punctuation">{</span>
+                <span class="attr">&quot;acceptAfter&quot;</span><span class="punctuation">:</span> <span class="number">1</span><span class="punctuation">,</span>
+                <span class="attr">&quot;typeAfterAccept&quot;</span><span class="punctuation">:</span> <span class="string">&quot;hv&quot;</span><span class="punctuation">,</span>
+                <span class="attr">&quot;typeBeforeNextMatch&quot;</span><span class="punctuation">:</span> <span class="string">&quot;l&quot;</span><span class="punctuation">,</span>
+                <span class="attr">&quot;typeAfterNextMatch&quot;</span><span class="punctuation">:</span> <span class="string">&quot;hv&quot;</span><span class="punctuation">,</span>
+                <span class="attr">&quot;typeAfterPreviousMatch&quot;</span><span class="punctuation">:</span> <span class="string">&quot;v&quot;</span>
+            <span class="punctuation">}</span>
+        <span class="punctuation">}</span><span class="punctuation">,</span>
+        <span class="attr">&quot;F&quot;</span><span class="punctuation">:</span> <span class="punctuation">{</span>
+            <span class="attr">&quot;command&quot;</span><span class="punctuation">:</span> <span class="string">&quot;modaledit.search&quot;</span><span class="punctuation">,</span>
+            <span class="attr">&quot;args&quot;</span><span class="punctuation">:</span> <span class="punctuation">{</span>
+                <span class="attr">&quot;acceptAfter&quot;</span><span class="punctuation">:</span> <span class="number">1</span><span class="punctuation">,</span>
+                <span class="attr">&quot;backwards&quot;</span><span class="punctuation">:</span> <span class="literal"><span class="keyword">true</span></span><span class="punctuation">,</span>
+                <span class="attr">&quot;typeAfterAccept&quot;</span><span class="punctuation">:</span> <span class="string">&quot;v&quot;</span><span class="punctuation">,</span>
+                <span class="attr">&quot;typeAfterNextMatch&quot;</span><span class="punctuation">:</span> <span class="string">&quot;v&quot;</span><span class="punctuation">,</span>
+                <span class="attr">&quot;typeBeforePreviousMatch&quot;</span><span class="punctuation">:</span> <span class="string">&quot;l&quot;</span><span class="punctuation">,</span>
+                <span class="attr">&quot;typeAfterPreviousMatch&quot;</span><span class="punctuation">:</span> <span class="string">&quot;hv&quot;</span>
+            <span class="punctuation">}</span>
+        <span class="punctuation">}</span><span class="punctuation">,</span>
+        <span class="attr">&quot;t&quot;</span><span class="punctuation">:</span> <span class="punctuation">{</span>
+            <span class="attr">&quot;command&quot;</span><span class="punctuation">:</span> <span class="string">&quot;modaledit.search&quot;</span><span class="punctuation">,</span>
+            <span class="attr">&quot;args&quot;</span><span class="punctuation">:</span> <span class="punctuation">{</span>
+                <span class="attr">&quot;acceptAfter&quot;</span><span class="punctuation">:</span> <span class="number">1</span><span class="punctuation">,</span>
+                <span class="attr">&quot;typeAfterAccept&quot;</span><span class="punctuation">:</span> <span class="string">&quot;hhv&quot;</span><span class="punctuation">,</span>
+                <span class="attr">&quot;typeBeforeNextMatch&quot;</span><span class="punctuation">:</span> <span class="string">&quot;ll&quot;</span><span class="punctuation">,</span>
+                <span class="attr">&quot;typeAfterNextMatch&quot;</span><span class="punctuation">:</span> <span class="string">&quot;hhv&quot;</span><span class="punctuation">,</span>
+                <span class="attr">&quot;typeBeforePreviousMatch&quot;</span><span class="punctuation">:</span> <span class="string">&quot;h&quot;</span><span class="punctuation">,</span>
+                <span class="attr">&quot;typeAfterPreviousMatch&quot;</span><span class="punctuation">:</span> <span class="string">&quot;lv&quot;</span>
+            <span class="punctuation">}</span>
+        <span class="punctuation">}</span><span class="punctuation">,</span>
+        <span class="attr">&quot;T&quot;</span><span class="punctuation">:</span> <span class="punctuation">{</span>
+            <span class="attr">&quot;command&quot;</span><span class="punctuation">:</span> <span class="string">&quot;modaledit.search&quot;</span><span class="punctuation">,</span>
+            <span class="attr">&quot;args&quot;</span><span class="punctuation">:</span> <span class="punctuation">{</span>
+                <span class="attr">&quot;acceptAfter&quot;</span><span class="punctuation">:</span> <span class="number">1</span><span class="punctuation">,</span>
+                <span class="attr">&quot;backwards&quot;</span><span class="punctuation">:</span> <span class="literal"><span class="keyword">true</span></span><span class="punctuation">,</span>
+                <span class="attr">&quot;typeAfterAccept&quot;</span><span class="punctuation">:</span> <span class="string">&quot;lv&quot;</span><span class="punctuation">,</span>
+                <span class="attr">&quot;typeBeforeNextMatch&quot;</span><span class="punctuation">:</span> <span class="string">&quot;h&quot;</span><span class="punctuation">,</span>
+                <span class="attr">&quot;typeAfterNextMatch&quot;</span><span class="punctuation">:</span> <span class="string">&quot;lv&quot;</span><span class="punctuation">,</span>
+                <span class="attr">&quot;typeBeforePreviousMatch&quot;</span><span class="punctuation">:</span> <span class="string">&quot;ll&quot;</span><span class="punctuation">,</span>
+                <span class="attr">&quot;typeAfterPreviousMatch&quot;</span><span class="punctuation">:</span> <span class="string">&quot;hhv&quot;</span>
+            <span class="punctuation">}</span>
+        <span class="punctuation">}</span><span class="punctuation">,</span>
 </code></pre>
 <p>Repeating the motions can be done simply by calling <code>nextMatch</code> or
 <code>previousMatch</code>.</p>
 
-<pre class="syntaxhighlight"><code>        ";": "modaledit.nextMatch",
-        ",": "modaledit.previousMatch",
+<pre class="syntaxhighlight narrow-scrollbars"><code>        <span class="attr">&quot;;&quot;</span><span class="punctuation">:</span> <span class="string">&quot;modaledit.nextMatch&quot;</span><span class="punctuation">,</span>
+        <span class="attr">&quot;,&quot;</span><span class="punctuation">:</span> <span class="string">&quot;modaledit.previousMatch&quot;</span><span class="punctuation">,</span>
 </code></pre>
 <h2 id="bookmarks">Bookmarks</h2>
 <p>You can also combine jump to bookmark motions with editing commands in Vim.
@@ -620,31 +855,31 @@ these keybindings:</p>
 </table>
 </div><p>Jump commands also work in visual mode.</p>
 
-<pre class="syntaxhighlight"><code>        "m": {
-            "help": "Define mark _",
-            "a-z": {
-                "command": "modaledit.defineBookmark",
-                "args": "{ bookmark: __rcmd[0] }"
-            }
-        },
-        "`": {
-            "a-z": {
-                "command": "modaledit.goToBookmark",
-                "args": "{ bookmark: __rcmd[0], select: __selecting }"
-            }
-        },
-        "'": {
-            "a-z": [
-                {
-                    "command": "modaledit.goToBookmark",
-                    "args": "{ bookmark: __rcmd[0], select: __selecting }"
-                },
-                {
-                    "command": "cursorMove",
-                    "args": "{ to: 'wrappedLineFirstNonWhitespaceCharacter', select: __selecting }"
-                }
-            ]
-        },
+<pre class="syntaxhighlight narrow-scrollbars"><code>        <span class="attr">&quot;m&quot;</span><span class="punctuation">:</span> <span class="punctuation">{</span>
+            <span class="attr">&quot;help&quot;</span><span class="punctuation">:</span> <span class="string">&quot;Define mark _&quot;</span><span class="punctuation">,</span>
+            <span class="attr">&quot;a-z&quot;</span><span class="punctuation">:</span> <span class="punctuation">{</span>
+                <span class="attr">&quot;command&quot;</span><span class="punctuation">:</span> <span class="string">&quot;modaledit.defineBookmark&quot;</span><span class="punctuation">,</span>
+                <span class="attr">&quot;args&quot;</span><span class="punctuation">:</span> <span class="string">&quot;{ bookmark: __rcmd[0] }&quot;</span>
+            <span class="punctuation">}</span>
+        <span class="punctuation">}</span><span class="punctuation">,</span>
+        <span class="attr">&quot;`&quot;</span><span class="punctuation">:</span> <span class="punctuation">{</span>
+            <span class="attr">&quot;a-z&quot;</span><span class="punctuation">:</span> <span class="punctuation">{</span>
+                <span class="attr">&quot;command&quot;</span><span class="punctuation">:</span> <span class="string">&quot;modaledit.goToBookmark&quot;</span><span class="punctuation">,</span>
+                <span class="attr">&quot;args&quot;</span><span class="punctuation">:</span> <span class="string">&quot;{ bookmark: __rcmd[0], select: __selecting }&quot;</span>
+            <span class="punctuation">}</span>
+        <span class="punctuation">}</span><span class="punctuation">,</span>
+        <span class="attr">&quot;&#x27;&quot;</span><span class="punctuation">:</span> <span class="punctuation">{</span>
+            <span class="attr">&quot;a-z&quot;</span><span class="punctuation">:</span> <span class="punctuation">[</span>
+                <span class="punctuation">{</span>
+                    <span class="attr">&quot;command&quot;</span><span class="punctuation">:</span> <span class="string">&quot;modaledit.goToBookmark&quot;</span><span class="punctuation">,</span>
+                    <span class="attr">&quot;args&quot;</span><span class="punctuation">:</span> <span class="string">&quot;{ bookmark: __rcmd[0], select: __selecting }&quot;</span>
+                <span class="punctuation">}</span><span class="punctuation">,</span>
+                <span class="punctuation">{</span>
+                    <span class="attr">&quot;command&quot;</span><span class="punctuation">:</span> <span class="string">&quot;cursorMove&quot;</span><span class="punctuation">,</span>
+                    <span class="attr">&quot;args&quot;</span><span class="punctuation">:</span> <span class="string">&quot;{ to: &#x27;wrappedLineFirstNonWhitespaceCharacter&#x27;, select: __selecting }&quot;</span>
+                <span class="punctuation">}</span>
+            <span class="punctuation">]</span>
+        <span class="punctuation">}</span><span class="punctuation">,</span>
 </code></pre>
 <h2 id="switching-between-modes">Switching between Modes</h2>
 <p>Next, we define keybindings that switch between normal, insert, and visual mode:</p>
@@ -694,34 +929,34 @@ these keybindings:</p>
 and <code>o</code> = open, but above we describe what the commands do exactly instead
 of using these names.</p>
 
-<pre class="syntaxhighlight"><code>        "i": "modaledit.enterInsert",
-        "I": [
-            "cursorHome",
-            "modaledit.enterInsert"
-        ],
+<pre class="syntaxhighlight narrow-scrollbars"><code>        <span class="attr">&quot;i&quot;</span><span class="punctuation">:</span> <span class="string">&quot;modaledit.enterInsert&quot;</span><span class="punctuation">,</span>
+        <span class="attr">&quot;I&quot;</span><span class="punctuation">:</span> <span class="punctuation">[</span>
+            <span class="string">&quot;cursorHome&quot;</span><span class="punctuation">,</span>
+            <span class="string">&quot;modaledit.enterInsert&quot;</span>
+        <span class="punctuation">]</span><span class="punctuation">,</span>
 </code></pre>
 <p>The <code>a</code> has to check if the cursor is at the end of line. If so, we don't move
 right because that would move to next line.</p>
 
-<pre class="syntaxhighlight"><code>        "a": [
-            {
-                "condition": "__char == ''",
-                "false": "cursorRight"
-            },
-            "modaledit.enterInsert"
-        ],
-        "A": [
-            "cursorEnd",
-            "modaledit.enterInsert"
-        ],
-        "o": [
-            "editor.action.insertLineAfter",
-            "modaledit.enterInsert"
-        ],
-        "O": [
-            "editor.action.insertLineBefore",
-            "modaledit.enterInsert"
-        ],
+<pre class="syntaxhighlight narrow-scrollbars"><code>        <span class="attr">&quot;a&quot;</span><span class="punctuation">:</span> <span class="punctuation">[</span>
+            <span class="punctuation">{</span>
+                <span class="attr">&quot;condition&quot;</span><span class="punctuation">:</span> <span class="string">&quot;__char == &#x27;&#x27;&quot;</span><span class="punctuation">,</span>
+                <span class="attr">&quot;false&quot;</span><span class="punctuation">:</span> <span class="string">&quot;cursorRight&quot;</span>
+            <span class="punctuation">}</span><span class="punctuation">,</span>
+            <span class="string">&quot;modaledit.enterInsert&quot;</span>
+        <span class="punctuation">]</span><span class="punctuation">,</span>
+        <span class="attr">&quot;A&quot;</span><span class="punctuation">:</span> <span class="punctuation">[</span>
+            <span class="string">&quot;cursorEnd&quot;</span><span class="punctuation">,</span>
+            <span class="string">&quot;modaledit.enterInsert&quot;</span>
+        <span class="punctuation">]</span><span class="punctuation">,</span>
+        <span class="attr">&quot;o&quot;</span><span class="punctuation">:</span> <span class="punctuation">[</span>
+            <span class="string">&quot;editor.action.insertLineAfter&quot;</span><span class="punctuation">,</span>
+            <span class="string">&quot;modaledit.enterInsert&quot;</span>
+        <span class="punctuation">]</span><span class="punctuation">,</span>
+        <span class="attr">&quot;O&quot;</span><span class="punctuation">:</span> <span class="punctuation">[</span>
+            <span class="string">&quot;editor.action.insertLineBefore&quot;</span><span class="punctuation">,</span>
+            <span class="string">&quot;modaledit.enterInsert&quot;</span>
+        <span class="punctuation">]</span><span class="punctuation">,</span>
 </code></pre>
 <p>Note that visual mode is not really a mode. Basically we just set the
 <code>__selecting</code> flag that changes the behavior of normal mode commands. Nor is
@@ -729,17 +964,17 @@ there a separate line selection mode. We just mimic Vim's behavior using
 VS Code's builtin commands that select ranges of text, when the <code>__selecting</code>
 flag is on.</p>
 
-<pre class="syntaxhighlight"><code>        "v": "modaledit.toggleSelection",
-        "V": [
-            {
-                "command": "cursorMove",
-                "args": {
-                    "to": "wrappedLineStart"
-                }
-            },
-            "modaledit.toggleSelection",
-            "cursorDownSelect"
-        ],
+<pre class="syntaxhighlight narrow-scrollbars"><code>        <span class="attr">&quot;v&quot;</span><span class="punctuation">:</span> <span class="string">&quot;modaledit.toggleSelection&quot;</span><span class="punctuation">,</span>
+        <span class="attr">&quot;V&quot;</span><span class="punctuation">:</span> <span class="punctuation">[</span>
+            <span class="punctuation">{</span>
+                <span class="attr">&quot;command&quot;</span><span class="punctuation">:</span> <span class="string">&quot;cursorMove&quot;</span><span class="punctuation">,</span>
+                <span class="attr">&quot;args&quot;</span><span class="punctuation">:</span> <span class="punctuation">{</span>
+                    <span class="attr">&quot;to&quot;</span><span class="punctuation">:</span> <span class="string">&quot;wrappedLineStart&quot;</span>
+                <span class="punctuation">}</span>
+            <span class="punctuation">}</span><span class="punctuation">,</span>
+            <span class="string">&quot;modaledit.toggleSelection&quot;</span><span class="punctuation">,</span>
+            <span class="string">&quot;cursorDownSelect&quot;</span>
+        <span class="punctuation">]</span><span class="punctuation">,</span>
 </code></pre>
 <h2 id="editing-in-normal-mode">Editing in Normal Mode</h2>
 <p>Editing commands in normal mode typically either affect current character or
@@ -811,28 +1046,28 @@ annex:</p>
 </div><p><key>x</key> and <key>X</key> commands do exactly what <key>Delete</key> and
 <key>Backspace</key> keys do.</p>
 
-<pre class="syntaxhighlight"><code>        "x": "deleteRight",
-        "X": "deleteLeft",
+<pre class="syntaxhighlight narrow-scrollbars"><code>        <span class="attr">&quot;x&quot;</span><span class="punctuation">:</span> <span class="string">&quot;deleteRight&quot;</span><span class="punctuation">,</span>
+        <span class="attr">&quot;X&quot;</span><span class="punctuation">:</span> <span class="string">&quot;deleteLeft&quot;</span><span class="punctuation">,</span>
 </code></pre>
 <p><key>r</key> and <key>s</key> commands delete character under cursor and enter
 insert mode. In Vim <key>r</key> and <key>R</key> keys swith momentarily or
 permanently to overwrite mode. Since this mode does not exist in VS Code, we
 settle on mapping both keys to the same sequence.</p>
 
-<pre class="syntaxhighlight"><code>        "r,s": [
-            "deleteRight",
-            "modaledit.enterInsert"
-        ],
+<pre class="syntaxhighlight narrow-scrollbars"><code>        <span class="attr">&quot;r,s&quot;</span><span class="punctuation">:</span> <span class="punctuation">[</span>
+            <span class="string">&quot;deleteRight&quot;</span><span class="punctuation">,</span>
+            <span class="string">&quot;modaledit.enterInsert&quot;</span>
+        <span class="punctuation">]</span><span class="punctuation">,</span>
 </code></pre>
 <p><key>S</key> substitutes the whole line. We don't need to implement the command
 here as we can reuse the <key>c</key><key>c</key> command that we define later.</p>
 
-<pre class="syntaxhighlight"><code>        "S": {
-            "command": "modaledit.typeNormalKeys",
-            "args": {
-                "keys": "cc"
-            }
-        },
+<pre class="syntaxhighlight narrow-scrollbars"><code>        <span class="attr">&quot;S&quot;</span><span class="punctuation">:</span> <span class="punctuation">{</span>
+            <span class="attr">&quot;command&quot;</span><span class="punctuation">:</span> <span class="string">&quot;modaledit.typeNormalKeys&quot;</span><span class="punctuation">,</span>
+            <span class="attr">&quot;args&quot;</span><span class="punctuation">:</span> <span class="punctuation">{</span>
+                <span class="attr">&quot;keys&quot;</span><span class="punctuation">:</span> <span class="string">&quot;cc&quot;</span>
+            <span class="punctuation">}</span>
+        <span class="punctuation">}</span><span class="punctuation">,</span>
 </code></pre>
 <p>Deleting in Vim always copies the deleted text into clipboard, so we do that
 as well. If you are wondering why we don't use VS Code's cut command, it has a
@@ -841,61 +1076,61 @@ next command in the sequence before cutting is done. This leads to strange
 random behavior that usually causes the whole line to disappear instead of the
 rest of line.</p>
 
-<pre class="syntaxhighlight"><code>        "D": [
-            "modaledit.cancelSelection",
-            "cursorEndSelect",
-            "editor.action.clipboardCopyAction",
-            "deleteRight",
-            "modaledit.cancelSelection"
-        ],
+<pre class="syntaxhighlight narrow-scrollbars"><code>        <span class="attr">&quot;D&quot;</span><span class="punctuation">:</span> <span class="punctuation">[</span>
+            <span class="string">&quot;modaledit.cancelSelection&quot;</span><span class="punctuation">,</span>
+            <span class="string">&quot;cursorEndSelect&quot;</span><span class="punctuation">,</span>
+            <span class="string">&quot;editor.action.clipboardCopyAction&quot;</span><span class="punctuation">,</span>
+            <span class="string">&quot;deleteRight&quot;</span><span class="punctuation">,</span>
+            <span class="string">&quot;modaledit.cancelSelection&quot;</span>
+        <span class="punctuation">]</span><span class="punctuation">,</span>
 </code></pre>
 <p>Again, we utilize existing mappings to implement the <key>C</key> command. It
 does same thing as keys <key>D</key><key>i</key> together.</p>
 
-<pre class="syntaxhighlight"><code>        "C": {
-            "command": "modaledit.typeNormalKeys",
-            "args": {
-                "keys": "Di"
-            }
-        },
+<pre class="syntaxhighlight narrow-scrollbars"><code>        <span class="attr">&quot;C&quot;</span><span class="punctuation">:</span> <span class="punctuation">{</span>
+            <span class="attr">&quot;command&quot;</span><span class="punctuation">:</span> <span class="string">&quot;modaledit.typeNormalKeys&quot;</span><span class="punctuation">,</span>
+            <span class="attr">&quot;args&quot;</span><span class="punctuation">:</span> <span class="punctuation">{</span>
+                <span class="attr">&quot;keys&quot;</span><span class="punctuation">:</span> <span class="string">&quot;Di&quot;</span>
+            <span class="punctuation">}</span>
+        <span class="punctuation">}</span><span class="punctuation">,</span>
 </code></pre>
 <p>Yanking or copying is always done on selected range. So, we make sure that only
 rest of line is selected before copying the range to clipboard. Afterwards we
 clear the selection again.</p>
 
-<pre class="syntaxhighlight"><code>        "Y": [
-            "modaledit.cancelSelection",
-            "cursorEndSelect",
-            "editor.action.clipboardCopyAction",
-            "modaledit.cancelSelection"
-        ],
+<pre class="syntaxhighlight narrow-scrollbars"><code>        <span class="attr">&quot;Y&quot;</span><span class="punctuation">:</span> <span class="punctuation">[</span>
+            <span class="string">&quot;modaledit.cancelSelection&quot;</span><span class="punctuation">,</span>
+            <span class="string">&quot;cursorEndSelect&quot;</span><span class="punctuation">,</span>
+            <span class="string">&quot;editor.action.clipboardCopyAction&quot;</span><span class="punctuation">,</span>
+            <span class="string">&quot;modaledit.cancelSelection&quot;</span>
+        <span class="punctuation">]</span><span class="punctuation">,</span>
 </code></pre>
 <p>Pasting text at cursor is done with <key>P</key> key. Following Vim convention
 <key>p</key> pastes text after cursor position. In both cases we clear the
 selection after paste, so that we don't accidently end up in visual mode.</p>
 
-<pre class="syntaxhighlight"><code>        "p": [
-            "cursorRight",
-            "editor.action.clipboardPasteAction",
-            "modaledit.cancelSelection"
-        ],
-        "P": [
-            "editor.action.clipboardPasteAction",
-            "modaledit.cancelSelection"
-        ],
+<pre class="syntaxhighlight narrow-scrollbars"><code>        <span class="attr">&quot;p&quot;</span><span class="punctuation">:</span> <span class="punctuation">[</span>
+            <span class="string">&quot;cursorRight&quot;</span><span class="punctuation">,</span>
+            <span class="string">&quot;editor.action.clipboardPasteAction&quot;</span><span class="punctuation">,</span>
+            <span class="string">&quot;modaledit.cancelSelection&quot;</span>
+        <span class="punctuation">]</span><span class="punctuation">,</span>
+        <span class="attr">&quot;P&quot;</span><span class="punctuation">:</span> <span class="punctuation">[</span>
+            <span class="string">&quot;editor.action.clipboardPasteAction&quot;</span><span class="punctuation">,</span>
+            <span class="string">&quot;modaledit.cancelSelection&quot;</span>
+        <span class="punctuation">]</span><span class="punctuation">,</span>
 </code></pre>
 <p><key>J</key> joins current and next lines together adding a space in between.
 There is a built in command that does just this.</p>
 
-<pre class="syntaxhighlight"><code>        "J": "editor.action.joinLines",
+<pre class="syntaxhighlight narrow-scrollbars"><code>        <span class="attr">&quot;J&quot;</span><span class="punctuation">:</span> <span class="string">&quot;editor.action.joinLines&quot;</span><span class="punctuation">,</span>
 </code></pre>
 <p>Undoing last change is also a matter of calling built-in command. We clear the
 selection afterwards.</p>
 
-<pre class="syntaxhighlight"><code>        "u": [
-            "undo",
-            "modaledit.cancelSelection"
-        ],
+<pre class="syntaxhighlight narrow-scrollbars"><code>        <span class="attr">&quot;u&quot;</span><span class="punctuation">:</span> <span class="punctuation">[</span>
+            <span class="string">&quot;undo&quot;</span><span class="punctuation">,</span>
+            <span class="string">&quot;modaledit.cancelSelection&quot;</span>
+        <span class="punctuation">]</span><span class="punctuation">,</span>
 </code></pre>
 <p>The last &quot;simple&quot; keybinding we define is <key>`</key> that repeats the last
 command that changed the text somehow. This command is provided by ModalEdit. It
@@ -903,7 +1138,7 @@ checks after each key sequence is typed whether it caused a change in file.
 If so, it stores the seqeuence as a change. The command just runs the stored
 keysequence again.</p>
 
-<pre class="syntaxhighlight"><code>        ".": "modaledit.repeatLastChange",
+<pre class="syntaxhighlight narrow-scrollbars"><code>        <span class="attr">&quot;.&quot;</span><span class="punctuation">:</span> <span class="string">&quot;modaledit.repeatLastChange&quot;</span><span class="punctuation">,</span>
 </code></pre>
 <h2 id="editing-with-motions">Editing with Motions</h2>
 <p>So, far we have kept the structure of keybindings quite simple. Now we tackle
@@ -956,9 +1191,9 @@ motion in visual mode selecting a range of text, and then running the command
 on the selection. It does not matter which editing command we run, all of them
 can be mapped the same way.</p>
 
-<pre class="syntaxhighlight"><code>        "d,y,c,&lt;,&gt;,=": {
-            "id": 2,
-            "help": "Edit with motion",
+<pre class="syntaxhighlight narrow-scrollbars"><code>        <span class="attr">&quot;d,y,c,&lt;,&gt;,=&quot;</span><span class="punctuation">:</span> <span class="punctuation">{</span>
+            <span class="attr">&quot;id&quot;</span><span class="punctuation">:</span> <span class="number">2</span><span class="punctuation">,</span>
+            <span class="attr">&quot;help&quot;</span><span class="punctuation">:</span> <span class="string">&quot;Edit with motion&quot;</span><span class="punctuation">,</span>
 </code></pre>
 <p>The motions can be also divided to two categories: repeatable and non-repeatable.
 Some motions we can repeat, such as move to next character/word/line, but some
@@ -979,10 +1214,10 @@ blocks. The entered key sequence <code>__cmd</code> contains the full sequence e
 the user, not just immediate sequence that lead to the block. So, we can extract
 the number from the start of the <code>__cmd</code> string.</p>
 
-<pre class="syntaxhighlight"><code>            "d,y,c,&lt;,&gt;,=": {
-                "command": "modaledit.typeNormalKeys",
-                "args": "{ keys: __cmd.slice(0, -2) + 'V' + (__rcmd[0] =='c' ? 'dO' : __rcmd[0]) }"
-            },
+<pre class="syntaxhighlight narrow-scrollbars"><code>            <span class="attr">&quot;d,y,c,&lt;,&gt;,=&quot;</span><span class="punctuation">:</span> <span class="punctuation">{</span>
+                <span class="attr">&quot;command&quot;</span><span class="punctuation">:</span> <span class="string">&quot;modaledit.typeNormalKeys&quot;</span><span class="punctuation">,</span>
+                <span class="attr">&quot;args&quot;</span><span class="punctuation">:</span> <span class="string">&quot;{ keys: __cmd.slice(0, -2) + &#x27;V&#x27; + (__rcmd[0] ==&#x27;c&#x27; ? &#x27;dO&#x27; : __rcmd[0]) }&quot;</span>
+            <span class="punctuation">}</span><span class="punctuation">,</span>
 </code></pre>
 <p>Another thing to note is that we actually have some logic when choosing what
 command to run; we transform the <key>c</key> key to <key>d</key><key>O</key>
@@ -993,24 +1228,24 @@ maps to command <key>2</key><key>V</key><key>d</key><key>O</key>.</p>
 example the command to yank three words <key>3</key><key>y</key><key>w</key> is
 converted to a sequence <key>v</key><key>3</key><key>w</key><key>y</key>.</p>
 
-<pre class="syntaxhighlight"><code>            "h,j,k,l,w,e,b,W,B,%": {
-                "command": "modaledit.typeNormalKeys",
-                "args": "{ keys: 'v' + __cmd.slice(0, -2) + __rcmd[0] + __rcmd[1] }"
-            },
+<pre class="syntaxhighlight narrow-scrollbars"><code>            <span class="attr">&quot;h,j,k,l,w,e,b,W,B,%&quot;</span><span class="punctuation">:</span> <span class="punctuation">{</span>
+                <span class="attr">&quot;command&quot;</span><span class="punctuation">:</span> <span class="string">&quot;modaledit.typeNormalKeys&quot;</span><span class="punctuation">,</span>
+                <span class="attr">&quot;args&quot;</span><span class="punctuation">:</span> <span class="string">&quot;{ keys: &#x27;v&#x27; + __cmd.slice(0, -2) + __rcmd[0] + __rcmd[1] }&quot;</span>
+            <span class="punctuation">}</span><span class="punctuation">,</span>
 </code></pre>
 <p>Non-repeatable motions are even easier. We just basically rearrange the key
 sequence and add <key>v</key> key in front.</p>
 
-<pre class="syntaxhighlight"><code>            "^,$,0,G,H,M,L": {
-                "command": "modaledit.typeNormalKeys",
-                "args": "{ keys: 'v' + __rcmd[0] + __rcmd[1] }"
-            },
-            "g": {
-                "g,_": {
-                    "command": "modaledit.typeNormalKeys",
-                    "args": "{ keys: 'v' + __rcmd[1] + __rcmd[0] + __rcmd[2] }"
-                }
-            },
+<pre class="syntaxhighlight narrow-scrollbars"><code>            <span class="attr">&quot;^,$,0,G,H,M,L&quot;</span><span class="punctuation">:</span> <span class="punctuation">{</span>
+                <span class="attr">&quot;command&quot;</span><span class="punctuation">:</span> <span class="string">&quot;modaledit.typeNormalKeys&quot;</span><span class="punctuation">,</span>
+                <span class="attr">&quot;args&quot;</span><span class="punctuation">:</span> <span class="string">&quot;{ keys: &#x27;v&#x27; + __rcmd[0] + __rcmd[1] }&quot;</span>
+            <span class="punctuation">}</span><span class="punctuation">,</span>
+            <span class="attr">&quot;g&quot;</span><span class="punctuation">:</span> <span class="punctuation">{</span>
+                <span class="attr">&quot;g,_&quot;</span><span class="punctuation">:</span> <span class="punctuation">{</span>
+                    <span class="attr">&quot;command&quot;</span><span class="punctuation">:</span> <span class="string">&quot;modaledit.typeNormalKeys&quot;</span><span class="punctuation">,</span>
+                    <span class="attr">&quot;args&quot;</span><span class="punctuation">:</span> <span class="string">&quot;{ keys: &#x27;v&#x27; + __rcmd[1] + __rcmd[0] + __rcmd[2] }&quot;</span>
+                <span class="punctuation">}</span>
+            <span class="punctuation">}</span><span class="punctuation">,</span>
 </code></pre>
 <p>Next motions jump to a character. They are handy when you want to edit text
 until a specified character. For example the command
@@ -1018,13 +1253,13 @@ until a specified character. For example the command
 The implementation is exactly same as above, so the command would map to key
 sequence <key>v</key><key>t</key><key>&quot;</key><key>d</key>.</p>
 
-<pre class="syntaxhighlight"><code>            "f,t,F,T": {
-                "help": "Do until _",
-                " -~": {
-                    "command": "modaledit.typeNormalKeys",
-                    "args": "{ keys: 'v' + __rcmd[1] + __rcmd[0] + __rcmd[2] }"
-                }
-            },
+<pre class="syntaxhighlight narrow-scrollbars"><code>            <span class="attr">&quot;f,t,F,T&quot;</span><span class="punctuation">:</span> <span class="punctuation">{</span>
+                <span class="attr">&quot;help&quot;</span><span class="punctuation">:</span> <span class="string">&quot;Do until _&quot;</span><span class="punctuation">,</span>
+                <span class="attr">&quot; -~&quot;</span><span class="punctuation">:</span> <span class="punctuation">{</span>
+                    <span class="attr">&quot;command&quot;</span><span class="punctuation">:</span> <span class="string">&quot;modaledit.typeNormalKeys&quot;</span><span class="punctuation">,</span>
+                    <span class="attr">&quot;args&quot;</span><span class="punctuation">:</span> <span class="string">&quot;{ keys: &#x27;v&#x27; + __rcmd[1] + __rcmd[0] + __rcmd[2] }&quot;</span>
+                <span class="punctuation">}</span>
+            <span class="punctuation">}</span><span class="punctuation">,</span>
 </code></pre>
 <p>Doing an edit inside set of delimiters like braces, parenthesis or quotation
 marks can be done with the <key>a</key> or <key>i</key> movement. The difference
@@ -1034,13 +1269,13 @@ Special delimiters <key>w</key>, <key>p</key>, <key>b</key>, <key>B</key>, and
 <key>t</key> apply the edit inside word, paragraph, parenthesis, curly braces,
 and angle brackets respectively.</p>
 
-<pre class="syntaxhighlight"><code>            "a,i": {
-                "help": "Do around/inside _",
-                "w,p,b,B,t, -/,:-@,[-`,{-~": {
-                    "command": "modaledit.typeNormalKeys",
-                    "args": "{ keys: 'v' + __rcmd[1] + __rcmd[0] + __rcmd[2] }"
-                }
-            },
+<pre class="syntaxhighlight narrow-scrollbars"><code>            <span class="attr">&quot;a,i&quot;</span><span class="punctuation">:</span> <span class="punctuation">{</span>
+                <span class="attr">&quot;help&quot;</span><span class="punctuation">:</span> <span class="string">&quot;Do around/inside _&quot;</span><span class="punctuation">,</span>
+                <span class="attr">&quot;w,p,b,B,t, -/,:-@,[-`,{-~&quot;</span><span class="punctuation">:</span> <span class="punctuation">{</span>
+                    <span class="attr">&quot;command&quot;</span><span class="punctuation">:</span> <span class="string">&quot;modaledit.typeNormalKeys&quot;</span><span class="punctuation">,</span>
+                    <span class="attr">&quot;args&quot;</span><span class="punctuation">:</span> <span class="string">&quot;{ keys: &#x27;v&#x27; + __rcmd[1] + __rcmd[0] + __rcmd[2] }&quot;</span>
+                <span class="punctuation">}</span>
+            <span class="punctuation">}</span><span class="punctuation">,</span>
 </code></pre>
 <p>The last motion you can combine with editing commands is jump to tag. It is
 convenient when you want to edit long ranges of text that can't fit on screen.
@@ -1048,14 +1283,14 @@ We have two variants of the motion: <key>`</key> edits until the exact mark
 location, <key>'</key> until the beginning of line where the mark specified as
 the last key resides. Key sequence is rearranged exactly as above.</p>
 
-<pre class="syntaxhighlight"><code>            "`,'": {
-                "help": "Do until mark _",
-                "a-z": {
-                    "command": "modaledit.typeNormalKeys",
-                    "args": "{ keys: 'v' + __rcmd[1] + __rcmd[0] + __rcmd[2] }"
-                }
-            }
-        },
+<pre class="syntaxhighlight narrow-scrollbars"><code>            <span class="attr">&quot;`,&#x27;&quot;</span><span class="punctuation">:</span> <span class="punctuation">{</span>
+                <span class="attr">&quot;help&quot;</span><span class="punctuation">:</span> <span class="string">&quot;Do until mark _&quot;</span><span class="punctuation">,</span>
+                <span class="attr">&quot;a-z&quot;</span><span class="punctuation">:</span> <span class="punctuation">{</span>
+                    <span class="attr">&quot;command&quot;</span><span class="punctuation">:</span> <span class="string">&quot;modaledit.typeNormalKeys&quot;</span><span class="punctuation">,</span>
+                    <span class="attr">&quot;args&quot;</span><span class="punctuation">:</span> <span class="string">&quot;{ keys: &#x27;v&#x27; + __rcmd[1] + __rcmd[0] + __rcmd[2] }&quot;</span>
+                <span class="punctuation">}</span>
+            <span class="punctuation">}</span>
+        <span class="punctuation">}</span><span class="punctuation">,</span>
 </code></pre>
 <h2 id="commands-prefixed-by-number">Commands Prefixed by Number</h2>
 <p>As stated above, you can repeat many motions and edit commands by prefixing
@@ -1073,20 +1308,20 @@ line &lt;<em>num</em>&gt;.</p>
 </thead>
 <tbody>
 <tr>
-<td>&lt;<em>num</em>&gt;<code>h|j|k|l|w|e|b|W|B|%</code></td>
-<td>Repeat motion &lt;<em>num</em>&gt; times</td>
+<td>&lt;<em>num</em>&gt;`h</td>
+<td>j</td>
 </tr>
 <tr>
 <td>&lt;<em>num</em>&gt;<code>u</code></td>
 <td>Undo &lt;<em>num</em>&gt; times</td>
 </tr>
 <tr>
-<td>&lt;<em>num</em>&gt;<code>v|V</code></td>
-<td>Select &lt;<em>num</em>&gt; characters/lines</td>
+<td>&lt;<em>num</em>&gt;`v</td>
+<td>V`</td>
 </tr>
 <tr>
-<td>&lt;<em>num</em>&gt;<code>s|S</code></td>
-<td>Substitute (replace) &lt;<em>num</em>&gt; characters/lines</td>
+<td>&lt;<em>num</em>&gt;`s</td>
+<td>S`</td>
 </tr>
 <tr>
 <td>&lt;<em>num</em>&gt;<code>J</code></td>
@@ -1097,8 +1332,8 @@ line &lt;<em>num</em>&gt;.</p>
 <td>Join &lt;<em>num</em>&gt; lines without space in between</td>
 </tr>
 <tr>
-<td>&lt;<em>num</em>&gt;<code>G|gg</code></td>
-<td>Jump to line &lt;<em>num</em>&gt;</td>
+<td>&lt;<em>num</em>&gt;`G</td>
+<td>gg`</td>
 </tr>
 <tr>
 <td>&lt;<em>num</em>&gt;<code>gu</code>&lt;<em>motion</em>&gt;</td>
@@ -1136,96 +1371,96 @@ line &lt;<em>num</em>&gt;.</p>
 </table>
 </div><p>The recursive part of the keymap defined below.</p>
 
-<pre class="syntaxhighlight"><code>        "1-9": {
-            "id": 3,
-            "help": "Repeat / go to line",
-            "0-9": 3,
+<pre class="syntaxhighlight narrow-scrollbars"><code>        <span class="attr">&quot;1-9&quot;</span><span class="punctuation">:</span> <span class="punctuation">{</span>
+            <span class="attr">&quot;id&quot;</span><span class="punctuation">:</span> <span class="number">3</span><span class="punctuation">,</span>
+            <span class="attr">&quot;help&quot;</span><span class="punctuation">:</span> <span class="string">&quot;Repeat / go to line&quot;</span><span class="punctuation">,</span>
+            <span class="attr">&quot;0-9&quot;</span><span class="punctuation">:</span> <span class="number">3</span><span class="punctuation">,</span>
 </code></pre>
 <p>If any of the repeatable motions is typed after a number, we just do that motion
 &lt;<em>num</em>&gt; times. The <code>parseInt</code> function extracts the number from the beginning of
 the key sequence.</p>
 
-<pre class="syntaxhighlight"><code>            "h,j,k,l,w,e,b,W,B,u,%": {
-                "command": "modaledit.typeNormalKeys",
-                "args": "{ keys: __rcmd[0] }",
-                "repeat": "parseInt(__cmd)"
-            },
+<pre class="syntaxhighlight narrow-scrollbars"><code>            <span class="attr">&quot;h,j,k,l,w,e,b,W,B,u,%&quot;</span><span class="punctuation">:</span> <span class="punctuation">{</span>
+                <span class="attr">&quot;command&quot;</span><span class="punctuation">:</span> <span class="string">&quot;modaledit.typeNormalKeys&quot;</span><span class="punctuation">,</span>
+                <span class="attr">&quot;args&quot;</span><span class="punctuation">:</span> <span class="string">&quot;{ keys: __rcmd[0] }&quot;</span><span class="punctuation">,</span>
+                <span class="attr">&quot;repeat&quot;</span><span class="punctuation">:</span> <span class="string">&quot;parseInt(__cmd)&quot;</span>
+            <span class="punctuation">}</span><span class="punctuation">,</span>
 </code></pre>
 <p>Repeating <key>v</key> or <key>V</key> command will select &lt;<em>num</em>&gt; characters or
 lines.</p>
 
-<pre class="syntaxhighlight"><code>            "v": {
-                "command": "cursorRightSelect",
-                "repeat": "parseInt(__cmd)"
-            },
-            "V": {
-                "command": "expandLineSelection",
-                "repeat": "parseInt(__cmd)"
-            },
+<pre class="syntaxhighlight narrow-scrollbars"><code>            <span class="attr">&quot;v&quot;</span><span class="punctuation">:</span> <span class="punctuation">{</span>
+                <span class="attr">&quot;command&quot;</span><span class="punctuation">:</span> <span class="string">&quot;cursorRightSelect&quot;</span><span class="punctuation">,</span>
+                <span class="attr">&quot;repeat&quot;</span><span class="punctuation">:</span> <span class="string">&quot;parseInt(__cmd)&quot;</span>
+            <span class="punctuation">}</span><span class="punctuation">,</span>
+            <span class="attr">&quot;V&quot;</span><span class="punctuation">:</span> <span class="punctuation">{</span>
+                <span class="attr">&quot;command&quot;</span><span class="punctuation">:</span> <span class="string">&quot;expandLineSelection&quot;</span><span class="punctuation">,</span>
+                <span class="attr">&quot;repeat&quot;</span><span class="punctuation">:</span> <span class="string">&quot;parseInt(__cmd)&quot;</span>
+            <span class="punctuation">}</span><span class="punctuation">,</span>
 </code></pre>
 <p>Also substitution commands can be repeated. In this case we just remap the
 key sequence with the parsed number in front.</p>
 
-<pre class="syntaxhighlight"><code>            "s": {
-                "command": "modaledit.typeNormalKeys",
-                "args": "{ keys: parseInt(__cmd) + 'vc' }"
-            },
-            "S": {
-                "command": "modaledit.typeNormalKeys",
-                "args": "{ keys: parseInt(__cmd) + 'cc' }"
-            },
+<pre class="syntaxhighlight narrow-scrollbars"><code>            <span class="attr">&quot;s&quot;</span><span class="punctuation">:</span> <span class="punctuation">{</span>
+                <span class="attr">&quot;command&quot;</span><span class="punctuation">:</span> <span class="string">&quot;modaledit.typeNormalKeys&quot;</span><span class="punctuation">,</span>
+                <span class="attr">&quot;args&quot;</span><span class="punctuation">:</span> <span class="string">&quot;{ keys: parseInt(__cmd) + &#x27;vc&#x27; }&quot;</span>
+            <span class="punctuation">}</span><span class="punctuation">,</span>
+            <span class="attr">&quot;S&quot;</span><span class="punctuation">:</span> <span class="punctuation">{</span>
+                <span class="attr">&quot;command&quot;</span><span class="punctuation">:</span> <span class="string">&quot;modaledit.typeNormalKeys&quot;</span><span class="punctuation">,</span>
+                <span class="attr">&quot;args&quot;</span><span class="punctuation">:</span> <span class="string">&quot;{ keys: parseInt(__cmd) + &#x27;cc&#x27; }&quot;</span>
+            <span class="punctuation">}</span><span class="punctuation">,</span>
 </code></pre>
 <p>We can join multiple lines at once, too. This works because the
 <code>editor.action.joinLines</code> joins all selected lines. We just have to clear the
 selection afterwards.</p>
 
-<pre class="syntaxhighlight"><code>            "J": [
-                {
-                    "command": "modaledit.typeNormalKeys",
-                    "args": "{ keys: parseInt(__cmd) + 'VJ' }"
-                },
-                "modaledit.cancelSelection"
-            ],
+<pre class="syntaxhighlight narrow-scrollbars"><code>            <span class="attr">&quot;J&quot;</span><span class="punctuation">:</span> <span class="punctuation">[</span>
+                <span class="punctuation">{</span>
+                    <span class="attr">&quot;command&quot;</span><span class="punctuation">:</span> <span class="string">&quot;modaledit.typeNormalKeys&quot;</span><span class="punctuation">,</span>
+                    <span class="attr">&quot;args&quot;</span><span class="punctuation">:</span> <span class="string">&quot;{ keys: parseInt(__cmd) + &#x27;VJ&#x27; }&quot;</span>
+                <span class="punctuation">}</span><span class="punctuation">,</span>
+                <span class="string">&quot;modaledit.cancelSelection&quot;</span>
+            <span class="punctuation">]</span><span class="punctuation">,</span>
 </code></pre>
 <p>Jumping to a line in Vim is also done by entering first a number and then eiter
 <key>G</key> or <key>g</key><key>g</key>. The first keybinding we actually
 implement, and the second one just remaps to the first one. Implementing jump
 to line in VS Code requires two commands</p>
 
-<pre class="syntaxhighlight"><code>            "G": [
-                {
-                    "command": "revealLine",
-                    "args": "{ lineNumber: parseInt(__cmd) - 1, at: 'top' }"
-                },
-                {
-                    "command": "cursorMove",
-                    "args": {
-                        "to": "viewPortTop"
-                    }
-                }
-            ],
-            "g": {
-                "g": {
-                    "command": "modaledit.typeNormalKeys",
-                    "args": "{ keys: parseInt(__cmd) + 'G' }"
-                },
+<pre class="syntaxhighlight narrow-scrollbars"><code>            <span class="attr">&quot;G&quot;</span><span class="punctuation">:</span> <span class="punctuation">[</span>
+                <span class="punctuation">{</span>
+                    <span class="attr">&quot;command&quot;</span><span class="punctuation">:</span> <span class="string">&quot;revealLine&quot;</span><span class="punctuation">,</span>
+                    <span class="attr">&quot;args&quot;</span><span class="punctuation">:</span> <span class="string">&quot;{ lineNumber: parseInt(__cmd) - 1, at: &#x27;top&#x27; }&quot;</span>
+                <span class="punctuation">}</span><span class="punctuation">,</span>
+                <span class="punctuation">{</span>
+                    <span class="attr">&quot;command&quot;</span><span class="punctuation">:</span> <span class="string">&quot;cursorMove&quot;</span><span class="punctuation">,</span>
+                    <span class="attr">&quot;args&quot;</span><span class="punctuation">:</span> <span class="punctuation">{</span>
+                        <span class="attr">&quot;to&quot;</span><span class="punctuation">:</span> <span class="string">&quot;viewPortTop&quot;</span>
+                    <span class="punctuation">}</span>
+                <span class="punctuation">}</span>
+            <span class="punctuation">]</span><span class="punctuation">,</span>
+            <span class="attr">&quot;g&quot;</span><span class="punctuation">:</span> <span class="punctuation">{</span>
+                <span class="attr">&quot;g&quot;</span><span class="punctuation">:</span> <span class="punctuation">{</span>
+                    <span class="attr">&quot;command&quot;</span><span class="punctuation">:</span> <span class="string">&quot;modaledit.typeNormalKeys&quot;</span><span class="punctuation">,</span>
+                    <span class="attr">&quot;args&quot;</span><span class="punctuation">:</span> <span class="string">&quot;{ keys: parseInt(__cmd) + &#x27;G&#x27; }&quot;</span>
+                <span class="punctuation">}</span><span class="punctuation">,</span>
 </code></pre>
 <p>Joining lines without space in between is implemented by repeating the command.</p>
 
-<pre class="syntaxhighlight"><code>                "J": {
-                    "command": "modaledit.typeNormalKeys",
-                    "args": "{ keys: __cmd.slice(-2) }",
-                    "repeat": "parseInt(__cmd)"
-                },
+<pre class="syntaxhighlight narrow-scrollbars"><code>                <span class="attr">&quot;J&quot;</span><span class="punctuation">:</span> <span class="punctuation">{</span>
+                    <span class="attr">&quot;command&quot;</span><span class="punctuation">:</span> <span class="string">&quot;modaledit.typeNormalKeys&quot;</span><span class="punctuation">,</span>
+                    <span class="attr">&quot;args&quot;</span><span class="punctuation">:</span> <span class="string">&quot;{ keys: __cmd.slice(-2) }&quot;</span><span class="punctuation">,</span>
+                    <span class="attr">&quot;repeat&quot;</span><span class="punctuation">:</span> <span class="string">&quot;parseInt(__cmd)&quot;</span>
+                <span class="punctuation">}</span><span class="punctuation">,</span>
 </code></pre>
 <p>Repeating the complex editing commands is just a matter of jumping to their
 keymap blocks. If <key>u</key> or <key>U</key> is pressed we jump to block <code>1</code>.
 The rest of the editing commands are implemented in block <code>2</code>.</p>
 
-<pre class="syntaxhighlight"><code>                "u,U": 1
-            },
-            "d,c,y,&lt;,&gt;,=": 2
-        },
+<pre class="syntaxhighlight narrow-scrollbars"><code>                <span class="attr">&quot;u,U&quot;</span><span class="punctuation">:</span> <span class="number">1</span>
+            <span class="punctuation">}</span><span class="punctuation">,</span>
+            <span class="attr">&quot;d,c,y,&lt;,&gt;,=&quot;</span><span class="punctuation">:</span> <span class="number">2</span>
+        <span class="punctuation">}</span><span class="punctuation">,</span>
 </code></pre>
 <h2 id="searching">Searching</h2>
 <p>Searching introduces a pseudo-mode that captures the keyboard and suspends other
@@ -1259,25 +1494,25 @@ commands as long as search is on. Searching commands are shown below.</p>
 </div><p><strong>Note</strong>: Searching commands work also with multiple cursors. As in Vim, search
 wraps around if top or bottom of file is encountered.</p>
 
-<pre class="syntaxhighlight"><code>        "/": [
-            {
-                "command": "modaledit.search",
-                "args": {
-                    "caseSensitive": true,
-                    "wrapAround": true
-                }
-            }
-        ],
-        "?": {
-            "command": "modaledit.search",
-            "args": {
-                "backwards": true,
-                "caseSensitive": true,
-                "wrapAround": true
-            }
-        },
-        "n": "modaledit.nextMatch",
-        "N": "modaledit.previousMatch",
+<pre class="syntaxhighlight narrow-scrollbars"><code>        <span class="attr">&quot;/&quot;</span><span class="punctuation">:</span> <span class="punctuation">[</span>
+            <span class="punctuation">{</span>
+                <span class="attr">&quot;command&quot;</span><span class="punctuation">:</span> <span class="string">&quot;modaledit.search&quot;</span><span class="punctuation">,</span>
+                <span class="attr">&quot;args&quot;</span><span class="punctuation">:</span> <span class="punctuation">{</span>
+                    <span class="attr">&quot;caseSensitive&quot;</span><span class="punctuation">:</span> <span class="literal"><span class="keyword">true</span></span><span class="punctuation">,</span>
+                    <span class="attr">&quot;wrapAround&quot;</span><span class="punctuation">:</span> <span class="literal"><span class="keyword">true</span></span>
+                <span class="punctuation">}</span>
+            <span class="punctuation">}</span>
+        <span class="punctuation">]</span><span class="punctuation">,</span>
+        <span class="attr">&quot;?&quot;</span><span class="punctuation">:</span> <span class="punctuation">{</span>
+            <span class="attr">&quot;command&quot;</span><span class="punctuation">:</span> <span class="string">&quot;modaledit.search&quot;</span><span class="punctuation">,</span>
+            <span class="attr">&quot;args&quot;</span><span class="punctuation">:</span> <span class="punctuation">{</span>
+                <span class="attr">&quot;backwards&quot;</span><span class="punctuation">:</span> <span class="literal"><span class="keyword">true</span></span><span class="punctuation">,</span>
+                <span class="attr">&quot;caseSensitive&quot;</span><span class="punctuation">:</span> <span class="literal"><span class="keyword">true</span></span><span class="punctuation">,</span>
+                <span class="attr">&quot;wrapAround&quot;</span><span class="punctuation">:</span> <span class="literal"><span class="keyword">true</span></span>
+            <span class="punctuation">}</span>
+        <span class="punctuation">}</span><span class="punctuation">,</span>
+        <span class="attr">&quot;n&quot;</span><span class="punctuation">:</span> <span class="string">&quot;modaledit.nextMatch&quot;</span><span class="punctuation">,</span>
+        <span class="attr">&quot;N&quot;</span><span class="punctuation">:</span> <span class="string">&quot;modaledit.previousMatch&quot;</span><span class="punctuation">,</span>
 </code></pre>
 <h2 id="miscellaneous-commands">Miscellaneous Commands</h2>
 <p>Rest of the normal mode commands are not motion or editing commands, but do
@@ -1311,22 +1546,22 @@ miscellaenous things.</p>
 </div><p>Note that <key>Z</key><key>Q</key> command still asks to save the file, if
 it has been changed. There is no way to get around this in VS Code.</p>
 
-<pre class="syntaxhighlight"><code>        ":": "workbench.action.showCommands",
-        "z": {
-            "z": {
-                "command": "revealLine",
-                "args": "{ lineNumber: __line, at: 'center' }"
-            }
-        },
-        "Z": {
-            "help": "Z - Close and save, Q - Close without saving",
-            "Z": [
-                "workbench.action.files.save",
-                "workbench.action.closeActiveEditor"
-            ],
-            "Q": "workbench.action.closeActiveEditor"
-        }
-    },
+<pre class="syntaxhighlight narrow-scrollbars"><code>        <span class="attr">&quot;:&quot;</span><span class="punctuation">:</span> <span class="string">&quot;workbench.action.showCommands&quot;</span><span class="punctuation">,</span>
+        <span class="attr">&quot;z&quot;</span><span class="punctuation">:</span> <span class="punctuation">{</span>
+            <span class="attr">&quot;z&quot;</span><span class="punctuation">:</span> <span class="punctuation">{</span>
+                <span class="attr">&quot;command&quot;</span><span class="punctuation">:</span> <span class="string">&quot;revealLine&quot;</span><span class="punctuation">,</span>
+                <span class="attr">&quot;args&quot;</span><span class="punctuation">:</span> <span class="string">&quot;{ lineNumber: __line, at: &#x27;center&#x27; }&quot;</span>
+            <span class="punctuation">}</span>
+        <span class="punctuation">}</span><span class="punctuation">,</span>
+        <span class="attr">&quot;Z&quot;</span><span class="punctuation">:</span> <span class="punctuation">{</span>
+            <span class="attr">&quot;help&quot;</span><span class="punctuation">:</span> <span class="string">&quot;Z - Close and save, Q - Close without saving&quot;</span><span class="punctuation">,</span>
+            <span class="attr">&quot;Z&quot;</span><span class="punctuation">:</span> <span class="punctuation">[</span>
+                <span class="string">&quot;workbench.action.files.save&quot;</span><span class="punctuation">,</span>
+                <span class="string">&quot;workbench.action.closeActiveEditor&quot;</span>
+            <span class="punctuation">]</span><span class="punctuation">,</span>
+            <span class="attr">&quot;Q&quot;</span><span class="punctuation">:</span> <span class="string">&quot;workbench.action.closeActiveEditor&quot;</span>
+        <span class="punctuation">}</span>
+    <span class="punctuation">}</span><span class="punctuation">,</span>
 </code></pre>
 <h2 id="motions-in-visual-mode">Motions in Visual Mode</h2>
 <p>ModalEdit 2.0 adds a new configuration section called <code>selectbidings</code> that has
@@ -1353,8 +1588,8 @@ full list is below:</p>
 </thead>
 <tbody>
 <tr>
-<td><code>h|j|k|l</code></td>
-<td>Select text to left/down/up/right</td>
+<td>`h</td>
+<td>j</td>
 </tr>
 <tr>
 <td><code>w</code></td>
@@ -1417,36 +1652,36 @@ full list is below:</p>
 <td>Select current paragraph not including the whitespace around it</td>
 </tr>
 <tr>
-<td><code>a( | a) | ab</code></td>
-<td>Select text inside parenthesis including them</td>
+<td>`a(</td>
+<td>a)</td>
 </tr>
 <tr>
-<td><code>i( | i) | ib</code></td>
-<td>Select text inside parenthesis not including them</td>
+<td>`i(</td>
+<td>i)</td>
 </tr>
 <tr>
-<td><code>a{ | a} | aB</code></td>
-<td>Select text inside curly braces including them</td>
+<td>`a{</td>
+<td>a}</td>
 </tr>
 <tr>
-<td><code>i{ | i} | iB</code></td>
-<td>Select text inside curly braces not including them</td>
+<td>`i{</td>
+<td>i}</td>
 </tr>
 <tr>
-<td><code>a[ | a]</code></td>
-<td>Select text inside brackets including them</td>
+<td>`a[</td>
+<td>a]`</td>
 </tr>
 <tr>
-<td><code>i[ | i]</code></td>
-<td>Select text inside brackets not including them</td>
+<td>`i[</td>
+<td>i]`</td>
 </tr>
 <tr>
-<td><code>a&lt; | a&gt; | at</code></td>
-<td>Select text inside ange brackets (tag) including them</td>
+<td>`a&lt;</td>
+<td>a&gt;</td>
 </tr>
 <tr>
-<td><code>i[ | i] | at</code></td>
-<td>Select text inside angle brackets (tag) not including them</td>
+<td>`i[</td>
+<td>i]</td>
 </tr>
 </tbody>
 </table>
@@ -1454,68 +1689,68 @@ full list is below:</p>
 but the actual commands invoked are different. Roughly speaking, we just add
 <code>Select</code> at the end of each command.</p>
 
-<pre class="syntaxhighlight"><code>    "selectbindings": {
-        "l": "cursorRightSelect",
-        "h": "cursorLeftSelect",
-        "j": "cursorDownSelect",
-        "k": "cursorUpSelect",
-        "w": "cursorWordStartRightSelect",
-        "e": "cursorWordEndRightSelect",
-        "b": "cursorWordStartLeftSelect",
-        "W": {
-            "command": "cursorWordStartRightSelect",
-            "repeat": "__char.match(/\\W/)"
-        },
-        "B": {
-            "command": "cursorWordStartLeftSelect",
-            "repeat": "__char.match(/\\W/)"
-        },
+<pre class="syntaxhighlight narrow-scrollbars"><code>    <span class="attr">&quot;selectbindings&quot;</span><span class="punctuation">:</span> <span class="punctuation">{</span>
+        <span class="attr">&quot;l&quot;</span><span class="punctuation">:</span> <span class="string">&quot;cursorRightSelect&quot;</span><span class="punctuation">,</span>
+        <span class="attr">&quot;h&quot;</span><span class="punctuation">:</span> <span class="string">&quot;cursorLeftSelect&quot;</span><span class="punctuation">,</span>
+        <span class="attr">&quot;j&quot;</span><span class="punctuation">:</span> <span class="string">&quot;cursorDownSelect&quot;</span><span class="punctuation">,</span>
+        <span class="attr">&quot;k&quot;</span><span class="punctuation">:</span> <span class="string">&quot;cursorUpSelect&quot;</span><span class="punctuation">,</span>
+        <span class="attr">&quot;w&quot;</span><span class="punctuation">:</span> <span class="string">&quot;cursorWordStartRightSelect&quot;</span><span class="punctuation">,</span>
+        <span class="attr">&quot;e&quot;</span><span class="punctuation">:</span> <span class="string">&quot;cursorWordEndRightSelect&quot;</span><span class="punctuation">,</span>
+        <span class="attr">&quot;b&quot;</span><span class="punctuation">:</span> <span class="string">&quot;cursorWordStartLeftSelect&quot;</span><span class="punctuation">,</span>
+        <span class="attr">&quot;W&quot;</span><span class="punctuation">:</span> <span class="punctuation">{</span>
+            <span class="attr">&quot;command&quot;</span><span class="punctuation">:</span> <span class="string">&quot;cursorWordStartRightSelect&quot;</span><span class="punctuation">,</span>
+            <span class="attr">&quot;repeat&quot;</span><span class="punctuation">:</span> <span class="string">&quot;__char.match(/\\W/)&quot;</span>
+        <span class="punctuation">}</span><span class="punctuation">,</span>
+        <span class="attr">&quot;B&quot;</span><span class="punctuation">:</span> <span class="punctuation">{</span>
+            <span class="attr">&quot;command&quot;</span><span class="punctuation">:</span> <span class="string">&quot;cursorWordStartLeftSelect&quot;</span><span class="punctuation">,</span>
+            <span class="attr">&quot;repeat&quot;</span><span class="punctuation">:</span> <span class="string">&quot;__char.match(/\\W/)&quot;</span>
+        <span class="punctuation">}</span><span class="punctuation">,</span>
 </code></pre>
 <p>Selecting forwards/backwards until a character is found can be implemented with
 the <code>modaledit.search</code> command as in normal mode. The difference is in what
 parameters we use; we include the <code>selectTillMatch</code> flag, and provide different
 <code>typeBefore...</code> and <code>typeAfter...</code> key sequences.</p>
 
-<pre class="syntaxhighlight"><code>        "f": {
-            "command": "modaledit.search",
-            "args": {
-                "acceptAfter": 1,
-                "selectTillMatch": true
-            }
-        },
-        "F": {
-            "command": "modaledit.search",
-            "args": {
-                "acceptAfter": 1,
-                "backwards": true,
-                "selectTillMatch": true
-            }
-        },
-        "t": {
-            "command": "modaledit.search",
-            "args": {
-                "acceptAfter": 1,
-                "typeAfterAccept": "h",
-                "typeBeforeNextMatch": "l",
-                "typeAfterNextMatch": "h",
-                "typeBeforePreviousMatch": "h",
-                "typeAfterPreviousMatch": "l",
-                "selectTillMatch": true
-            }
-        },
-        "T": {
-            "command": "modaledit.search",
-            "args": {
-                "acceptAfter": 1,
-                "backwards": true,
-                "typeAfterAccept": "l",
-                "typeBeforeNextMatch": "h",
-                "typeAfterNextMatch": "l",
-                "typeBeforePreviousMatch": "l",
-                "typeAfterPreviousMatch": "h",
-                "selectTillMatch": true
-            }
-        },
+<pre class="syntaxhighlight narrow-scrollbars"><code>        <span class="attr">&quot;f&quot;</span><span class="punctuation">:</span> <span class="punctuation">{</span>
+            <span class="attr">&quot;command&quot;</span><span class="punctuation">:</span> <span class="string">&quot;modaledit.search&quot;</span><span class="punctuation">,</span>
+            <span class="attr">&quot;args&quot;</span><span class="punctuation">:</span> <span class="punctuation">{</span>
+                <span class="attr">&quot;acceptAfter&quot;</span><span class="punctuation">:</span> <span class="number">1</span><span class="punctuation">,</span>
+                <span class="attr">&quot;selectTillMatch&quot;</span><span class="punctuation">:</span> <span class="literal"><span class="keyword">true</span></span>
+            <span class="punctuation">}</span>
+        <span class="punctuation">}</span><span class="punctuation">,</span>
+        <span class="attr">&quot;F&quot;</span><span class="punctuation">:</span> <span class="punctuation">{</span>
+            <span class="attr">&quot;command&quot;</span><span class="punctuation">:</span> <span class="string">&quot;modaledit.search&quot;</span><span class="punctuation">,</span>
+            <span class="attr">&quot;args&quot;</span><span class="punctuation">:</span> <span class="punctuation">{</span>
+                <span class="attr">&quot;acceptAfter&quot;</span><span class="punctuation">:</span> <span class="number">1</span><span class="punctuation">,</span>
+                <span class="attr">&quot;backwards&quot;</span><span class="punctuation">:</span> <span class="literal"><span class="keyword">true</span></span><span class="punctuation">,</span>
+                <span class="attr">&quot;selectTillMatch&quot;</span><span class="punctuation">:</span> <span class="literal"><span class="keyword">true</span></span>
+            <span class="punctuation">}</span>
+        <span class="punctuation">}</span><span class="punctuation">,</span>
+        <span class="attr">&quot;t&quot;</span><span class="punctuation">:</span> <span class="punctuation">{</span>
+            <span class="attr">&quot;command&quot;</span><span class="punctuation">:</span> <span class="string">&quot;modaledit.search&quot;</span><span class="punctuation">,</span>
+            <span class="attr">&quot;args&quot;</span><span class="punctuation">:</span> <span class="punctuation">{</span>
+                <span class="attr">&quot;acceptAfter&quot;</span><span class="punctuation">:</span> <span class="number">1</span><span class="punctuation">,</span>
+                <span class="attr">&quot;typeAfterAccept&quot;</span><span class="punctuation">:</span> <span class="string">&quot;h&quot;</span><span class="punctuation">,</span>
+                <span class="attr">&quot;typeBeforeNextMatch&quot;</span><span class="punctuation">:</span> <span class="string">&quot;l&quot;</span><span class="punctuation">,</span>
+                <span class="attr">&quot;typeAfterNextMatch&quot;</span><span class="punctuation">:</span> <span class="string">&quot;h&quot;</span><span class="punctuation">,</span>
+                <span class="attr">&quot;typeBeforePreviousMatch&quot;</span><span class="punctuation">:</span> <span class="string">&quot;h&quot;</span><span class="punctuation">,</span>
+                <span class="attr">&quot;typeAfterPreviousMatch&quot;</span><span class="punctuation">:</span> <span class="string">&quot;l&quot;</span><span class="punctuation">,</span>
+                <span class="attr">&quot;selectTillMatch&quot;</span><span class="punctuation">:</span> <span class="literal"><span class="keyword">true</span></span>
+            <span class="punctuation">}</span>
+        <span class="punctuation">}</span><span class="punctuation">,</span>
+        <span class="attr">&quot;T&quot;</span><span class="punctuation">:</span> <span class="punctuation">{</span>
+            <span class="attr">&quot;command&quot;</span><span class="punctuation">:</span> <span class="string">&quot;modaledit.search&quot;</span><span class="punctuation">,</span>
+            <span class="attr">&quot;args&quot;</span><span class="punctuation">:</span> <span class="punctuation">{</span>
+                <span class="attr">&quot;acceptAfter&quot;</span><span class="punctuation">:</span> <span class="number">1</span><span class="punctuation">,</span>
+                <span class="attr">&quot;backwards&quot;</span><span class="punctuation">:</span> <span class="literal"><span class="keyword">true</span></span><span class="punctuation">,</span>
+                <span class="attr">&quot;typeAfterAccept&quot;</span><span class="punctuation">:</span> <span class="string">&quot;l&quot;</span><span class="punctuation">,</span>
+                <span class="attr">&quot;typeBeforeNextMatch&quot;</span><span class="punctuation">:</span> <span class="string">&quot;h&quot;</span><span class="punctuation">,</span>
+                <span class="attr">&quot;typeAfterNextMatch&quot;</span><span class="punctuation">:</span> <span class="string">&quot;l&quot;</span><span class="punctuation">,</span>
+                <span class="attr">&quot;typeBeforePreviousMatch&quot;</span><span class="punctuation">:</span> <span class="string">&quot;l&quot;</span><span class="punctuation">,</span>
+                <span class="attr">&quot;typeAfterPreviousMatch&quot;</span><span class="punctuation">:</span> <span class="string">&quot;h&quot;</span><span class="punctuation">,</span>
+                <span class="attr">&quot;selectTillMatch&quot;</span><span class="punctuation">:</span> <span class="literal"><span class="keyword">true</span></span>
+            <span class="punctuation">}</span>
+        <span class="punctuation">}</span><span class="punctuation">,</span>
 </code></pre>
 <p>Selecting text inside/around delimiters are motions that are only defined in
 visual mode. The motions can be used along with editing commands in normal mode,
@@ -1528,51 +1763,51 @@ expressions, and selects the range between these delimiters. The scope of the
 search is by default the current line, but for some variants we specify the
 <code>docScope</code> parameter which causes the search to consider the whole file.</p>
 
-<pre class="syntaxhighlight"><code>        "a,i": {
-            "help": "Select around/inside _",
-            "w": [
-                {
-                    "command": "modaledit.selectBetween",
-                    "args": "{ from: '\\\\W', to: '\\\\W', regex: true, inclusive: __rcmd[1] == 'a' }"
-                }
-            ],
-            "p": [
-                {
-                    "command": "modaledit.selectBetween",
-                    "args": "{ from: '(?&lt;=\\\\r?\\\\n)\\\\s*\\\\r?\\\\n', to: '(?&lt;=\\\\r?\\\\n)\\\\s*\\\\r?\\\\n', regex: true, inclusive: __rcmd[1] == 'a', docScope: true }"
-                }
-            ],
-            " -/,:-@,[-`,{-~": [
-                {
-                    "command": "modaledit.selectBetween",
-                    "args": "{ from: __rcmd[0], to: __rcmd[0], inclusive: __rcmd[1] == 'a' }"
-                }
-            ],
-            "(,),b": [
-                {
-                    "command": "modaledit.selectBetween",
-                    "args": "{ from: '(', to: ')', inclusive: __rcmd[1] == 'a', docScope: true }"
-                }
-            ],
-            "{,},B": [
-                {
-                    "command": "modaledit.selectBetween",
-                    "args": "{ from: '{', to: '}', inclusive: __rcmd[1] == 'a', docScope: true }"
-                }
-            ],
-            "[,]": [
-                {
-                    "command": "modaledit.selectBetween",
-                    "args": "{ from: '[', to: ']', inclusive: __rcmd[1] == 'a', docScope: true }"
-                }
-            ],
-            "&lt;,&gt;,t": [
-                {
-                    "command": "modaledit.selectBetween",
-                    "args": "{ from: '&lt;', to: '&gt;', inclusive: __rcmd[1] == 'a' }"
-                }
-            ]
-        },
+<pre class="syntaxhighlight narrow-scrollbars"><code>        <span class="attr">&quot;a,i&quot;</span><span class="punctuation">:</span> <span class="punctuation">{</span>
+            <span class="attr">&quot;help&quot;</span><span class="punctuation">:</span> <span class="string">&quot;Select around/inside _&quot;</span><span class="punctuation">,</span>
+            <span class="attr">&quot;w&quot;</span><span class="punctuation">:</span> <span class="punctuation">[</span>
+                <span class="punctuation">{</span>
+                    <span class="attr">&quot;command&quot;</span><span class="punctuation">:</span> <span class="string">&quot;modaledit.selectBetween&quot;</span><span class="punctuation">,</span>
+                    <span class="attr">&quot;args&quot;</span><span class="punctuation">:</span> <span class="string">&quot;{ from: &#x27;\\\\W&#x27;, to: &#x27;\\\\W&#x27;, regex: true, inclusive: __rcmd[1] == &#x27;a&#x27; }&quot;</span>
+                <span class="punctuation">}</span>
+            <span class="punctuation">]</span><span class="punctuation">,</span>
+            <span class="attr">&quot;p&quot;</span><span class="punctuation">:</span> <span class="punctuation">[</span>
+                <span class="punctuation">{</span>
+                    <span class="attr">&quot;command&quot;</span><span class="punctuation">:</span> <span class="string">&quot;modaledit.selectBetween&quot;</span><span class="punctuation">,</span>
+                    <span class="attr">&quot;args&quot;</span><span class="punctuation">:</span> <span class="string">&quot;{ from: &#x27;(?&lt;=\\\\r?\\\\n)\\\\s*\\\\r?\\\\n&#x27;, to: &#x27;(?&lt;=\\\\r?\\\\n)\\\\s*\\\\r?\\\\n&#x27;, regex: true, inclusive: __rcmd[1] == &#x27;a&#x27;, docScope: true }&quot;</span>
+                <span class="punctuation">}</span>
+            <span class="punctuation">]</span><span class="punctuation">,</span>
+            <span class="attr">&quot; -/,:-@,[-`,{-~&quot;</span><span class="punctuation">:</span> <span class="punctuation">[</span>
+                <span class="punctuation">{</span>
+                    <span class="attr">&quot;command&quot;</span><span class="punctuation">:</span> <span class="string">&quot;modaledit.selectBetween&quot;</span><span class="punctuation">,</span>
+                    <span class="attr">&quot;args&quot;</span><span class="punctuation">:</span> <span class="string">&quot;{ from: __rcmd[0], to: __rcmd[0], inclusive: __rcmd[1] == &#x27;a&#x27; }&quot;</span>
+                <span class="punctuation">}</span>
+            <span class="punctuation">]</span><span class="punctuation">,</span>
+            <span class="attr">&quot;(,),b&quot;</span><span class="punctuation">:</span> <span class="punctuation">[</span>
+                <span class="punctuation">{</span>
+                    <span class="attr">&quot;command&quot;</span><span class="punctuation">:</span> <span class="string">&quot;modaledit.selectBetween&quot;</span><span class="punctuation">,</span>
+                    <span class="attr">&quot;args&quot;</span><span class="punctuation">:</span> <span class="string">&quot;{ from: &#x27;(&#x27;, to: &#x27;)&#x27;, inclusive: __rcmd[1] == &#x27;a&#x27;, docScope: true }&quot;</span>
+                <span class="punctuation">}</span>
+            <span class="punctuation">]</span><span class="punctuation">,</span>
+            <span class="attr">&quot;{,},B&quot;</span><span class="punctuation">:</span> <span class="punctuation">[</span>
+                <span class="punctuation">{</span>
+                    <span class="attr">&quot;command&quot;</span><span class="punctuation">:</span> <span class="string">&quot;modaledit.selectBetween&quot;</span><span class="punctuation">,</span>
+                    <span class="attr">&quot;args&quot;</span><span class="punctuation">:</span> <span class="string">&quot;{ from: &#x27;{&#x27;, to: &#x27;}&#x27;, inclusive: __rcmd[1] == &#x27;a&#x27;, docScope: true }&quot;</span>
+                <span class="punctuation">}</span>
+            <span class="punctuation">]</span><span class="punctuation">,</span>
+            <span class="attr">&quot;[,]&quot;</span><span class="punctuation">:</span> <span class="punctuation">[</span>
+                <span class="punctuation">{</span>
+                    <span class="attr">&quot;command&quot;</span><span class="punctuation">:</span> <span class="string">&quot;modaledit.selectBetween&quot;</span><span class="punctuation">,</span>
+                    <span class="attr">&quot;args&quot;</span><span class="punctuation">:</span> <span class="string">&quot;{ from: &#x27;[&#x27;, to: &#x27;]&#x27;, inclusive: __rcmd[1] == &#x27;a&#x27;, docScope: true }&quot;</span>
+                <span class="punctuation">}</span>
+            <span class="punctuation">]</span><span class="punctuation">,</span>
+            <span class="attr">&quot;&lt;,&gt;,t&quot;</span><span class="punctuation">:</span> <span class="punctuation">[</span>
+                <span class="punctuation">{</span>
+                    <span class="attr">&quot;command&quot;</span><span class="punctuation">:</span> <span class="string">&quot;modaledit.selectBetween&quot;</span><span class="punctuation">,</span>
+                    <span class="attr">&quot;args&quot;</span><span class="punctuation">:</span> <span class="string">&quot;{ from: &#x27;&lt;&#x27;, to: &#x27;&gt;&#x27;, inclusive: __rcmd[1] == &#x27;a&#x27; }&quot;</span>
+                <span class="punctuation">}</span>
+            <span class="punctuation">]</span>
+        <span class="punctuation">}</span><span class="punctuation">,</span>
 </code></pre>
 <h2 id="editing-commands-in-visual-mode">Editing Commands in Visual Mode</h2>
 <p>The last pieces of puzzle are editing commands that operate on selected text in
@@ -1601,8 +1836,8 @@ selection afterwards.</p>
 <td>Reindent (reformat) selection</td>
 </tr>
 <tr>
-<td><code>d | x</code></td>
-<td>Delete (cut) selection</td>
+<td>`d</td>
+<td>x`</td>
 </tr>
 <tr>
 <td><code>c</code></td>
@@ -1624,42 +1859,42 @@ selection afterwards.</p>
 </table>
 </div><p>Here are the implementations.</p>
 
-<pre class="syntaxhighlight"><code>        "&gt;": [
-            "editor.action.indentLines",
-            "modaledit.cancelSelection"
-        ],
-        "&lt;": [
-            "editor.action.outdentLines",
-            "modaledit.cancelSelection"
-        ],
-        "=": [
-            "editor.action.formatSelection",
-            "modaledit.cancelSelection"
-        ],
-        "d,x": [
-            "editor.action.clipboardCopyAction",
-            "deleteRight",
-            "modaledit.cancelSelection"
-        ],
-        "c": [
-            "editor.action.clipboardCopyAction",
-            "deleteRight",
-            "modaledit.enterInsert"
-        ],
-        "y": [
-            "editor.action.clipboardCopyAction",
-            "modaledit.cancelSelection"
-        ],
-        "u": [
-            "editor.action.transformToLowercase",
-            "modaledit.cancelSelection"
-        ],
-        "U": [
-            "editor.action.transformToUppercase",
-            "modaledit.cancelSelection"
-        ]
-    }
-}
+<pre class="syntaxhighlight narrow-scrollbars"><code>        <span class="attr">&quot;&gt;&quot;</span><span class="punctuation">:</span> <span class="punctuation">[</span>
+            <span class="string">&quot;editor.action.indentLines&quot;</span><span class="punctuation">,</span>
+            <span class="string">&quot;modaledit.cancelSelection&quot;</span>
+        <span class="punctuation">]</span><span class="punctuation">,</span>
+        <span class="attr">&quot;&lt;&quot;</span><span class="punctuation">:</span> <span class="punctuation">[</span>
+            <span class="string">&quot;editor.action.outdentLines&quot;</span><span class="punctuation">,</span>
+            <span class="string">&quot;modaledit.cancelSelection&quot;</span>
+        <span class="punctuation">]</span><span class="punctuation">,</span>
+        <span class="attr">&quot;=&quot;</span><span class="punctuation">:</span> <span class="punctuation">[</span>
+            <span class="string">&quot;editor.action.formatSelection&quot;</span><span class="punctuation">,</span>
+            <span class="string">&quot;modaledit.cancelSelection&quot;</span>
+        <span class="punctuation">]</span><span class="punctuation">,</span>
+        <span class="attr">&quot;d,x&quot;</span><span class="punctuation">:</span> <span class="punctuation">[</span>
+            <span class="string">&quot;editor.action.clipboardCopyAction&quot;</span><span class="punctuation">,</span>
+            <span class="string">&quot;deleteRight&quot;</span><span class="punctuation">,</span>
+            <span class="string">&quot;modaledit.cancelSelection&quot;</span>
+        <span class="punctuation">]</span><span class="punctuation">,</span>
+        <span class="attr">&quot;c&quot;</span><span class="punctuation">:</span> <span class="punctuation">[</span>
+            <span class="string">&quot;editor.action.clipboardCopyAction&quot;</span><span class="punctuation">,</span>
+            <span class="string">&quot;deleteRight&quot;</span><span class="punctuation">,</span>
+            <span class="string">&quot;modaledit.enterInsert&quot;</span>
+        <span class="punctuation">]</span><span class="punctuation">,</span>
+        <span class="attr">&quot;y&quot;</span><span class="punctuation">:</span> <span class="punctuation">[</span>
+            <span class="string">&quot;editor.action.clipboardCopyAction&quot;</span><span class="punctuation">,</span>
+            <span class="string">&quot;modaledit.cancelSelection&quot;</span>
+        <span class="punctuation">]</span><span class="punctuation">,</span>
+        <span class="attr">&quot;u&quot;</span><span class="punctuation">:</span> <span class="punctuation">[</span>
+            <span class="string">&quot;editor.action.transformToLowercase&quot;</span><span class="punctuation">,</span>
+            <span class="string">&quot;modaledit.cancelSelection&quot;</span>
+        <span class="punctuation">]</span><span class="punctuation">,</span>
+        <span class="attr">&quot;U&quot;</span><span class="punctuation">:</span> <span class="punctuation">[</span>
+            <span class="string">&quot;editor.action.transformToUppercase&quot;</span><span class="punctuation">,</span>
+            <span class="string">&quot;modaledit.cancelSelection&quot;</span>
+        <span class="punctuation">]</span>
+    <span class="punctuation">}</span>
+<span class="punctuation">}</span>
 </code></pre>
 <h2 id="conclusion">Conclusion</h2>
 <p>The list of commands we provided is by no means exhaustive but still contains
@@ -1669,21 +1904,34 @@ about 600 lines of configuration, and most of it is pretty trivial. This
 demonstrates that ModalEdit's functionality is powerful enough to build all
 kinds of operations that make modal editors like Vim popular.</p>
 
-        
-    </div>
-            <div class="stickypane">
+        </div>
+            <div class="sidepane narrow-scrollbars">
                 
-    <div class="pagemenu">
-        <h3>On This Page</h3>
-            <ul class="pagetree">
-                
-            </ul>
-    </div>
-                
+        <div class="pagemenu">
+            <h3>On This Page</h3>
+                <ul class="pagetree">
+                </ul>
+        </div>
             </div>
         </div>
-    </div>
-    <script src="../js/main.js"></script>
+        
+        <div class="footer">
+            <a class="footer-button" href="../tutorial.html">
+            <p>Previous</p>
+            <p>« Tutorial</p>
+        </a>
+            <div class="footer-text">
+                <p>Copyright © 2025 Tommi Johtela</p>
+                <p>Generated by 
+                    <a href="https://johtela.github.io/litscript">LiTScript</a>
+                </p>
+            </div>
+            <a class="footer-button" href="../src/extension.html">
+            <p>Next</p>
+            <p>Extension »</p>
+        </a>
+        </div>
     
-</body>
-</html>
+        <script src="../dist/normal.js"></script>
+    </body>
+    </html>

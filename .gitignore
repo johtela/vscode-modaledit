@@ -1,4 +1,4 @@
-dist
+/dist
 out
 node_modules
 .vscode-test/

@@ -1,15 +1,19 @@
 {
     "files": [ "*.md", "presets/*" ],
     "updateToc": true,
+    "nodeModules": [
+        {
+            "path": "./src/extension.ts",
+            "outDir": "./dist",
+            "external": ["vscode"]
+        }
+    ],
     "frontMatter": {
         "projectName": "ModalEdit",
         "repository": "https://github.com/johtela/vscode-modaledit",
         "download": "https://marketplace.visualstudio.com/items?itemName=johtela.vscode-modaledit",
         "license": "LICENSE.html",
-        "footer": "Copyright © 2020 Tommi Johtela",
-        "logo": "images/escape.svg",
-        "userTheme": "./user-theme.less",
-        "syntaxHighlight": "coding-horror",
-        "footerLocation": "toc-menu"
+        "footer": "Copyright © 2025 Tommi Johtela",
+        "logo": "images/escape.svg"
     }
 }

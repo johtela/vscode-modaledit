@@ -2,17 +2,20 @@
     {
         "page": "Home",
         "file": "README.html",
-        "desc": ""
+        "desc": "Home page",
+        "bullet": "🏠"
     },
     {
         "page": "Tutorial",
         "file": "tutorial.html",
-        "desc": ""
+        "desc": "How to create your own keymaps",
+        "bullet": "🎓"
     },
     {
         "page": "Vim Presets",
         "file": "presets/vim.html",
-        "desc": ""
+        "desc": "Built-in Vim presets",
+        "bullet": "🦈"
     },
     {
         "page": "Implementation",
@@ -20,28 +23,33 @@
             {
                 "page": "Extension",
                 "file": "src/extension.html",
-                "desc": ""
+                "desc": "Main extension module",
+                "bullet": "🔌"
             },
             {
                 "page": "Actions",
                 "file": "src/actions.html",
-                "desc": ""
+                "desc": "Keymap management",
+                "bullet": "⌨️"
             },
             {
                 "page": "Commands",
                 "file": "src/commands.html",
-                "desc": ""
+                "desc": "Registered commands",
+                "bullet": "📢"
             }
         ]
     },
     {
         "page": "Change Log",
         "file": "CHANGELOG.html",
-        "desc": ""
+        "desc": "Version history",
+        "bullet": "📅"
     },
     {
         "page": "License",
         "file": "LICENSE.html",
-        "desc": ""
+        "desc": "MIT license",
+        "bullet": "📜"
     }
 ]

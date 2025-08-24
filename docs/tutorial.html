@@ -1,134 +1,369 @@
 
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>ModalEdit - Tutorial</title>
-    <link rel="icon" type="image/icon" href="images/favicon.png" />
-    <link rel="stylesheet" href="css/main.css" />
-    
-    
-</head>
-<body>
-    
-    <div class="navbar">
-        <div class="navmenu">
-            
-    <a class="title enabled" href="index.html">
-        <img src="images/escape.svg" />
-        <span>ModalEdit</span>
-    </a>
-    <a class="enabled" href="https://marketplace.visualstudio.com/items?itemName=johtela.vscode-modaledit">
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 512"><path d="M537.6 226.6c4.1-10.7 6.4-22.4 6.4-34.6 0-53-43-96-96-96-19.7 0-38.1 6-53.3 16.2C367 64.2 315.3 32 256 32c-88.4 0-160 71.6-160 160 0 2.7.1 5.4.2 8.1C40.2 219.8 0 273.2 0 336c0 79.5 64.5 144 144 144h368c70.7 0 128-57.3 128-128 0-61.9-44-113.6-102.4-125.4zm-132.9 88.7L299.3 420.7c-6.2 6.2-16.4 6.2-22.6 0L171.3 315.3c-10.1-10.1-2.9-27.3 11.3-27.3H248V176c0-8.8 7.2-16 16-16h48c8.8 0 16 7.2 16 16v112h65.4c14.2 0 21.4 17.2 11.3 27.3z"/></svg>
-        <span>Download</span>
-    </a>
-    <a class="enabled" href="https://github.com/johtela/vscode-modaledit">
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 496 512"><path d="M165.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6zm-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3zm44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9zM244.8 8C106.1 8 0 113.3 0 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C428.2 457.8 496 362.9 496 252 496 113.3 383.5 8 244.8 8zM97.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1zm-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7zm32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1zm-11.4-14.7c-1.6 1-1.6 3.6 0 5.9 1.6 2.3 4.3 3.3 5.6 2.3 1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2z"/></svg>
-        <span>GitHub</span>
-    </a>
-    <a class="enabled" href="LICENSE.html">
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 384 512"><path d="M224 136V0H24C10.7 0 0 10.7 0 24v464c0 13.3 10.7 24 24 24h336c13.3 0 24-10.7 24-24V160H248c-13.2 0-24-10.8-24-24zM64 72c0-4.42 3.58-8 8-8h80c4.42 0 8 3.58 8 8v16c0 4.42-3.58 8-8 8H72c-4.42 0-8-3.58-8-8V72zm0 64c0-4.42 3.58-8 8-8h80c4.42 0 8 3.58 8 8v16c0 4.42-3.58 8-8 8H72c-4.42 0-8-3.58-8-8v-16zm192.81 248H304c8.84 0 16 7.16 16 16s-7.16 16-16 16h-47.19c-16.45 0-31.27-9.14-38.64-23.86-2.95-5.92-8.09-6.52-10.17-6.52s-7.22.59-10.02 6.19l-7.67 15.34a15.986 15.986 0 0 1-14.31 8.84c-.38 0-.75-.02-1.14-.05-6.45-.45-12-4.75-14.03-10.89L144 354.59l-10.61 31.88c-5.89 17.66-22.38 29.53-41 29.53H80c-8.84 0-16-7.16-16-16s7.16-16 16-16h12.39c4.83 0 9.11-3.08 10.64-7.66l18.19-54.64c3.3-9.81 12.44-16.41 22.78-16.41s19.48 6.59 22.77 16.41l13.88 41.64c19.77-16.19 54.05-9.7 66 14.16 2.02 4.06 5.96 6.5 10.16 6.5zM377 105L279.1 7c-4.5-4.5-10.6-7-17-7H256v128h128v-6.1c0-6.3-2.5-12.4-7-16.9z"/></svg>
-        <span>License</span>
-    </a>
-    <a class="enabled" href="README.html">
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path d="M223.7 239l136-136c9.4-9.4 24.6-9.4 33.9 0l22.6 22.6c9.4 9.4 9.4 24.6 0 33.9L319.9 256l96.4 96.4c9.4 9.4 9.4 24.6 0 33.9L393.7 409c-9.4 9.4-24.6 9.4-33.9 0l-136-136c-9.5-9.4-9.5-24.6-.1-34zm-192 34l136 136c9.4 9.4 24.6 9.4 33.9 0l22.6-22.6c9.4-9.4 9.4-24.6 0-33.9L127.9 256l96.4-96.4c9.4-9.4 9.4-24.6 0-33.9L201.7 103c-9.4-9.4-24.6-9.4-33.9 0l-136 136c-9.5 9.4-9.5 24.6-.1 34z"/></svg>
-        <span>Previous: Home</span>
-    </a>
-    <a class="enabled" href="presets/vim.html">
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path d="M224.3 273l-136 136c-9.4 9.4-24.6 9.4-33.9 0l-22.6-22.6c-9.4-9.4-9.4-24.6 0-33.9l96.4-96.4-96.4-96.4c-9.4-9.4-9.4-24.6 0-33.9L54.3 103c9.4-9.4 24.6-9.4 33.9 0l136 136c9.5 9.4 9.5 24.6.1 34zm192-34l-136-136c-9.4-9.4-24.6-9.4-33.9 0l-22.6 22.6c-9.4 9.4-9.4 24.6 0 33.9l96.4 96.4-96.4 96.4c-9.4 9.4-9.4 24.6 0 33.9l22.6 22.6c9.4 9.4 24.6 9.4 33.9 0l136-136c9.4-9.2 9.4-24.4 0-33.8z"/></svg>
-        <span>Next: Vim Presets</span>
-    </a>
-        </div>
+    <!DOCTYPE html>
+    <html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta http-equiv="X-UA-Compatible" content="ie=edge">
+        <title>
+            ModalEdit - Tutorial
+        </title>
+        <link rel="icon" type="image/icon" href="images/favicon.svg" />
+        <link rel="stylesheet" href="dist/normal.css" />
         
+    </head>
+    <body data-syntax-highlight="monokai"
+        data-theme="purple-rain">
+        
+        <div id="navbar">
+            
+    <div class="navmenu ">
+        
+    <div class="navitem " >
+        <a class="title enabled" href="index.html" >
+            <img src="images/escape.svg" />
+            <span>ModalEdit</span>
+        </a>
+        
+    </div>
+    <div class="navitem " >
+        <a class="enabled" href="https://marketplace.visualstudio.com/items?itemName=johtela.vscode-modaledit" >
+            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-cloud-download" viewBox="0 0 24 24" stroke-width="1.5" stroke="#2c3e50" fill="none" stroke-linecap="round" stroke-linejoin="round">
+            <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+            <path d="M19 18a3.5 3.5 0 0 0 0 -7h-1a5 4.5 0 0 0 -11 -2a4.6 4.4 0 0 0 -2.1 8.4" />
+            <path d="M12 13l0 9" />
+            <path d="M9 19l3 3l3 -3" />
+        </svg>
+            <span>Download</span>
+        </a>
+        
+    </div>
+    <div class="navitem " >
+        <a class="enabled" href="https://github.com/johtela/vscode-modaledit" >
+            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-brand-github" viewBox="0 0 24 24" stroke-width="1.5" stroke="#2c3e50" fill="none" stroke-linecap="round" stroke-linejoin="round">
+            <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+            <path d="M9 19c-4.3 1.4 -4.3 -2.5 -6 -3m12 5v-3.5c0 -1 .1 -1.4 -.5 -2c2.8 -.3 5.5 -1.4 5.5 -6a4.6 4.6 0 0 0 -1.3 -3.2a4.2 4.2 0 0 0 -.1 -3.2s-1.1 -.3 -3.5 1.3a12.3 12.3 0 0 0 -6.2 0c-2.4 -1.6 -3.5 -1.3 -3.5 -1.3a4.2 4.2 0 0 0 -.1 3.2a4.6 4.6 0 0 0 -1.3 3.2c0 4.6 2.7 5.7 5.5 6c-.6 .6 -.6 1.2 -.5 2v3.5" />
+        </svg>
+            <span>GitHub</span>
+        </a>
+        
+    </div>
+    <div class="navitem " >
+        <a class="enabled" href="LICENSE.html" >
+            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-license" viewBox="0 0 24 24" stroke-width="1.5" stroke="#2c3e50" fill="none" stroke-linecap="round" stroke-linejoin="round">
+            <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+            <path d="M15 21h-9a3 3 0 0 1 -3 -3v-1h10v2a2 2 0 0 0 4 0v-14a2 2 0 1 1 2 2h-2m2 -4h-11a3 3 0 0 0 -3 3v11" />
+            <path d="M9 7l4 0" />
+            <path d="M9 11l4 0" />
+        </svg>
+            <span>License</span>
+        </a>
+        
+    </div>
+    <div class="navitem " >
+        <a   >
+            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-caret-down" viewBox="0 0 24 24" stroke-width="1.5" stroke="#2c3e50" fill="none" stroke-linecap="round" stroke-linejoin="round">
+            <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+            <path d="M6 10l6 6l6 -6h-12" />
+        </svg>
+            <span>Syntax Highlight</span>
+        </a>
+        
+    <div class="navmenu toggle">
+        
+    <div class="navitem " id="coding-horror">
+        <a   onclick="document.body.syntaxHighlight('coding-horror')">
+            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-palette" viewBox="0 0 24 24" stroke-width="1.5" stroke="#2c3e50" fill="none" stroke-linecap="round" stroke-linejoin="round">
+            <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+            <path d="M12 21a9 9 0 0 1 0 -18c4.97 0 9 3.582 9 8c0 1.06 -.474 2.078 -1.318 2.828c-.844 .75 -1.989 1.172 -3.182 1.172h-2.5a2 2 0 0 0 -1 3.75a1.3 1.3 0 0 1 -1 2.25" />
+            <path d="M8.5 10.5m-1 0a1 1 0 1 0 2 0a1 1 0 1 0 -2 0" />
+            <path d="M12.5 7.5m-1 0a1 1 0 1 0 2 0a1 1 0 1 0 -2 0" />
+            <path d="M16.5 10.5m-1 0a1 1 0 1 0 2 0a1 1 0 1 0 -2 0" />
+        </svg>
+            <span>Coding Horror</span>
+        </a>
+        
+    </div>
+    <div class="navitem active" id="monokai">
+        <a   onclick="document.body.syntaxHighlight('monokai')">
+            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-palette" viewBox="0 0 24 24" stroke-width="1.5" stroke="#2c3e50" fill="none" stroke-linecap="round" stroke-linejoin="round">
+            <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+            <path d="M12 21a9 9 0 0 1 0 -18c4.97 0 9 3.582 9 8c0 1.06 -.474 2.078 -1.318 2.828c-.844 .75 -1.989 1.172 -3.182 1.172h-2.5a2 2 0 0 0 -1 3.75a1.3 1.3 0 0 1 -1 2.25" />
+            <path d="M8.5 10.5m-1 0a1 1 0 1 0 2 0a1 1 0 1 0 -2 0" />
+            <path d="M12.5 7.5m-1 0a1 1 0 1 0 2 0a1 1 0 1 0 -2 0" />
+            <path d="M16.5 10.5m-1 0a1 1 0 1 0 2 0a1 1 0 1 0 -2 0" />
+        </svg>
+            <span>Monokai</span>
+        </a>
+        
+    </div>
+    <div class="navitem " id="solarized-light">
+        <a   onclick="document.body.syntaxHighlight('solarized-light')">
+            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-palette" viewBox="0 0 24 24" stroke-width="1.5" stroke="#2c3e50" fill="none" stroke-linecap="round" stroke-linejoin="round">
+            <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+            <path d="M12 21a9 9 0 0 1 0 -18c4.97 0 9 3.582 9 8c0 1.06 -.474 2.078 -1.318 2.828c-.844 .75 -1.989 1.172 -3.182 1.172h-2.5a2 2 0 0 0 -1 3.75a1.3 1.3 0 0 1 -1 2.25" />
+            <path d="M8.5 10.5m-1 0a1 1 0 1 0 2 0a1 1 0 1 0 -2 0" />
+            <path d="M12.5 7.5m-1 0a1 1 0 1 0 2 0a1 1 0 1 0 -2 0" />
+            <path d="M16.5 10.5m-1 0a1 1 0 1 0 2 0a1 1 0 1 0 -2 0" />
+        </svg>
+            <span>Solarized Light</span>
+        </a>
+        
+    </div>
+    <div class="navitem " id="son-of-obsidian">
+        <a   onclick="document.body.syntaxHighlight('son-of-obsidian')">
+            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-palette" viewBox="0 0 24 24" stroke-width="1.5" stroke="#2c3e50" fill="none" stroke-linecap="round" stroke-linejoin="round">
+            <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+            <path d="M12 21a9 9 0 0 1 0 -18c4.97 0 9 3.582 9 8c0 1.06 -.474 2.078 -1.318 2.828c-.844 .75 -1.989 1.172 -3.182 1.172h-2.5a2 2 0 0 0 -1 3.75a1.3 1.3 0 0 1 -1 2.25" />
+            <path d="M8.5 10.5m-1 0a1 1 0 1 0 2 0a1 1 0 1 0 -2 0" />
+            <path d="M12.5 7.5m-1 0a1 1 0 1 0 2 0a1 1 0 1 0 -2 0" />
+            <path d="M16.5 10.5m-1 0a1 1 0 1 0 2 0a1 1 0 1 0 -2 0" />
+        </svg>
+            <span>Son of Obsidian</span>
+        </a>
+        
+    </div>
+    </div>
+    </div>
+    <div class="navitem " >
+        <a   >
+            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-caret-down" viewBox="0 0 24 24" stroke-width="1.5" stroke="#2c3e50" fill="none" stroke-linecap="round" stroke-linejoin="round">
+            <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+            <path d="M6 10l6 6l6 -6h-12" />
+        </svg>
+            <span>Theme</span>
+        </a>
+        
+    <div class="navmenu toggle">
+        
+    <div class="navitem " id="blueberry">
+        <a   onclick="document.body.theme('blueberry')">
+            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-paint" viewBox="0 0 24 24" stroke-width="1.5" stroke="#2c3e50" fill="none" stroke-linecap="round" stroke-linejoin="round">
+            <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+            <path d="M5 3m0 2a2 2 0 0 1 2 -2h10a2 2 0 0 1 2 2v2a2 2 0 0 1 -2 2h-10a2 2 0 0 1 -2 -2z" />
+            <path d="M19 6h1a2 2 0 0 1 2 2a5 5 0 0 1 -5 5l-5 0v2" />
+            <path d="M10 15m0 1a1 1 0 0 1 1 -1h2a1 1 0 0 1 1 1v4a1 1 0 0 1 -1 1h-2a1 1 0 0 1 -1 -1z" />
+        </svg>
+            <span>Blueberry</span>
+        </a>
+        
+    </div>
+    <div class="navitem " id="book-cover">
+        <a   onclick="document.body.theme('book-cover')">
+            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-paint" viewBox="0 0 24 24" stroke-width="1.5" stroke="#2c3e50" fill="none" stroke-linecap="round" stroke-linejoin="round">
+            <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+            <path d="M5 3m0 2a2 2 0 0 1 2 -2h10a2 2 0 0 1 2 2v2a2 2 0 0 1 -2 2h-10a2 2 0 0 1 -2 -2z" />
+            <path d="M19 6h1a2 2 0 0 1 2 2a5 5 0 0 1 -5 5l-5 0v2" />
+            <path d="M10 15m0 1a1 1 0 0 1 1 -1h2a1 1 0 0 1 1 1v4a1 1 0 0 1 -1 1h-2a1 1 0 0 1 -1 -1z" />
+        </svg>
+            <span>Book Cover</span>
+        </a>
+        
+    </div>
+    <div class="navitem " id="brownie">
+        <a   onclick="document.body.theme('brownie')">
+            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-paint" viewBox="0 0 24 24" stroke-width="1.5" stroke="#2c3e50" fill="none" stroke-linecap="round" stroke-linejoin="round">
+            <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+            <path d="M5 3m0 2a2 2 0 0 1 2 -2h10a2 2 0 0 1 2 2v2a2 2 0 0 1 -2 2h-10a2 2 0 0 1 -2 -2z" />
+            <path d="M19 6h1a2 2 0 0 1 2 2a5 5 0 0 1 -5 5l-5 0v2" />
+            <path d="M10 15m0 1a1 1 0 0 1 1 -1h2a1 1 0 0 1 1 1v4a1 1 0 0 1 -1 1h-2a1 1 0 0 1 -1 -1z" />
+        </svg>
+            <span>Brownie</span>
+        </a>
+        
+    </div>
+    <div class="navitem " id="camouflage">
+        <a   onclick="document.body.theme('camouflage')">
+            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-paint" viewBox="0 0 24 24" stroke-width="1.5" stroke="#2c3e50" fill="none" stroke-linecap="round" stroke-linejoin="round">
+            <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+            <path d="M5 3m0 2a2 2 0 0 1 2 -2h10a2 2 0 0 1 2 2v2a2 2 0 0 1 -2 2h-10a2 2 0 0 1 -2 -2z" />
+            <path d="M19 6h1a2 2 0 0 1 2 2a5 5 0 0 1 -5 5l-5 0v2" />
+            <path d="M10 15m0 1a1 1 0 0 1 1 -1h2a1 1 0 0 1 1 1v4a1 1 0 0 1 -1 1h-2a1 1 0 0 1 -1 -1z" />
+        </svg>
+            <span>Camouflage</span>
+        </a>
+        
+    </div>
+    <div class="navitem " id="chocolate">
+        <a   onclick="document.body.theme('chocolate')">
+            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-paint" viewBox="0 0 24 24" stroke-width="1.5" stroke="#2c3e50" fill="none" stroke-linecap="round" stroke-linejoin="round">
+            <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+            <path d="M5 3m0 2a2 2 0 0 1 2 -2h10a2 2 0 0 1 2 2v2a2 2 0 0 1 -2 2h-10a2 2 0 0 1 -2 -2z" />
+            <path d="M19 6h1a2 2 0 0 1 2 2a5 5 0 0 1 -5 5l-5 0v2" />
+            <path d="M10 15m0 1a1 1 0 0 1 1 -1h2a1 1 0 0 1 1 1v4a1 1 0 0 1 -1 1h-2a1 1 0 0 1 -1 -1z" />
+        </svg>
+            <span>Chocolate</span>
+        </a>
+        
+    </div>
+    <div class="navitem " id="greyhound">
+        <a   onclick="document.body.theme('greyhound')">
+            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-paint" viewBox="0 0 24 24" stroke-width="1.5" stroke="#2c3e50" fill="none" stroke-linecap="round" stroke-linejoin="round">
+            <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+            <path d="M5 3m0 2a2 2 0 0 1 2 -2h10a2 2 0 0 1 2 2v2a2 2 0 0 1 -2 2h-10a2 2 0 0 1 -2 -2z" />
+            <path d="M19 6h1a2 2 0 0 1 2 2a5 5 0 0 1 -5 5l-5 0v2" />
+            <path d="M10 15m0 1a1 1 0 0 1 1 -1h2a1 1 0 0 1 1 1v4a1 1 0 0 1 -1 1h-2a1 1 0 0 1 -1 -1z" />
+        </svg>
+            <span>Greyhound</span>
+        </a>
+        
+    </div>
+    <div class="navitem " id="ice-age">
+        <a   onclick="document.body.theme('ice-age')">
+            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-paint" viewBox="0 0 24 24" stroke-width="1.5" stroke="#2c3e50" fill="none" stroke-linecap="round" stroke-linejoin="round">
+            <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+            <path d="M5 3m0 2a2 2 0 0 1 2 -2h10a2 2 0 0 1 2 2v2a2 2 0 0 1 -2 2h-10a2 2 0 0 1 -2 -2z" />
+            <path d="M19 6h1a2 2 0 0 1 2 2a5 5 0 0 1 -5 5l-5 0v2" />
+            <path d="M10 15m0 1a1 1 0 0 1 1 -1h2a1 1 0 0 1 1 1v4a1 1 0 0 1 -1 1h-2a1 1 0 0 1 -1 -1z" />
+        </svg>
+            <span>Ice Age</span>
+        </a>
+        
+    </div>
+    <div class="navitem " id="mustard">
+        <a   onclick="document.body.theme('mustard')">
+            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-paint" viewBox="0 0 24 24" stroke-width="1.5" stroke="#2c3e50" fill="none" stroke-linecap="round" stroke-linejoin="round">
+            <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+            <path d="M5 3m0 2a2 2 0 0 1 2 -2h10a2 2 0 0 1 2 2v2a2 2 0 0 1 -2 2h-10a2 2 0 0 1 -2 -2z" />
+            <path d="M19 6h1a2 2 0 0 1 2 2a5 5 0 0 1 -5 5l-5 0v2" />
+            <path d="M10 15m0 1a1 1 0 0 1 1 -1h2a1 1 0 0 1 1 1v4a1 1 0 0 1 -1 1h-2a1 1 0 0 1 -1 -1z" />
+        </svg>
+            <span>Mustard</span>
+        </a>
+        
+    </div>
+    <div class="navitem " id="peachy">
+        <a   onclick="document.body.theme('peachy')">
+            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-paint" viewBox="0 0 24 24" stroke-width="1.5" stroke="#2c3e50" fill="none" stroke-linecap="round" stroke-linejoin="round">
+            <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+            <path d="M5 3m0 2a2 2 0 0 1 2 -2h10a2 2 0 0 1 2 2v2a2 2 0 0 1 -2 2h-10a2 2 0 0 1 -2 -2z" />
+            <path d="M19 6h1a2 2 0 0 1 2 2a5 5 0 0 1 -5 5l-5 0v2" />
+            <path d="M10 15m0 1a1 1 0 0 1 1 -1h2a1 1 0 0 1 1 1v4a1 1 0 0 1 -1 1h-2a1 1 0 0 1 -1 -1z" />
+        </svg>
+            <span>Peachy</span>
+        </a>
+        
+    </div>
+    <div class="navitem " id="red-alert">
+        <a   onclick="document.body.theme('red-alert')">
+            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-paint" viewBox="0 0 24 24" stroke-width="1.5" stroke="#2c3e50" fill="none" stroke-linecap="round" stroke-linejoin="round">
+            <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+            <path d="M5 3m0 2a2 2 0 0 1 2 -2h10a2 2 0 0 1 2 2v2a2 2 0 0 1 -2 2h-10a2 2 0 0 1 -2 -2z" />
+            <path d="M19 6h1a2 2 0 0 1 2 2a5 5 0 0 1 -5 5l-5 0v2" />
+            <path d="M10 15m0 1a1 1 0 0 1 1 -1h2a1 1 0 0 1 1 1v4a1 1 0 0 1 -1 1h-2a1 1 0 0 1 -1 -1z" />
+        </svg>
+            <span>Red Alert</span>
+        </a>
+        
+    </div>
+    <div class="navitem " id="ultra-violet">
+        <a   onclick="document.body.theme('ultra-violet')">
+            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-paint" viewBox="0 0 24 24" stroke-width="1.5" stroke="#2c3e50" fill="none" stroke-linecap="round" stroke-linejoin="round">
+            <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+            <path d="M5 3m0 2a2 2 0 0 1 2 -2h10a2 2 0 0 1 2 2v2a2 2 0 0 1 -2 2h-10a2 2 0 0 1 -2 -2z" />
+            <path d="M19 6h1a2 2 0 0 1 2 2a5 5 0 0 1 -5 5l-5 0v2" />
+            <path d="M10 15m0 1a1 1 0 0 1 1 -1h2a1 1 0 0 1 1 1v4a1 1 0 0 1 -1 1h-2a1 1 0 0 1 -1 -1z" />
+        </svg>
+            <span>Ultra Violet</span>
+        </a>
+        
+    </div>
+    <div class="navitem " id="vintage">
+        <a   onclick="document.body.theme('vintage')">
+            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-paint" viewBox="0 0 24 24" stroke-width="1.5" stroke="#2c3e50" fill="none" stroke-linecap="round" stroke-linejoin="round">
+            <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+            <path d="M5 3m0 2a2 2 0 0 1 2 -2h10a2 2 0 0 1 2 2v2a2 2 0 0 1 -2 2h-10a2 2 0 0 1 -2 -2z" />
+            <path d="M19 6h1a2 2 0 0 1 2 2a5 5 0 0 1 -5 5l-5 0v2" />
+            <path d="M10 15m0 1a1 1 0 0 1 1 -1h2a1 1 0 0 1 1 1v4a1 1 0 0 1 -1 1h-2a1 1 0 0 1 -1 -1z" />
+        </svg>
+            <span>Vintage</span>
+        </a>
+        
+    </div>
+    </div>
+    </div>
+    </div>
+            
     <a class="hamburger">
         <div class="bar1"></div>
         <div class="bar2"></div>
         <div class="bar3"></div>
     </a>
-    </div>
-    
-    <div class="layout">
-        <div class="sidepane collapsible">
-            
-    <div class="tocmenu">
-        <h3>Table of Contents</h3>
+        </div>
         
+        <div class="layout">
+            <div class="sidepane narrow-scrollbars">
+                
+        <div class="tocmenu">
+            <h3>Table of Contents</h3>
+            
     <ul>
         
     <li>
-        
-        <a href="README.html">Home</a>
-        
+        <a href="README.html"><span>🏠</span><span data-toggle="tooltip" data-title="Home page">
+            Home
+        </span></a>
+    </li>
+    <li>
+        <a href="tutorial.html" class="highlight"><span>🎓</span><span data-toggle="tooltip" data-title="How to create your own keymaps">
+            Tutorial
+        </span></a>
+    </li>
+    <li>
+        <a href="presets/vim.html"><span>🦈</span><span data-toggle="tooltip" data-title="Built-in Vim presets">
+            Vim Presets
+        </span></a>
     </li>
     <li>
         
-        <a href="tutorial.html" class="highlight">Tutorial</a>
-        
-    </li>
-    <li>
-        
-        <a href="presets/vim.html">Vim Presets</a>
-        
-    </li>
-    <li>
-        <button class="accordion">
+    <div class="accordion">
         Implementation
-        </button>
-            
+        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-chevron-up" viewBox="0 0 24 24" stroke-width="1.5" stroke="#2c3e50" fill="none" stroke-linecap="round" stroke-linejoin="round">
+            <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+            <path d="M6 15l6 -6l6 6" />
+        </svg>
+    </div>
+    
     <ul>
         
     <li>
-        
-        <a href="src/extension.html">Extension</a>
-        
+        <a href="src/extension.html"><span>🔌</span><span data-toggle="tooltip" data-title="Main extension module">
+            Extension
+        </span></a>
     </li>
     <li>
-        
-        <a href="src/actions.html">Actions</a>
-        
+        <a href="src/actions.html"><span>⌨️</span><span data-toggle="tooltip" data-title="Keymap management">
+            Actions
+        </span></a>
     </li>
     <li>
-        
-        <a href="src/commands.html">Commands</a>
-        
+        <a href="src/commands.html"><span>📢</span><span data-toggle="tooltip" data-title="Registered commands">
+            Commands
+        </span></a>
     </li>
     </ul>
     </li>
     <li>
-        
-        <a href="CHANGELOG.html">Change Log</a>
-        
+        <a href="CHANGELOG.html"><span>📅</span><span data-toggle="tooltip" data-title="Version history">
+            Change Log
+        </span></a>
     </li>
     <li>
-        
-        <a href="LICENSE.html">License</a>
-        
+        <a href="LICENSE.html"><span>📜</span><span data-toggle="tooltip" data-title="MIT license">
+            License
+        </span></a>
     </li>
     </ul>
-    </div>
-            
-    <div class="footer">
-        Copyright © 2020 Tommi Johtela
-        <div class="ad">
-            Created with <a href="https://github.com/johtela/litscript">LiTScript</a>
         </div>
-    </div>
-
-        </div>
-        <div class="sideicon collapsible">
+                <div class="toc-button"><svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-chevrons-right" viewBox="0 0 24 24" stroke-width="1.5" stroke="#2c3e50" fill="none" stroke-linecap="round" stroke-linejoin="round">
+            <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+            <path d="M7 7l5 5l-5 5" />
+            <path d="M13 7l5 5l-5 5" />
+        </svg></div>
+            </div>
             
-    <a class="hamburger">
-        <div class="bar1"></div>
-        <div class="bar2"></div>
-        <div class="bar3"></div>
-    </a>
-        </div>
-        <div class="scrollingarea closepopups">
-            
-    <div class="contentarea">
-        <h1 id="build-your-own-vim-emulation-for-vs-code">Build Your Own Vim Emulation for VS Code</h1>
+        <div class="contentarea closepopups">
+            <h1 id="build-your-own-vim-emulation-for-vs-code">Build Your Own Vim Emulation for VS Code</h1>
 <p><img src="../images/sharks.png" alt="Shark" width="256" height="206">
 <a href="https://www.vim.org/">Vim</a> is the great white shark of text editors. It has survived among modern
 IDEs because of its unique philosophy. It supports <a href="https://unix.stackexchange.com/questions/57705/modeless-vs-modal-editors">modal editing</a> which is
@@ -164,8 +399,8 @@ conventions in this tutorial.</p>
 block for key bindings. We'll use the <a href="https://vim.rtorr.com/">Vim Cheat Sheet</a> as our specification
 for key bindings to be added.</p>
 
-<pre class="syntaxhighlight"><code>{
-    <span class="string">"modaledit.keybindings"</span>: {
+<pre class="syntaxhighlight narrow-scrollbars"><code>{
+    <span class="string">&quot;modaledit.keybindings&quot;</span>: {
 </code></pre>
 <h2 id="switching-between-modes">Switching Between Modes</h2>
 <p>First things first: we need to be able to enter the normal mode somehow. The
@@ -177,14 +412,14 @@ this command using VS Code's standard keymappings pressing
 <p>There are multiple ways to enter insert mode. If you want to insert text in the
 current cursor position, you press <key>i</key>.</p>
 
-<pre class="syntaxhighlight"><code>        <span class="string">"i"</span>: <span class="string">"modaledit.enterInsert"</span>,
+<pre class="syntaxhighlight narrow-scrollbars"><code>        <span class="string">&quot;i&quot;</span>: <span class="string">&quot;modaledit.enterInsert&quot;</span>,
 </code></pre>
 <p>To insert text at the beginning of line, you press <key>I</key>. For this
 operation, we need a command sequence, i.e. an array of commands.</p>
 
-<pre class="syntaxhighlight"><code>        <span class="string">"I"</span>: [
-            <span class="string">"cursorHome"</span>,
-            <span class="string">"modaledit.enterInsert"</span>
+<pre class="syntaxhighlight narrow-scrollbars"><code>        <span class="string">&quot;I&quot;</span>: [
+            <span class="string">&quot;cursorHome&quot;</span>,
+            <span class="string">&quot;modaledit.enterInsert&quot;</span>
         ],
 </code></pre>
 <h3 id="append-text">Append Text</h3>
@@ -198,16 +433,16 @@ value of the property is a JS expression which ModalEdit evaluates. It selects
 the command based on the result. In this case, the result <code>false</code> will execute
 the <code>cursorRight</code> command.</p>
 
-<pre class="syntaxhighlight"><code>        <span class="string">"a"</span>: [
+<pre class="syntaxhighlight narrow-scrollbars"><code>        <span class="string">&quot;a&quot;</span>: [
             {
-                <span class="string">"condition"</span>: <span class="string">"__char == ''"</span>,
-                <span class="string">"false"</span>: <span class="string">"cursorRight"</span>
+                <span class="string">&quot;condition&quot;</span>: <span class="string">&quot;__char == &#x27;&#x27;&quot;</span>,
+                <span class="string">&quot;false&quot;</span>: <span class="string">&quot;cursorRight&quot;</span>
             },
-            <span class="string">"modaledit.enterInsert"</span>
+            <span class="string">&quot;modaledit.enterInsert&quot;</span>
         ],
-        <span class="string">"A"</span>: [
-            <span class="string">"cursorEnd"</span>,
-            <span class="string">"modaledit.enterInsert"</span>
+        <span class="string">&quot;A&quot;</span>: [
+            <span class="string">&quot;cursorEnd&quot;</span>,
+            <span class="string">&quot;modaledit.enterInsert&quot;</span>
         ],
 </code></pre>
 <h3 id="open-a-new-line">Open a New Line</h3>
@@ -216,13 +451,13 @@ empty line, and putting the cursor on it. There are two variants of this command
 as well: <key>o</key> opens a new line below the current line whereas
 <key>O</key> opens it on the current line.</p>
 
-<pre class="syntaxhighlight"><code>        <span class="string">"o"</span>: [
-            <span class="string">"editor.action.insertLineAfter"</span>,
-            <span class="string">"modaledit.enterInsert"</span>
+<pre class="syntaxhighlight narrow-scrollbars"><code>        <span class="string">&quot;o&quot;</span>: [
+            <span class="string">&quot;editor.action.insertLineAfter&quot;</span>,
+            <span class="string">&quot;modaledit.enterInsert&quot;</span>
         ],
-        <span class="string">"O"</span>: [
-            <span class="string">"editor.action.insertLineBefore"</span>,
-            <span class="string">"modaledit.enterInsert"</span>
+        <span class="string">&quot;O&quot;</span>: [
+            <span class="string">&quot;editor.action.insertLineBefore&quot;</span>,
+            <span class="string">&quot;modaledit.enterInsert&quot;</span>
         ],
 </code></pre>
 <p>Now we can test the commands we just created.</p>
@@ -252,7 +487,7 @@ when you enter insert mode.</p>
 <p>So, let's add a binding to toggle selection mode on or off. We use the familiar
 <key>v</key> key for this.</p>
 
-<pre class="syntaxhighlight"><code>        <span class="string">"v"</span>: <span class="string">"modaledit.toggleSelection"</span>,
+<pre class="syntaxhighlight narrow-scrollbars"><code>        <span class="string">&quot;v&quot;</span>: <span class="string">&quot;modaledit.toggleSelection&quot;</span>,
 </code></pre>
 <p>Now we can add commands for cursor movement. These commands use the generic
 <a href="https://code.visualstudio.com/api/references/commands"><code>cursorMove</code> command</a> which takes arguments. The arguments we use
@@ -261,45 +496,45 @@ which allows us to define parameters as a JS expression. The <code>__selecting</
 in the expression indicates whether selection mode is on. The same effect could
 be achieved also with a conditional command, but this way is a bit simpler.</p>
 
-<pre class="syntaxhighlight"><code>        <span class="string">"h"</span>: {
-            <span class="string">"command"</span>: <span class="string">"cursorMove"</span>,
-            <span class="string">"args"</span>: <span class="string">"{ to: 'left', select: __selecting }"</span>
+<pre class="syntaxhighlight narrow-scrollbars"><code>        <span class="string">&quot;h&quot;</span>: {
+            <span class="string">&quot;command&quot;</span>: <span class="string">&quot;cursorMove&quot;</span>,
+            <span class="string">&quot;args&quot;</span>: <span class="string">&quot;{ to: &#x27;left&#x27;, select: __selecting }&quot;</span>
         },
-        <span class="string">"j"</span>: {
-            <span class="string">"command"</span>: <span class="string">"cursorMove"</span>,
-            <span class="string">"args"</span>: <span class="string">"{ to: 'down', select: __selecting }"</span>
+        <span class="string">&quot;j&quot;</span>: {
+            <span class="string">&quot;command&quot;</span>: <span class="string">&quot;cursorMove&quot;</span>,
+            <span class="string">&quot;args&quot;</span>: <span class="string">&quot;{ to: &#x27;down&#x27;, select: __selecting }&quot;</span>
         },
-        <span class="string">"k"</span>: {
-            <span class="string">"command"</span>: <span class="string">"cursorMove"</span>,
-            <span class="string">"args"</span>: <span class="string">"{ to: 'up', select: __selecting }"</span>
+        <span class="string">&quot;k&quot;</span>: {
+            <span class="string">&quot;command&quot;</span>: <span class="string">&quot;cursorMove&quot;</span>,
+            <span class="string">&quot;args&quot;</span>: <span class="string">&quot;{ to: &#x27;up&#x27;, select: __selecting }&quot;</span>
         },
-        <span class="string">"l"</span>: {
-            <span class="string">"command"</span>: <span class="string">"cursorMove"</span>,
-            <span class="string">"args"</span>: <span class="string">"{ to: 'right', select: __selecting }"</span>
+        <span class="string">&quot;l&quot;</span>: {
+            <span class="string">&quot;command&quot;</span>: <span class="string">&quot;cursorMove&quot;</span>,
+            <span class="string">&quot;args&quot;</span>: <span class="string">&quot;{ to: &#x27;right&#x27;, select: __selecting }&quot;</span>
         },
 </code></pre>
 <p>We can also simulate linewise visual mode using VS Code's <code>expandLineSelection</code>
 command. Note that we don't need to call <code>modaledit.toggleSelection</code> this time
 as selection mode is turned on automatically.</p>
 
-<pre class="syntaxhighlight"><code>        <span class="string">"V"</span>: <span class="string">"expandLineSelection"</span>,
+<pre class="syntaxhighlight narrow-scrollbars"><code>        <span class="string">&quot;V&quot;</span>: <span class="string">&quot;expandLineSelection&quot;</span>,
 </code></pre>
 <h3 id="moving-inside-screen">Moving Inside Screen</h3>
 <p>To move cursor quickly to the top, middle, or bottom of the screen we use keys
 <key>H</key>, <key>M</key>, and <key>L</key>. Again, we need to use the
 <a href="https://code.visualstudio.com/api/references/commands"><code>cursorMove</code> command</a>.</p>
 
-<pre class="syntaxhighlight"><code>        <span class="string">"H"</span>: {
-            <span class="string">"command"</span>: <span class="string">"cursorMove"</span>,
-            <span class="string">"args"</span>: <span class="string">"{ to: 'viewPortTop', select: __selecting }"</span>
+<pre class="syntaxhighlight narrow-scrollbars"><code>        <span class="string">&quot;H&quot;</span>: {
+            <span class="string">&quot;command&quot;</span>: <span class="string">&quot;cursorMove&quot;</span>,
+            <span class="string">&quot;args&quot;</span>: <span class="string">&quot;{ to: &#x27;viewPortTop&#x27;, select: __selecting }&quot;</span>
         },
-        <span class="string">"M"</span>: {
-            <span class="string">"command"</span>: <span class="string">"cursorMove"</span>,
-            <span class="string">"args"</span>: <span class="string">"{ to: 'viewPortCenter', select: __selecting }"</span>
+        <span class="string">&quot;M&quot;</span>: {
+            <span class="string">&quot;command&quot;</span>: <span class="string">&quot;cursorMove&quot;</span>,
+            <span class="string">&quot;args&quot;</span>: <span class="string">&quot;{ to: &#x27;viewPortCenter&#x27;, select: __selecting }&quot;</span>
         },
-        <span class="string">"L"</span>: {
-            <span class="string">"command"</span>: <span class="string">"cursorMove"</span>,
-            <span class="string">"args"</span>: <span class="string">"{ to: 'viewPortBottom', select: __selecting }"</span>
+        <span class="string">&quot;L&quot;</span>: {
+            <span class="string">&quot;command&quot;</span>: <span class="string">&quot;cursorMove&quot;</span>,
+            <span class="string">&quot;args&quot;</span>: <span class="string">&quot;{ to: &#x27;viewPortBottom&#x27;, select: __selecting }&quot;</span>
         },
 </code></pre>
 <h3 id="jumping-to-previous-next-word">Jumping to Previous/Next Word</h3>
@@ -308,23 +543,23 @@ as selection mode is turned on automatically.</p>
 For these we need to use conditional commands because <code>cursorMove</code> falls short
 in this use case.</p>
 
-<pre class="syntaxhighlight"><code>        <span class="string">"w"</span>: {
-            <span class="string">"condition"</span>: <span class="string">"__selecting"</span>,
-            <span class="string">"true"</span>: <span class="string">"cursorWordStartRightSelect"</span>,
-            <span class="string">"false"</span>: <span class="string">"cursorWordStartRight"</span>
+<pre class="syntaxhighlight narrow-scrollbars"><code>        <span class="string">&quot;w&quot;</span>: {
+            <span class="string">&quot;condition&quot;</span>: <span class="string">&quot;__selecting&quot;</span>,
+            <span class="string">&quot;true&quot;</span>: <span class="string">&quot;cursorWordStartRightSelect&quot;</span>,
+            <span class="string">&quot;false&quot;</span>: <span class="string">&quot;cursorWordStartRight&quot;</span>
         },
-        <span class="string">"b"</span>: {
-            <span class="string">"condition"</span>: <span class="string">"__selecting"</span>,
-            <span class="string">"true"</span>: <span class="string">"cursorWordStartLeftSelect"</span>,
-            <span class="string">"false"</span>: <span class="string">"cursorWordStartLeft"</span>
+        <span class="string">&quot;b&quot;</span>: {
+            <span class="string">&quot;condition&quot;</span>: <span class="string">&quot;__selecting&quot;</span>,
+            <span class="string">&quot;true&quot;</span>: <span class="string">&quot;cursorWordStartLeftSelect&quot;</span>,
+            <span class="string">&quot;false&quot;</span>: <span class="string">&quot;cursorWordStartLeft&quot;</span>
         },
 </code></pre>
 <p><key>e</key> jumps to the end of the next word.</p>
 
-<pre class="syntaxhighlight"><code>        <span class="string">"e"</span>: {
-            <span class="string">"condition"</span>: <span class="string">"__selecting"</span>,
-            <span class="string">"true"</span>: <span class="string">"cursorWordEndRightSelect"</span>,
-            <span class="string">"false"</span>: <span class="string">"cursorWordEndRight"</span>
+<pre class="syntaxhighlight narrow-scrollbars"><code>        <span class="string">&quot;e&quot;</span>: {
+            <span class="string">&quot;condition&quot;</span>: <span class="string">&quot;__selecting&quot;</span>,
+            <span class="string">&quot;true&quot;</span>: <span class="string">&quot;cursorWordEndRightSelect&quot;</span>,
+            <span class="string">&quot;false&quot;</span>: <span class="string">&quot;cursorWordEndRight&quot;</span>
         },
 </code></pre>
 <blockquote>
@@ -338,46 +573,46 @@ subtle differences between the editors.</p>
 <key>0</key>, to the first non-blank character <key>^</key>, and to the end of
 line <key>$</key>.</p>
 
-<pre class="syntaxhighlight"><code>        <span class="string">"0"</span>: {
-            <span class="string">"command"</span>: <span class="string">"cursorMove"</span>,
-            <span class="string">"args"</span>: <span class="string">"{ to: 'wrappedLineStart', select: __selecting }"</span>
+<pre class="syntaxhighlight narrow-scrollbars"><code>        <span class="string">&quot;0&quot;</span>: {
+            <span class="string">&quot;command&quot;</span>: <span class="string">&quot;cursorMove&quot;</span>,
+            <span class="string">&quot;args&quot;</span>: <span class="string">&quot;{ to: &#x27;wrappedLineStart&#x27;, select: __selecting }&quot;</span>
         },
-        <span class="string">"^"</span>: {
-            <span class="string">"command"</span>: <span class="string">"cursorMove"</span>,
-            <span class="string">"args"</span>: <span class="string">"{ to: 'wrappedLineFirstNonWhitespaceCharacter', select: __selecting }"</span>
+        <span class="string">&quot;^&quot;</span>: {
+            <span class="string">&quot;command&quot;</span>: <span class="string">&quot;cursorMove&quot;</span>,
+            <span class="string">&quot;args&quot;</span>: <span class="string">&quot;{ to: &#x27;wrappedLineFirstNonWhitespaceCharacter&#x27;, select: __selecting }&quot;</span>
         },
-        <span class="string">"$"</span>: {
-            <span class="string">"command"</span>: <span class="string">"cursorMove"</span>,
-            <span class="string">"args"</span>: <span class="string">"{ to: 'wrappedLineEnd', select: __selecting }"</span>
+        <span class="string">&quot;$&quot;</span>: {
+            <span class="string">&quot;command&quot;</span>: <span class="string">&quot;cursorMove&quot;</span>,
+            <span class="string">&quot;args&quot;</span>: <span class="string">&quot;{ to: &#x27;wrappedLineEnd&#x27;, select: __selecting }&quot;</span>
         },
 </code></pre>
 <p>A lesser known variant of above commands is <key>g</key><key>_</key> that jumps
 to the last non-blank character of the line. Since it is a two key sequence we
 need to open a block for all commands beginning with <key>g</key>.</p>
 
-<pre class="syntaxhighlight"><code>        <span class="string">"g"</span>: {
-            <span class="string">"_"</span>: {
-                <span class="string">"command"</span>: <span class="string">"cursorMove"</span>,
-                <span class="string">"args"</span>: <span class="string">"{ to: 'wrappedLineLastNonWhitespaceCharacter', select: __selecting }"</span>
+<pre class="syntaxhighlight narrow-scrollbars"><code>        <span class="string">&quot;g&quot;</span>: {
+            <span class="string">&quot;_&quot;</span>: {
+                <span class="string">&quot;command&quot;</span>: <span class="string">&quot;cursorMove&quot;</span>,
+                <span class="string">&quot;args&quot;</span>: <span class="string">&quot;{ to: &#x27;wrappedLineLastNonWhitespaceCharacter&#x27;, select: __selecting }&quot;</span>
             },
 </code></pre>
 <h3 id="jumping-to-start-end-of-document">Jumping to Start/End of Document</h3>
 <p>Another motion command is <key>g</key><key>g</key> which jumps to the beginning
 of the file.</p>
 
-<pre class="syntaxhighlight"><code>            <span class="string">"g"</span>: {
-                <span class="string">"condition"</span>: <span class="string">"__selecting"</span>,
-                <span class="string">"true"</span>: <span class="string">"cursorTopSelect"</span>,
-                <span class="string">"false"</span>: <span class="string">"cursorTop"</span>
+<pre class="syntaxhighlight narrow-scrollbars"><code>            <span class="string">&quot;g&quot;</span>: {
+                <span class="string">&quot;condition&quot;</span>: <span class="string">&quot;__selecting&quot;</span>,
+                <span class="string">&quot;true&quot;</span>: <span class="string">&quot;cursorTopSelect&quot;</span>,
+                <span class="string">&quot;false&quot;</span>: <span class="string">&quot;cursorTop&quot;</span>
             },
         },
 </code></pre>
 <p>The opposite of that is <key>G</key> wich jumps to the end of file.</p>
 
-<pre class="syntaxhighlight"><code>        <span class="string">"G"</span>: {
-            <span class="string">"condition"</span>: <span class="string">"__selecting"</span>,
-            <span class="string">"true"</span>: <span class="string">"cursorBottomSelect"</span>,
-            <span class="string">"false"</span>: <span class="string">"cursorBottom"</span>
+<pre class="syntaxhighlight narrow-scrollbars"><code>        <span class="string">&quot;G&quot;</span>: {
+            <span class="string">&quot;condition&quot;</span>: <span class="string">&quot;__selecting&quot;</span>,
+            <span class="string">&quot;true&quot;</span>: <span class="string">&quot;cursorBottomSelect&quot;</span>,
+            <span class="string">&quot;false&quot;</span>: <span class="string">&quot;cursorBottom&quot;</span>
         },
 </code></pre>
 <h3 id="jump-to-character">Jump to Character</h3>
@@ -387,22 +622,22 @@ repeatedly by using <key>f</key> and <key>F</key> keys which move directly to a
 given character. VS Code provides no built-in command for this, but ModalEdit
 includes an incremental search command which can be customized to this purpose.</p>
 
-<pre class="syntaxhighlight"><code>        <span class="string">"f"</span>: {
-            <span class="string">"condition"</span>: <span class="string">"__selecting"</span>,
-            <span class="string">"true"</span>: {
-                <span class="string">"command"</span>: <span class="string">"modaledit.search"</span>,
-                <span class="string">"args"</span>: {
-                    <span class="string">"caseSensitive"</span>: <span class="literal">true</span>,
-                    <span class="string">"acceptAfter"</span>: <span class="number">1</span>,
-                    <span class="string">"selectTillMatch"</span>: <span class="literal">true</span>,
+<pre class="syntaxhighlight narrow-scrollbars"><code>        <span class="string">&quot;f&quot;</span>: {
+            <span class="string">&quot;condition&quot;</span>: <span class="string">&quot;__selecting&quot;</span>,
+            <span class="string">&quot;true&quot;</span>: {
+                <span class="string">&quot;command&quot;</span>: <span class="string">&quot;modaledit.search&quot;</span>,
+                <span class="string">&quot;args&quot;</span>: {
+                    <span class="string">&quot;caseSensitive&quot;</span>: <span class="literal">true</span>,
+                    <span class="string">&quot;acceptAfter&quot;</span>: <span class="number">1</span>,
+                    <span class="string">&quot;selectTillMatch&quot;</span>: <span class="literal">true</span>,
                 }
             },
-            <span class="string">"false"</span>: {
-                <span class="string">"command"</span>: <span class="string">"modaledit.search"</span>,
-                <span class="string">"args"</span>: {
-                    <span class="string">"caseSensitive"</span>: <span class="literal">true</span>,
-                    <span class="string">"acceptAfter"</span>: <span class="number">1</span>,
-                    <span class="string">"typeAfterAccept"</span>: <span class="string">"h"</span>,
+            <span class="string">&quot;false&quot;</span>: {
+                <span class="string">&quot;command&quot;</span>: <span class="string">&quot;modaledit.search&quot;</span>,
+                <span class="string">&quot;args&quot;</span>: {
+                    <span class="string">&quot;caseSensitive&quot;</span>: <span class="literal">true</span>,
+                    <span class="string">&quot;acceptAfter&quot;</span>: <span class="number">1</span>,
+                    <span class="string">&quot;typeAfterAccept&quot;</span>: <span class="string">&quot;h&quot;</span>,
                 }
             },
         },
@@ -423,24 +658,24 @@ over the searched character.</li>
 <p>Now we can implement the opposite <key>F</key> command which searches for the
 previous character. The <code>backwards</code> parameter switches the search direction.</p>
 
-<pre class="syntaxhighlight"><code>        <span class="string">"F"</span>: {
-            <span class="string">"condition"</span>: <span class="string">"__selecting"</span>,
-            <span class="string">"true"</span>: {
-                <span class="string">"command"</span>: <span class="string">"modaledit.search"</span>,
-                <span class="string">"args"</span>: {
-                    <span class="string">"caseSensitive"</span>: <span class="literal">true</span>,
-                    <span class="string">"acceptAfter"</span>: <span class="number">1</span>,
-                    <span class="string">"selectTillMatch"</span>: <span class="literal">true</span>,
-                    <span class="string">"backwards"</span>: <span class="literal">true</span>,
+<pre class="syntaxhighlight narrow-scrollbars"><code>        <span class="string">&quot;F&quot;</span>: {
+            <span class="string">&quot;condition&quot;</span>: <span class="string">&quot;__selecting&quot;</span>,
+            <span class="string">&quot;true&quot;</span>: {
+                <span class="string">&quot;command&quot;</span>: <span class="string">&quot;modaledit.search&quot;</span>,
+                <span class="string">&quot;args&quot;</span>: {
+                    <span class="string">&quot;caseSensitive&quot;</span>: <span class="literal">true</span>,
+                    <span class="string">&quot;acceptAfter&quot;</span>: <span class="number">1</span>,
+                    <span class="string">&quot;selectTillMatch&quot;</span>: <span class="literal">true</span>,
+                    <span class="string">&quot;backwards&quot;</span>: <span class="literal">true</span>,
                 }
             },
-            <span class="string">"false"</span>: {
-                <span class="string">"command"</span>: <span class="string">"modaledit.search"</span>,
-                <span class="string">"args"</span>: {
-                    <span class="string">"caseSensitive"</span>: <span class="literal">true</span>,
-                    <span class="string">"acceptAfter"</span>: <span class="number">1</span>,
-                    <span class="string">"typeAfterAccept"</span>: <span class="string">"h"</span>,
-                    <span class="string">"backwards"</span>: <span class="literal">true</span>
+            <span class="string">&quot;false&quot;</span>: {
+                <span class="string">&quot;command&quot;</span>: <span class="string">&quot;modaledit.search&quot;</span>,
+                <span class="string">&quot;args&quot;</span>: {
+                    <span class="string">&quot;caseSensitive&quot;</span>: <span class="literal">true</span>,
+                    <span class="string">&quot;acceptAfter&quot;</span>: <span class="number">1</span>,
+                    <span class="string">&quot;typeAfterAccept&quot;</span>: <span class="string">&quot;h&quot;</span>,
+                    <span class="string">&quot;backwards&quot;</span>: <span class="literal">true</span>
                 }
             },
         },
@@ -448,8 +683,8 @@ previous character. The <code>backwards</code> parameter switches the search dir
 <p>With <key>;</key> and <key>,</key> keys you can repeat the previous <key>f</key>
 or <key>F</key> commands either forwards or backwards.</p>
 
-<pre class="syntaxhighlight"><code>        <span class="string">";"</span>: <span class="string">"modaledit.nextMatch"</span>,
-        <span class="string">","</span>: <span class="string">"modaledit.previousMatch"</span>,
+<pre class="syntaxhighlight narrow-scrollbars"><code>        <span class="string">&quot;;&quot;</span>: <span class="string">&quot;modaledit.nextMatch&quot;</span>,
+        <span class="string">&quot;,&quot;</span>: <span class="string">&quot;modaledit.previousMatch&quot;</span>,
 </code></pre>
 <blockquote>
 <p>We omitted few useful jump commands, like <key>t</key>, <key>T</key>,
@@ -463,10 +698,10 @@ screen so that cursor is at the center. Again, the ability to use JS expression
 in arguments comes in handy. We use the <code>__line</code> parameter to get the line where
 the cursor is.</p>
 
-<pre class="syntaxhighlight"><code>        <span class="string">"z"</span>: {
-            <span class="string">"z"</span>: {
-                <span class="string">"command"</span>: <span class="string">"revealLine"</span>,
-                <span class="string">"args"</span>: <span class="string">"{ lineNumber: __line, at: 'center' }"</span>
+<pre class="syntaxhighlight narrow-scrollbars"><code>        <span class="string">&quot;z&quot;</span>: {
+            <span class="string">&quot;z&quot;</span>: {
+                <span class="string">&quot;command&quot;</span>: <span class="string">&quot;revealLine&quot;</span>,
+                <span class="string">&quot;args&quot;</span>: <span class="string">&quot;{ lineNumber: __line, at: &#x27;center&#x27; }&quot;</span>
             }
         },
 </code></pre>
@@ -483,17 +718,17 @@ only in normal mode. Most of the Vim's standard <key>Ctrl</key>+key combinations
 are already in use, so you need to decide whether you want to remap the existing
 commands first.</p>
 
-<pre class="syntaxhighlight"><code><span class="comment">// keybindings.json</span>
+<pre class="syntaxhighlight narrow-scrollbars"><code><span class="comment">// keybindings.json</span>
 {
     {
-        <span class="string">"key"</span>: <span class="string">"ctrl+b"</span>,
-        <span class="string">"command"</span>: <span class="string">"cursorPageUp"</span>,
-        <span class="string">"when"</span>: <span class="string">"editorTextFocus &amp;&amp; modaledit.normal"</span>
+        <span class="string">&quot;key&quot;</span>: <span class="string">&quot;ctrl+b&quot;</span>,
+        <span class="string">&quot;command&quot;</span>: <span class="string">&quot;cursorPageUp&quot;</span>,
+        <span class="string">&quot;when&quot;</span>: <span class="string">&quot;editorTextFocus &amp;&amp; modaledit.normal&quot;</span>
     },
     {
-        <span class="string">"key"</span>: <span class="string">"ctrl+f"</span>,
-        <span class="string">"command"</span>: <span class="string">"cursorPageDown"</span>,
-        <span class="string">"when"</span>: <span class="string">"editorTextFocus &amp;&amp; modaledit.normal"</span>
+        <span class="string">&quot;key&quot;</span>: <span class="string">&quot;ctrl+f&quot;</span>,
+        <span class="string">&quot;command&quot;</span>: <span class="string">&quot;cursorPageDown&quot;</span>,
+        <span class="string">&quot;when&quot;</span>: <span class="string">&quot;editorTextFocus &amp;&amp; modaledit.normal&quot;</span>
     }
 }
 </code></pre>
@@ -520,14 +755,14 @@ just this. We also get the actual command from the last item of the <code>__keys
 array and pass it to the <code>modaledit.typeNormalKeys</code> which runs the command
 mapped to the key.</p>
 
-<pre class="syntaxhighlight"><code>        <span class="string">"1-9"</span>: {
-            <span class="string">"id"</span>: <span class="number">1</span>,
-            <span class="string">"help"</span>: <span class="string">"Enter count followed by [h,j,k,l,w,b,e]"</span>,
-            <span class="string">"0-9"</span>: <span class="number">1</span>,
-            <span class="string">"h,j,k,l,w,b,e"</span>: {
-                <span class="string">"command"</span>: <span class="string">"modaledit.typeNormalKeys"</span>,
-                <span class="string">"args"</span>: <span class="string">"{ keys: __keys[__keys.length - 1] }"</span>,
-                <span class="string">"repeat"</span>: <span class="string">"Number(__keys.slice(0, -1).join(''))"</span>
+<pre class="syntaxhighlight narrow-scrollbars"><code>        <span class="string">&quot;1-9&quot;</span>: {
+            <span class="string">&quot;id&quot;</span>: <span class="number">1</span>,
+            <span class="string">&quot;help&quot;</span>: <span class="string">&quot;Enter count followed by [h,j,k,l,w,b,e]&quot;</span>,
+            <span class="string">&quot;0-9&quot;</span>: <span class="number">1</span>,
+            <span class="string">&quot;h,j,k,l,w,b,e&quot;</span>: {
+                <span class="string">&quot;command&quot;</span>: <span class="string">&quot;modaledit.typeNormalKeys&quot;</span>,
+                <span class="string">&quot;args&quot;</span>: <span class="string">&quot;{ keys: __keys[__keys.length - 1] }&quot;</span>,
+                <span class="string">&quot;repeat&quot;</span>: <span class="string">&quot;Number(__keys.slice(0, -1).join(&#x27;&#x27;))&quot;</span>
             },
 </code></pre>
 <p>With this one reletively simply mapping we can implement the repeating
@@ -541,15 +776,15 @@ top of the screen, and then we move the cursor to the same line. Unfortunately
 the built-in command <code>workbench.action.gotoLine</code> does not take any arguments, so
 we have to reinvent the wheel.</p>
 
-<pre class="syntaxhighlight"><code>            <span class="string">"G"</span>: [
+<pre class="syntaxhighlight narrow-scrollbars"><code>            <span class="string">&quot;G&quot;</span>: [
                 {
-                    <span class="string">"command"</span>: <span class="string">"revealLine"</span>,
-                    <span class="string">"args"</span>: <span class="string">"{ lineNumber: Number(__keys.slice(0, -1).join('')) - 1, at: 'top' }"</span>
+                    <span class="string">&quot;command&quot;</span>: <span class="string">&quot;revealLine&quot;</span>,
+                    <span class="string">&quot;args&quot;</span>: <span class="string">&quot;{ lineNumber: Number(__keys.slice(0, -1).join(&#x27;&#x27;)) - 1, at: &#x27;top&#x27; }&quot;</span>
                 },
                 {
-                    <span class="string">"command"</span>: <span class="string">"cursorMove"</span>,
-                    <span class="string">"args"</span>: {
-                        <span class="string">"to"</span>: <span class="string">"viewPortTop"</span>
+                    <span class="string">&quot;command&quot;</span>: <span class="string">&quot;cursorMove&quot;</span>,
+                    <span class="string">&quot;args&quot;</span>: {
+                        <span class="string">&quot;to&quot;</span>: <span class="string">&quot;viewPortTop&quot;</span>
                     }
                 }
             ]
@@ -561,7 +796,7 @@ have counterparts in VS Code.</p>
 <h3 id="joining-lines">Joining Lines</h3>
 <p><key>J</key> joins current and next line together.</p>
 
-<pre class="syntaxhighlight"><code>        <span class="string">"J"</span>: <span class="string">"editor.action.joinLines"</span>,
+<pre class="syntaxhighlight narrow-scrollbars"><code>        <span class="string">&quot;J&quot;</span>: <span class="string">&quot;editor.action.joinLines&quot;</span>,
 </code></pre>
 <h3 id="changing-text">Changing Text</h3>
 <p><em>Change</em> commands delete some text and then enter insert mode.
@@ -570,19 +805,19 @@ have counterparts in VS Code.</p>
 and <key>c</key><key>w</key> changes the end of the word. Three key sequnce
 <key>c</key><key>i</key><key>w</key> changes the whole word under the cursor.</p>
 
-<pre class="syntaxhighlight"><code>        <span class="string">"c"</span>: {
-            <span class="string">"c"</span>: [
-                <span class="string">"deleteAllLeft"</span>,
-                <span class="string">"deleteAllRight"</span>,
-                <span class="string">"modaledit.enterInsert"</span>
+<pre class="syntaxhighlight narrow-scrollbars"><code>        <span class="string">&quot;c&quot;</span>: {
+            <span class="string">&quot;c&quot;</span>: [
+                <span class="string">&quot;deleteAllLeft&quot;</span>,
+                <span class="string">&quot;deleteAllRight&quot;</span>,
+                <span class="string">&quot;modaledit.enterInsert&quot;</span>
             ],
-            <span class="string">"$"</span>: [
-                <span class="string">"deleteAllRight"</span>,
-                <span class="string">"modaledit.enterInsert"</span>
+            <span class="string">&quot;$&quot;</span>: [
+                <span class="string">&quot;deleteAllRight&quot;</span>,
+                <span class="string">&quot;modaledit.enterInsert&quot;</span>
             ],
-            <span class="string">"w"</span>: [
-                <span class="string">"deleteWordEndRight"</span>,
-                <span class="string">"modaledit.enterInsert"</span>
+            <span class="string">&quot;w&quot;</span>: [
+                <span class="string">&quot;deleteWordEndRight&quot;</span>,
+                <span class="string">&quot;modaledit.enterInsert&quot;</span>
             ],
 </code></pre>
 <h3 id="change-until-around-inside">Change Until/Around/Inside</h3>
@@ -599,15 +834,15 @@ type of command that serves many use cases. We use it first to implement the
 cursor till the next occurrence of <em>x</em>. <key>c</key><key>f</key><em>x</em> does the
 same and deletes <em>x</em> too.</p>
 
-<pre class="syntaxhighlight"><code>            <span class="string">"t,f"</span>: {
-                <span class="string">"help"</span>: <span class="string">"Change until _"</span>,
-                <span class="string">" -~"</span>: [
+<pre class="syntaxhighlight narrow-scrollbars"><code>            <span class="string">&quot;t,f&quot;</span>: {
+                <span class="string">&quot;help&quot;</span>: <span class="string">&quot;Change until _&quot;</span>,
+                <span class="string">&quot; -~&quot;</span>: [
                     {
-                        <span class="string">"command"</span>: <span class="string">"modaledit.selectBetween"</span>,
-                        <span class="string">"args"</span>: <span class="string">"{ to: __keys[2], inclusive: __keys[1] == 'f' }"</span>
+                        <span class="string">&quot;command&quot;</span>: <span class="string">&quot;modaledit.selectBetween&quot;</span>,
+                        <span class="string">&quot;args&quot;</span>: <span class="string">&quot;{ to: __keys[2], inclusive: __keys[1] == &#x27;f&#x27; }&quot;</span>
                     },
-                    <span class="string">"deleteLeft"</span>,
-                    <span class="string">"modaledit.enterInsert"</span>
+                    <span class="string">&quot;deleteLeft&quot;</span>,
+                    <span class="string">&quot;modaledit.enterInsert&quot;</span>
                 ]
             },
 </code></pre>
@@ -623,15 +858,15 @@ over the searched character.</p>
 <p>Next we add the change around/inside commands. The first variant takes care of
 the characters that are not braces.</p>
 
-<pre class="syntaxhighlight"><code>            <span class="string">"a,i"</span>: {
-                <span class="string">"help"</span>: <span class="string">"Change around/inside _"</span>,
-                <span class="string">" -/,:-@,[-`,{-~"</span>: [
+<pre class="syntaxhighlight narrow-scrollbars"><code>            <span class="string">&quot;a,i&quot;</span>: {
+                <span class="string">&quot;help&quot;</span>: <span class="string">&quot;Change around/inside _&quot;</span>,
+                <span class="string">&quot; -/,:-@,[-`,{-~&quot;</span>: [
                     {
-                        <span class="string">"command"</span>: <span class="string">"modaledit.selectBetween"</span>,
-                        <span class="string">"args"</span>: <span class="string">"{ from: __keys[2], to: __keys[2], inclusive: __keys[1] == 'a' }"</span>
+                        <span class="string">&quot;command&quot;</span>: <span class="string">&quot;modaledit.selectBetween&quot;</span>,
+                        <span class="string">&quot;args&quot;</span>: <span class="string">&quot;{ from: __keys[2], to: __keys[2], inclusive: __keys[1] == &#x27;a&#x27; }&quot;</span>
                     },
-                    <span class="string">"deleteLeft"</span>,
-                    <span class="string">"modaledit.enterInsert"</span>
+                    <span class="string">&quot;deleteLeft&quot;</span>,
+                    <span class="string">&quot;modaledit.enterInsert&quot;</span>
                 ],
 </code></pre>
 <p>The rather cryptic key range captures all visible non-alphanumeric ASCII
@@ -641,37 +876,37 @@ The only difference is that we store the character to be searched into both
 <p>Now we can add the commands that change text inside braces, such as
 <key>c</key><key>i</key><key>{</key> or <key>c</key><key>a</key><key>]</key>.</p>
 
-<pre class="syntaxhighlight"><code>                <span class="string">"(,)"</span>: [
+<pre class="syntaxhighlight narrow-scrollbars"><code>                <span class="string">&quot;(,)&quot;</span>: [
                     {
-                        <span class="string">"command"</span>: <span class="string">"modaledit.selectBetween"</span>,
-                        <span class="string">"args"</span>: <span class="string">"{ from: '(', to: ')', inclusive: __keys[1] == 'a' }"</span>
+                        <span class="string">&quot;command&quot;</span>: <span class="string">&quot;modaledit.selectBetween&quot;</span>,
+                        <span class="string">&quot;args&quot;</span>: <span class="string">&quot;{ from: &#x27;(&#x27;, to: &#x27;)&#x27;, inclusive: __keys[1] == &#x27;a&#x27; }&quot;</span>
                     },
-                    <span class="string">"deleteLeft"</span>,
-                    <span class="string">"modaledit.enterInsert"</span>
+                    <span class="string">&quot;deleteLeft&quot;</span>,
+                    <span class="string">&quot;modaledit.enterInsert&quot;</span>
                 ],
-                <span class="string">"{,}"</span>: [
+                <span class="string">&quot;{,}&quot;</span>: [
                     {
-                        <span class="string">"command"</span>: <span class="string">"modaledit.selectBetween"</span>,
-                        <span class="string">"args"</span>: <span class="string">"{ from: '{', to: '}', inclusive: __keys[1] == 'a' }"</span>
+                        <span class="string">&quot;command&quot;</span>: <span class="string">&quot;modaledit.selectBetween&quot;</span>,
+                        <span class="string">&quot;args&quot;</span>: <span class="string">&quot;{ from: &#x27;{&#x27;, to: &#x27;}&#x27;, inclusive: __keys[1] == &#x27;a&#x27; }&quot;</span>
                     },
-                    <span class="string">"deleteLeft"</span>,
-                    <span class="string">"modaledit.enterInsert"</span>
+                    <span class="string">&quot;deleteLeft&quot;</span>,
+                    <span class="string">&quot;modaledit.enterInsert&quot;</span>
                 ],
-                <span class="string">"[,]"</span>: [
+                <span class="string">&quot;[,]&quot;</span>: [
                     {
-                        <span class="string">"command"</span>: <span class="string">"modaledit.selectBetween"</span>,
-                        <span class="string">"args"</span>: <span class="string">"{ from: '[', to: ']', inclusive: __keys[1] == 'a' }"</span>
+                        <span class="string">&quot;command&quot;</span>: <span class="string">&quot;modaledit.selectBetween&quot;</span>,
+                        <span class="string">&quot;args&quot;</span>: <span class="string">&quot;{ from: &#x27;[&#x27;, to: &#x27;]&#x27;, inclusive: __keys[1] == &#x27;a&#x27; }&quot;</span>
                     },
-                    <span class="string">"deleteLeft"</span>,
-                    <span class="string">"modaledit.enterInsert"</span>
+                    <span class="string">&quot;deleteLeft&quot;</span>,
+                    <span class="string">&quot;modaledit.enterInsert&quot;</span>
                 ],
-                <span class="string">"&lt;,&gt;"</span>: [
+                <span class="string">&quot;&lt;,&gt;&quot;</span>: [
                     {
-                        <span class="string">"command"</span>: <span class="string">"modaledit.selectBetween"</span>,
-                        <span class="string">"args"</span>: <span class="string">"{ from: '&lt;', to: '&gt;', inclusive: __keys[1] == 'a' }"</span>
+                        <span class="string">&quot;command&quot;</span>: <span class="string">&quot;modaledit.selectBetween&quot;</span>,
+                        <span class="string">&quot;args&quot;</span>: <span class="string">&quot;{ from: &#x27;&lt;&#x27;, to: &#x27;&gt;&#x27;, inclusive: __keys[1] == &#x27;a&#x27; }&quot;</span>
                     },
-                    <span class="string">"deleteLeft"</span>,
-                    <span class="string">"modaledit.enterInsert"</span>
+                    <span class="string">&quot;deleteLeft&quot;</span>,
+                    <span class="string">&quot;modaledit.enterInsert&quot;</span>
                 ],
 </code></pre>
 <p>It is also useful to be able to change the current word the cursor is on. You
@@ -682,13 +917,13 @@ non-alphanumeric characters (except underscore). Note the double escaping
 needed to enter the <code>\</code> character. There are other commands we could use to
 implement the operation, but this version works reliably in all scenarios.</p>
 
-<pre class="syntaxhighlight"><code>                <span class="string">"w"</span>: [
+<pre class="syntaxhighlight narrow-scrollbars"><code>                <span class="string">&quot;w&quot;</span>: [
                     {
-                        <span class="string">"command"</span>: <span class="string">"modaledit.selectBetween"</span>,
-                        <span class="string">"args"</span>: <span class="string">"{ from: '\\\\W', to: '\\\\W', regex: true, inclusive: __keys[1] == 'a' }"</span>
+                        <span class="string">&quot;command&quot;</span>: <span class="string">&quot;modaledit.selectBetween&quot;</span>,
+                        <span class="string">&quot;args&quot;</span>: <span class="string">&quot;{ from: &#x27;\\\\W&#x27;, to: &#x27;\\\\W&#x27;, regex: true, inclusive: __keys[1] == &#x27;a&#x27; }&quot;</span>
                     },
-                    <span class="string">"deleteLeft"</span>,
-                    <span class="string">"modaledit.enterInsert"</span>
+                    <span class="string">&quot;deleteLeft&quot;</span>,
+                    <span class="string">&quot;modaledit.enterInsert&quot;</span>
                 ]
             }
         },
@@ -700,32 +935,32 @@ sake of keeping the tutorial short, we'll leave those as an exercise.</p>
 </blockquote>
 <p>A shorthand for  <key>c</key><key>$</key> command is <key>C</key>.</p>
 
-<pre class="syntaxhighlight"><code>        <span class="string">"C"</span>: [
-            <span class="string">"deleteAllRight"</span>,
-            <span class="string">"modaledit.enterInsert"</span>
+<pre class="syntaxhighlight narrow-scrollbars"><code>        <span class="string">&quot;C&quot;</span>: [
+            <span class="string">&quot;deleteAllRight&quot;</span>,
+            <span class="string">&quot;modaledit.enterInsert&quot;</span>
         ],
 </code></pre>
 <p><em>Substitution</em> commands do  basically same things as change commands;
 <key>s</key> changes the character under cursor, and <key>S</key> is same as
 <key>c</key><key>c</key>.</p>
 
-<pre class="syntaxhighlight"><code>        <span class="string">"s"</span>: [
-            <span class="string">"deleteRight"</span>,
-            <span class="string">"modaledit.enterInsert"</span>
+<pre class="syntaxhighlight narrow-scrollbars"><code>        <span class="string">&quot;s&quot;</span>: [
+            <span class="string">&quot;deleteRight&quot;</span>,
+            <span class="string">&quot;modaledit.enterInsert&quot;</span>
         ],
-        <span class="string">"S"</span>: [
-            <span class="string">"deleteAllLeft"</span>,
-            <span class="string">"deleteAllRight"</span>,
-            <span class="string">"modaledit.enterInsert"</span>
+        <span class="string">&quot;S&quot;</span>: [
+            <span class="string">&quot;deleteAllLeft&quot;</span>,
+            <span class="string">&quot;deleteAllRight&quot;</span>,
+            <span class="string">&quot;modaledit.enterInsert&quot;</span>
         ],
 </code></pre>
 <h3 id="undo-amp-redo">Undo &amp; Redo</h3>
 <p>You can undo the last change with <key>u</key>. We also clear the selection to
 copy Vim's operation.</p>
 
-<pre class="syntaxhighlight"><code>        <span class="string">"u"</span>: [
-            <span class="string">"undo"</span>,
-            <span class="string">"modaledit.cancelSelection"</span>
+<pre class="syntaxhighlight narrow-scrollbars"><code>        <span class="string">&quot;u&quot;</span>: [
+            <span class="string">&quot;undo&quot;</span>,
+            <span class="string">&quot;modaledit.cancelSelection&quot;</span>
         ],
 </code></pre>
 <p>Since redo is mapped to <key>Ctrl</key>+<key>r</key> by default, we leave this
@@ -734,30 +969,30 @@ binding as an exercise to the reader.</p>
 <p>Visual commands operate on the selected text. <key>&lt;</key> and <key>&gt;</key>
 shift selected text left or right (indent/outdent).</p>
 
-<pre class="syntaxhighlight"><code>        <span class="string">"&lt;"</span>: <span class="string">"editor.action.outdentLines"</span>,
-        <span class="string">"&gt;"</span>: <span class="string">"editor.action.indentLines"</span>,
+<pre class="syntaxhighlight narrow-scrollbars"><code>        <span class="string">&quot;&lt;&quot;</span>: <span class="string">&quot;editor.action.outdentLines&quot;</span>,
+        <span class="string">&quot;&gt;&quot;</span>: <span class="string">&quot;editor.action.indentLines&quot;</span>,
 </code></pre>
 <h3 id="clipboard-commands">Clipboard Commands</h3>
 <p><key>y</key> yanks, i.e. copies, selected text to clipboard. Following Vim
 convention, we also clear the selection.</p>
 
-<pre class="syntaxhighlight"><code>        <span class="string">"y"</span>: [
-            <span class="string">"editor.action.clipboardCopyAction"</span>,
-            <span class="string">"modaledit.cancelSelection"</span>
+<pre class="syntaxhighlight narrow-scrollbars"><code>        <span class="string">&quot;y&quot;</span>: [
+            <span class="string">&quot;editor.action.clipboardCopyAction&quot;</span>,
+            <span class="string">&quot;modaledit.cancelSelection&quot;</span>
         ],
 </code></pre>
 <p><key>d</key> deletes (cuts) the selected text and puts it to clipboard. Capital
 <key>D</key> deletes the rest of the line. <key>x</key> deletes just the
 character under the cursor.</p>
 
-<pre class="syntaxhighlight"><code>        <span class="string">"d"</span>: <span class="string">"editor.action.clipboardCutAction"</span>,
-        <span class="string">"D"</span>: [
-            <span class="string">"cursorEndSelect"</span>,
-            <span class="string">"editor.action.clipboardCutAction"</span>
+<pre class="syntaxhighlight narrow-scrollbars"><code>        <span class="string">&quot;d&quot;</span>: <span class="string">&quot;editor.action.clipboardCutAction&quot;</span>,
+        <span class="string">&quot;D&quot;</span>: [
+            <span class="string">&quot;cursorEndSelect&quot;</span>,
+            <span class="string">&quot;editor.action.clipboardCutAction&quot;</span>
         ],
-        <span class="string">"x"</span>: [
-            <span class="string">"cursorRightSelect"</span>,
-            <span class="string">"editor.action.clipboardCutAction"</span>
+        <span class="string">&quot;x&quot;</span>: [
+            <span class="string">&quot;cursorRightSelect&quot;</span>,
+            <span class="string">&quot;editor.action.clipboardCutAction&quot;</span>
         ],
 </code></pre>
 <blockquote>
@@ -770,11 +1005,11 @@ line. Again, one of the subtle differences that is futile to try to unify.</p>
 commands: <key>p</key> puts the text after the cursor, and <key>P</key> puts it
 before.</p>
 
-<pre class="syntaxhighlight"><code>        <span class="string">"p"</span>: [
-            <span class="string">"cursorRight"</span>,
-            <span class="string">"editor.action.clipboardPasteAction"</span>
+<pre class="syntaxhighlight narrow-scrollbars"><code>        <span class="string">&quot;p&quot;</span>: [
+            <span class="string">&quot;cursorRight&quot;</span>,
+            <span class="string">&quot;editor.action.clipboardPasteAction&quot;</span>
         ],
-        <span class="string">"P"</span>: <span class="string">"editor.action.clipboardPasteAction"</span>,
+        <span class="string">&quot;P&quot;</span>: <span class="string">&quot;editor.action.clipboardPasteAction&quot;</span>,
 </code></pre>
 <h3 id="switching-case">Switching Case</h3>
 <p>Switching selected text to upper or lower case is done with a nifty trick.
@@ -782,10 +1017,10 @@ We can examine the selection in a conditional command that calls different VS
 Code commands based on the expression. The command is bound to the tilde
 <key>~</key> character.</p>
 
-<pre class="syntaxhighlight"><code>        <span class="string">"~"</span>: {
-            <span class="string">"condition"</span>: <span class="string">"__selection == __selection.toUpperCase()"</span>,
-            <span class="string">"true"</span>: <span class="string">"editor.action.transformToLowercase"</span>,
-            <span class="string">"false"</span>: <span class="string">"editor.action.transformToUppercase"</span>
+<pre class="syntaxhighlight narrow-scrollbars"><code>        <span class="string">&quot;~&quot;</span>: {
+            <span class="string">&quot;condition&quot;</span>: <span class="string">&quot;__selection == __selection.toUpperCase()&quot;</span>,
+            <span class="string">&quot;true&quot;</span>: <span class="string">&quot;editor.action.transformToLowercase&quot;</span>,
+            <span class="string">&quot;false&quot;</span>: <span class="string">&quot;editor.action.transformToUppercase&quot;</span>
         },
 </code></pre>
 <h2 id="marks">Marks</h2>
@@ -798,16 +1033,16 @@ and adds two simple commands: <code>modaledit.defineBookmark</code> and
 To define a bookmark, you type <key>m</key><key>a</key>, for example, and to
 jump to that mark, type <key>`</key><key>a</key>.</p>
 
-<pre class="syntaxhighlight"><code>        <span class="string">"m"</span>: {
-            <span class="string">"a-z"</span>: {
-                <span class="string">"command"</span>: <span class="string">"modaledit.defineBookmark"</span>,
-                <span class="string">"args"</span>: <span class="string">"{ bookmark: __keys[1] }"</span>
+<pre class="syntaxhighlight narrow-scrollbars"><code>        <span class="string">&quot;m&quot;</span>: {
+            <span class="string">&quot;a-z&quot;</span>: {
+                <span class="string">&quot;command&quot;</span>: <span class="string">&quot;modaledit.defineBookmark&quot;</span>,
+                <span class="string">&quot;args&quot;</span>: <span class="string">&quot;{ bookmark: __keys[1] }&quot;</span>
             }
         },
-        <span class="string">"`"</span>: {
-            <span class="string">"a-z"</span>: {
-                <span class="string">"command"</span>: <span class="string">"modaledit.goToBookmark"</span>,
-                <span class="string">"args"</span>: <span class="string">"{ bookmark: __keys[1] }"</span>
+        <span class="string">&quot;`&quot;</span>: {
+            <span class="string">&quot;a-z&quot;</span>: {
+                <span class="string">&quot;command&quot;</span>: <span class="string">&quot;modaledit.goToBookmark&quot;</span>,
+                <span class="string">&quot;args&quot;</span>: <span class="string">&quot;{ bookmark: __keys[1] }&quot;</span>
             }
         },
 </code></pre>
@@ -816,24 +1051,24 @@ jump to that mark, type <key>`</key><key>a</key>.</p>
 search command provided by ModalEdit for this. As in Vim, typing <key>/</key>
 starts an incremental search. <key>?</key> starts a search backwards.</p>
 
-<pre class="syntaxhighlight"><code>        <span class="string">"/"</span>: {
-            <span class="string">"command"</span>: <span class="string">"modaledit.search"</span>,
-            <span class="string">"args"</span>: {
-                <span class="string">"caseSensitive"</span>: <span class="literal">true</span>
+<pre class="syntaxhighlight narrow-scrollbars"><code>        <span class="string">&quot;/&quot;</span>: {
+            <span class="string">&quot;command&quot;</span>: <span class="string">&quot;modaledit.search&quot;</span>,
+            <span class="string">&quot;args&quot;</span>: {
+                <span class="string">&quot;caseSensitive&quot;</span>: <span class="literal">true</span>
             }
         },
-        <span class="string">"?"</span>: {
-            <span class="string">"command"</span>: <span class="string">"modaledit.search"</span>,
-            <span class="string">"args"</span>: {
-                <span class="string">"caseSensitive"</span>: <span class="literal">true</span>,
-                <span class="string">"backwards"</span>: <span class="literal">true</span>
+        <span class="string">&quot;?&quot;</span>: {
+            <span class="string">&quot;command&quot;</span>: <span class="string">&quot;modaledit.search&quot;</span>,
+            <span class="string">&quot;args&quot;</span>: {
+                <span class="string">&quot;caseSensitive&quot;</span>: <span class="literal">true</span>,
+                <span class="string">&quot;backwards&quot;</span>: <span class="literal">true</span>
             }
         },
 </code></pre>
 <p>Jumping to next previous match is done with keys <key>n</key> and <key>N</key>.</p>
 
-<pre class="syntaxhighlight"><code>        <span class="string">"n"</span>: <span class="string">"modaledit.nextMatch"</span>,
-        <span class="string">"N"</span>: <span class="string">"modaledit.previousMatch"</span>,
+<pre class="syntaxhighlight narrow-scrollbars"><code>        <span class="string">&quot;n&quot;</span>: <span class="string">&quot;modaledit.nextMatch&quot;</span>,
+        <span class="string">&quot;N&quot;</span>: <span class="string">&quot;modaledit.previousMatch&quot;</span>,
 </code></pre>
 <p>There are some subtle differences in the search functionality as well. Instead
 of just highlighting matches ModalEdit selects them. This is preferable
@@ -867,21 +1102,34 @@ laser beam. It requires some training to operate, but when properly configured
 will cut through text at the speed of light.</p>
 <p>Happy Editing! 🦈😎</p>
 
-        
-    </div>
-            <div class="stickypane">
+        </div>
+            <div class="sidepane narrow-scrollbars">
                 
-    <div class="pagemenu">
-        <h3>On This Page</h3>
-            <ul class="pagetree">
-                
-            </ul>
-    </div>
-                
+        <div class="pagemenu">
+            <h3>On This Page</h3>
+                <ul class="pagetree">
+                </ul>
+        </div>
             </div>
         </div>
-    </div>
-    <script src="js/main.js"></script>
+        
+        <div class="footer">
+            <a class="footer-button" href="README.html">
+            <p>Previous</p>
+            <p>« Home</p>
+        </a>
+            <div class="footer-text">
+                <p>Copyright © 2025 Tommi Johtela</p>
+                <p>Generated by 
+                    <a href="https://johtela.github.io/litscript">LiTScript</a>
+                </p>
+            </div>
+            <a class="footer-button" href="presets/vim.html">
+            <p>Next</p>
+            <p>Vim Presets »</p>
+        </a>
+        </div>
     
-</body>
-</html>
+        <script src="dist/normal.js"></script>
+    </body>
+    </html>

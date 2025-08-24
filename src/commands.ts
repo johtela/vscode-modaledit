@@ -291,12 +291,14 @@ export function toggle() {
 /**
  * When entering normal mode, we:
  *
- * 1. cancel the search, if it is on,
- * 2. subscribe to the `type` event,
- * 3. handle the rest of the mode setup with `setNormalMode` function, and
- * 4. clear the selection.
+ * 1. abort any running actions,
+ * 2. cancel the search, if it is on,
+ * 3. subscribe to the `type` event,
+ * 4. handle the rest of the mode setup with `setNormalMode` function, and
+ * 5. clear the selection.
  */
 export function enterNormal() {
+    actions.abortActions()
     cancelSearch()
     if (!typeSubscription)
         typeSubscription = vscode.commands.registerCommand("type", onType)

@@ -458,6 +458,16 @@ async function executeConditional(cond: Conditional, selecting: boolean):
         await execute(cond[branch], selecting)
 }
 /**
+ * Since repeated commands can potentially put VSCode in a busy loop, we provide 
+ * a way to abort them. For this purpose, we define a flag that is set by the 
+ * `enterNormalMode` function. Effectively, when the user presses `Esc` we abort 
+ * the repeat loop.
+ */
+let abort = false
+export function abortActions() {
+    abort = true
+}
+/**
  * Parameterized commands can get their arguments in two forms: as a string 
  * that is evaluated to get the actual arguments, or as an object. Before 
  * executing the command, we inspect the `repeat` property. If it is string
@@ -474,12 +484,13 @@ async function executeParameterized(action: Parameterized, selecting: boolean) {
         if (isString(repeat))
             do {
                 await executeVSCommand(action.command, args)
-                cont = evalString(repeat, selecting)
+                cont = !abort && evalString(repeat, selecting)
             }
             while (cont)
         else
-            for (let i = 0; i < repeat; i++)
+            for (let i = 0; i < repeat && !abort; i++)
                 await executeVSCommand(action.command, args)
+        abort = false
     }
     if (action.repeat) {
         if (isString(action.repeat)) {

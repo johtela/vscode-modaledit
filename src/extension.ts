@@ -8,6 +8,8 @@ import * as vscode from 'vscode'
 import * as actions from './actions'
 import * as commands from './commands'
 /** 
+ * ## Activation
+ * 
  * This method is called when the extension is activated. The activation events
  * are set in the `package.json` like this:
  * ```js
@@ -48,6 +50,8 @@ export function activate(context: vscode.ExtensionContext) {
 		commands.enterInsert()
 }
 /** 
+ * ## Deactivation
+ * 
  * This method is called when your extension is deactivated
  */
 export function deactivate() {
