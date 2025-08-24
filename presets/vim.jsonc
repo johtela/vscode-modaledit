@@ -1098,7 +1098,7 @@ selection afterwards.
 | `>`       | Indent selection
 | `<`       | Outdent selection
 | `=`       | Reindent (reformat) selection
-| `d | x`   | Delete (cut) selection
+| `d \| x`  | Delete (cut) selection
 | `c`       | Change selection (cut and enter insert mode)
 | `y`       | Yank (copy) selection
 | `u`       | Transorm selection to lowercase
