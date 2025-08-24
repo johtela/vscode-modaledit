@@ -14,6 +14,7 @@
         "download": "https://marketplace.visualstudio.com/items?itemName=johtela.vscode-modaledit",
         "license": "LICENSE.html",
         "footer": "Copyright © 2025 Tommi Johtela",
-        "logo": "images/escape.svg"
+        "logo": "images/escape.svg",
+        "styles": [ "./user-theme.css" ]
     }
 }

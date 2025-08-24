@@ -1,0 +1,28 @@
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans:ital,wght@0,100..900;1,100..900&family=Roboto+Mono:ital,wght@0,100..700;1,100..700&family=Sanchez:ital@0;1&display=swap');
+
+body {
+	--sans-font: "Noto Sans";
+	--serif-font: "Sanchez";
+	--mono-font: "Roboto Mono";
+
+	--cnt-font-size: 17px;
+	--cnt-width: 75ch;
+}
+/* Custom style for keyboard keys. */
+key {
+	display: inline;
+	display: inline-block;
+	min-width: 2em;
+    padding: 0 1ex;
+	margin: 0 2px;    
+    font-family: var(--sans-font);
+    font-size: 0.75em;
+	text-align: center;
+	text-decoration: none;
+    border-radius: .3em;
+	border: 2px outset #f6e4db;
+	cursor: default;
+	user-select: none;
+	background: linear-gradient(to bottom right, #e6b99e, #f6e4db);
+	color: rgb(50, 50, 50);
+}
