@@ -20,7 +20,7 @@
 		"onStartupFinished"
 	],
 	"icon": "images/normal.jpg",
-	"main": "./out/extension.js",
+	"main": "./dist/extension.js",
 	"contributes": {
 		"configuration": {
 			"type": "object",
