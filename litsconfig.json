@@ -15,6 +15,7 @@
         "license": "LICENSE.html",
         "footer": "Copyright © 2025 Tommi Johtela",
         "logo": "images/escape.svg",
-        "styles": [ "./user-theme.css" ]
+        "styles": [ "./user-theme.css" ],
+        "theme": "red-alert"
     }
 }
