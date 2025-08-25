@@ -8,8 +8,6 @@ src/**
 **/*.map
 **/*.ts
 **/*.html
-**/*.less
-webpack.config.js
-.nojekyll
+**/*.css
 images/**
 !images/normal.jpg

@@ -187,3 +187,14 @@ Two new commands (courtesy of [David Little](https://github.com/haberdashPI)):
 - `modaledit.enableSelection` turns selection mode on.
 - `modaledit.cancelMultipleSelections` cancels selection mode preserving
   multiple cursors.
+
+## Version 2.2
+
+- Added a possibility to abort long running commands by pressing `Esc`.
+- `modaledit.selectBetween` command now supports the `nested` parameter, which
+  correctly handles selection between nested brackets, and resembles Vim's
+  behavior. Also updated Vim bindings accordingly. 
+  [#39](https://github.com/johtela/vscode-modaledit/issues/39)
+- Will later upload extension also to
+  [Open VSIX Registry](https://open-vsx.org/) so that it can be used also with
+  VSCodium and other open-source forks.

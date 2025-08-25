@@ -542,6 +542,17 @@ mode no longer &quot;sticks&quot; between tabs.</p>
 <li><code>modaledit.cancelMultipleSelections</code> cancels selection mode preserving
 multiple cursors.</li>
 </ul>
+<h2 id="version-2-2">Version 2.2</h2>
+<ul>
+<li>Added a possibility to abort long running commands by pressing <code>Esc</code>.</li>
+<li><code>modaledit.selectBetween</code> command now supports the <code>nested</code> parameter, which
+correctly handles selection between nested brackets, and resembles Vim's
+behavior. Also updated Vim bindings accordingly.
+<a href="https://github.com/johtela/vscode-modaledit/issues/39">#39</a></li>
+<li>Will later upload extension also to
+<a href="https://open-vsx.org/">Open VSIX Registry</a> so that it can be used also with
+VSCodium and other open-source forks.</li>
+</ul>
 
         </div>
             <div class="sidepane narrow-scrollbars">
