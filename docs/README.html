@@ -1068,6 +1068,10 @@ the whole document, set the <code>docScope</code> flag.</li>
 <li>The <code>nested</code> makes sure that <code>from</code> and <code>to</code> are balanced. I.e. if there are
 nested <code>from</code> → <code>to</code> blocks, the command selects the block where the cursor
 currently resides. Deeper level blocks will be included in the selection.</li>
+<li>The <code>unicode</code> flag enables full Unicode support in regular expressions,
+including Unicode property escapes like <code>\p{L}</code> (letters), <code>\p{Emoji}</code>, etc.
+This is useful for matching non-ASCII characters and emoji correctly. When
+this flag is missing or false, standard JavaScript regex matching is used.</li>
 </ul>
 <p>Below is an example that selects all text inside matching parentheses. For more
 advanced examples check the <a href="https://johtela.github.io/vscode-modaledit/docs/.vscode/settings.html">tutorial</a>.</p>
@@ -1078,6 +1082,59 @@ advanced examples check the <a href="https://johtela.github.io/vscode-modaledit/
         <span class="string">&quot;from&quot;</span>: <span class="string">&quot;(&quot;</span>,
         <span class="string">&quot;to&quot;</span>: <span class="string">&quot;)&quot;</span>
         <span class="string">&quot;nested&quot;</span>: <span class="literal">true</span>
+    }
+}
+</code></pre>
+<h4 id="multi-cursor-support">Multi-Cursor Support</h4>
+<p>The <code>modaledit.selectBetween</code> command fully supports multiple cursors. When
+multiple cursors are active, the command processes each cursor independently:</p>
+<ul>
+<li>Each cursor searches within its own line scope (when <code>docScope</code> is <code>false</code> or
+omitted).</li>
+<li>All cursors remain active after the command executes.</li>
+<li>Each selection is computed independently based on its cursor position.</li>
+</ul>
+<p>For example, with multiple cursors on different lines, the following command
+will select the word at each cursor position:</p>
+
+<pre class="syntaxhighlight narrow-scrollbars"><code>{
+    <span class="string">&quot;command&quot;</span>: <span class="string">&quot;modaledit.selectBetween&quot;</span>,
+    <span class="string">&quot;args&quot;</span>: {
+        <span class="string">&quot;from&quot;</span>: <span class="string">&quot;\\W&quot;</span>,
+        <span class="string">&quot;to&quot;</span>: <span class="string">&quot;\\W&quot;</span>,
+        <span class="string">&quot;regex&quot;</span>: <span class="literal">true</span>
+    }
+}
+</code></pre>
+<p><strong>Note:</strong> When <code>docScope</code> is set to <code>true</code>, the command falls back to
+single-cursor mode and searches the entire document. In this case, only the
+primary cursor's selection is processed, and other cursors are removed. This
+behavior ensures that document-wide searches operate predictably.</p>
+<h4 id="unicode-support">Unicode Support</h4>
+<p>The <code>unicode</code> flag enables full Unicode regex support, allowing you to match
+characters beyond ASCII and use Unicode property escapes. This is particularly
+useful for internationalized text and emoji.</p>
+<p>Example using Unicode property escapes to select a word (any sequence of Unicode
+letters):</p>
+
+<pre class="syntaxhighlight narrow-scrollbars"><code>{
+    <span class="string">&quot;command&quot;</span>: <span class="string">&quot;modaledit.selectBetween&quot;</span>,
+    <span class="string">&quot;args&quot;</span>: {
+        <span class="string">&quot;from&quot;</span>: <span class="string">&quot;\\P{L}&quot;</span>,
+        <span class="string">&quot;to&quot;</span>: <span class="string">&quot;\\P{L}&quot;</span>,
+        <span class="string">&quot;regex&quot;</span>: <span class="literal">true</span>,
+        <span class="string">&quot;unicode&quot;</span>: <span class="literal">true</span>
+    }
+}
+</code></pre>
+<p>Example selecting text between Unicode quotation marks:</p>
+
+<pre class="syntaxhighlight narrow-scrollbars"><code>{
+    <span class="string">&quot;command&quot;</span>: <span class="string">&quot;modaledit.selectBetween&quot;</span>,
+    <span class="string">&quot;args&quot;</span>: {
+        <span class="string">&quot;from&quot;</span>: <span class="string">&quot;&quot;</span><span class="string">&quot;,
+        &quot;</span>to<span class="string">&quot;: &quot;</span><span class="string">&quot;&quot;</span>,
+        <span class="string">&quot;unicode&quot;</span>: <span class="literal">true</span>
     }
 }
 </code></pre>

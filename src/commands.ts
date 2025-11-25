@@ -110,6 +110,7 @@ interface SelectBetweenArgs {
     caseSensitive: boolean
     docScope: boolean
     nested: boolean
+    unicode: boolean
 }
 /**
  * ## State Variables
@@ -849,6 +850,16 @@ function ensureRegexp(str?: string): string {
     return str || "^$a"
 }
 /**
+ * Helper function to build regex flags for selectBetween command.
+ * Combines case sensitivity and unicode flags appropriately.
+ */
+function buildRegexFlags(caseSensitive: boolean, unicode: boolean): string {
+    let flags = "g"
+    if (!caseSensitive) flags += "i"
+    if (unicode) flags += "u"
+    return flags
+}
+/**
  * For selecting ranges of text between two characters (inside parenthesis, for
  * example) we add the `modaledit.selectBetween` command. See the
  * [instructions](../README.html#selecting-text-between-delimiters) for the list
@@ -861,95 +872,199 @@ function selectBetween(args: SelectBetweenArgs) {
     if (typeof args !== 'object')
         throw Error(`${selectBetweenId}: Invalid args: ${JSON.stringify(args)}`)
     let doc = editor.document
+
     /**
-     * Get position of cursor and anchor. These positions might be in "reverse"
-     * order (cursor lies before anchor), so we need to sort them into `lowPos`
-     * and `highPos` variables and corresponding offset variables. These are
-     * used to determine the search range later on.
-     *
-     * Since `to` or `from` parameter might be missing, we initialize the
-     * `fromOffs` and `toOffs` variables to low and high offsets. They delimit
-     * the range to be selected at the end.
+     * When docScope is true, fall back to single-cursor mode and search the
+     * entire document. This maintains the original behavior for document-wide
+     * searches.
      */
-    let cursorPos = editor.selection.active
-    let anchorPos = editor.selection.anchor
-    let [highPos, lowPos] = cursorPos.isAfterOrEqual(anchorPos) ?
-        [cursorPos, anchorPos] : [anchorPos, cursorPos]
-    let highOffs = doc.offsetAt(highPos)
-    let lowOffs = doc.offsetAt(lowPos)
-    /**
-     * Next we determine the search range. The `startOffs` marks the starting
-     * offset and `endOffs` the end. Depending on the specified scope these
-     * variables are either set to start/end of the current line or the whole
-     * document.
-     */
-    let startPos = new vscode.Position(args.docScope ? 0 : lowPos.line, 0)
-    let endPos = doc.lineAt(args.docScope ? doc.lineCount - 1 : highPos.line)
-        .range.end
-    let startOffs = doc.offsetAt(startPos)
-    /**
-     * Convert `from` and `to` arguments to regexps, and then construct a 
-     * combined regexp that matches either of them.
-     */
-    let [open, close] = args.regex ? 
-        [ensureRegexp(args.from), ensureRegexp(args.to)] : 
-        [escapeRegexp(args.from), escapeRegexp(args.to)]
-    let fromOffs = lowOffs
-    if (args.from) {
+    if (args.docScope) {
         /**
-         * This branch searches for the `from` and `to` regexes in the range 
-         * from `startPos` to `lowPos`. It finds the last occurrence of either 
-         * delimiter, handling nesting if `nested` is true. If no match is 
-         * found, `fromOffs` defaults to `lowOffs`, so the selection start is
-         * not changed. 
+         * Get position of cursor and anchor. These positions might be in "reverse"
+         * order (cursor lies before anchor), so we need to sort them into `lowPos`
+         * and `highPos` variables and corresponding offset variables. These are
+         * used to determine the search range later on.
+         *
+         * Since `to` or `from` parameter might be missing, we initialize the
+         * `fromOffs` and `toOffs` variables to low and high offsets. They delimit
+         * the range to be selected at the end.
          */
-        let regexp = new RegExp(`(${open})|(${close})`, 
-            args.caseSensitive ? "g" : "gi")
-        let text = doc.getText(new vscode.Range(startPos, lowPos))
-        let matches = Array.from(text.matchAll(regexp))
-        for (let i = matches.length - 1, openCnt = 1; i >= 0 && openCnt > 0; 
-            --i) {
-            let match = matches[i]
-            fromOffs = startOffs + match.index +
-                (args.inclusive ? 0 : match[0].length)
-            if (match[1])
-                openCnt--
-            else if (args.nested && match[2])
-                openCnt++
+        let cursorPos = editor.selection.active
+        let anchorPos = editor.selection.anchor
+        let [highPos, lowPos] = cursorPos.isAfterOrEqual(anchorPos) ?
+            [cursorPos, anchorPos] : [anchorPos, cursorPos]
+        let highOffs = doc.offsetAt(highPos)
+        let lowOffs = doc.offsetAt(lowPos)
+        /**
+         * Next we determine the search range. The `startOffs` marks the starting
+         * offset and `endOffs` the end. With docScope, these are set to start/end
+         * of the whole document.
+         */
+        let startPos = new vscode.Position(0, 0)
+        let endPos = doc.lineAt(doc.lineCount - 1).range.end
+        let startOffs = doc.offsetAt(startPos)
+        /**
+         * Convert `from` and `to` arguments to regexps, and then construct a
+         * combined regexp that matches either of them.
+         */
+        let [open, close] = args.regex ?
+            [ensureRegexp(args.from), ensureRegexp(args.to)] :
+            [escapeRegexp(args.from), escapeRegexp(args.to)]
+        let fromOffs = lowOffs
+        if (args.from) {
+            /**
+             * This branch searches for the `from` and `to` regexes in the range
+             * from `startPos` to `lowPos`. It finds the last occurrence of either
+             * delimiter, handling nesting if `nested` is true. If no match is
+             * found, `fromOffs` defaults to `lowOffs`, so the selection start is
+             * not changed.
+             */
+            let regexp = new RegExp(`(${open})|(${close})`,
+                buildRegexFlags(args.caseSensitive, args.unicode))
+            let text = doc.getText(new vscode.Range(startPos, lowPos))
+            let matches = Array.from(text.matchAll(regexp))
+            for (let i = matches.length - 1, openCnt = 1; i >= 0 && openCnt > 0;
+                --i) {
+                let match = matches[i]
+                fromOffs = startOffs + match.index +
+                    (args.inclusive ? 0 : match[0].length)
+                if (match[1])
+                    openCnt--
+                else if (args.nested && match[2])
+                    openCnt++
+            }
         }
-    }
-    let toOffs = highOffs
-    if (args.to) {
-        /**
-         * This block finds the `to` regex (or string) in the range 
-         * `[highPos, endPos]`. If `nested` is true, it handles nested 
-         * delimiters by tracking open/close counts. The search proceeds 
-         * forward, updating `toOffs` to the end (or start, if not inclusive)
-         * of the first matching delimiter at the correct nesting level.
-         */
-        let regexp = new RegExp(`(${close})|(${open})`, 
-            args.caseSensitive ? "g" : "gi")
-        let text = doc.getText(new vscode.Range(highPos, endPos))
-        for (let match = regexp.exec(text), openCnt = 1; 
-            match && openCnt > 0;
-            match = regexp.exec(text)) {
-            toOffs = highOffs + match.index +
-                (args.inclusive ? match[0].length : 0)
-            if (match[1])
-                openCnt--
-            else if (args.nested && match[2])
-                openCnt++
+        let toOffs = highOffs
+        if (args.to) {
+            /**
+             * This block finds the `to` regex (or string) in the range
+             * `[highPos, endPos]`. If `nested` is true, it handles nested
+             * delimiters by tracking open/close counts. The search proceeds
+             * forward, updating `toOffs` to the end (or start, if not inclusive)
+             * of the first matching delimiter at the correct nesting level.
+             */
+            let regexp = new RegExp(`(${close})|(${open})`,
+                buildRegexFlags(args.caseSensitive, args.unicode))
+            let text = doc.getText(new vscode.Range(highPos, endPos))
+            for (let match = regexp.exec(text), openCnt = 1;
+                match && openCnt > 0;
+                match = regexp.exec(text)) {
+                toOffs = highOffs + match.index +
+                    (args.inclusive ? match[0].length : 0)
+                if (match[1])
+                    openCnt--
+                else if (args.nested && match[2])
+                    openCnt++
+            }
         }
+        if (cursorPos.isAfterOrEqual(anchorPos))
+            /**
+             * The last thing to do is to select the range from `fromOffs` to
+             * `toOffs`. We want to preserve the direction of the selection. If
+             * it was reserved when this command was called, we flip the variables.
+             */
+            changeSelection(editor, doc.positionAt(fromOffs), doc.positionAt(toOffs))
+        else
+            changeSelection(editor, doc.positionAt(toOffs), doc.positionAt(fromOffs))
+        return
     }
-    if (cursorPos.isAfterOrEqual(anchorPos))
+
+    /**
+     * Multi-cursor mode: process each selection independently.
+     * Each cursor searches within its own line scope.
+     */
+    editor.selections = editor.selections.map(selection => {
         /**
-         * The last thing to do is to select the range from `fromOffs` to
-         * `toOffs`. We want to preserve the direction of the selection. If
-         * it was reserved when this command was called, we flip the variables.
+         * Get position of cursor and anchor. These positions might be in "reverse"
+         * order (cursor lies before anchor), so we need to sort them into `lowPos`
+         * and `highPos` variables and corresponding offset variables. These are
+         * used to determine the search range later on.
+         *
+         * Since `to` or `from` parameter might be missing, we initialize the
+         * `fromOffs` and `toOffs` variables to low and high offsets. They delimit
+         * the range to be selected at the end.
          */
-        changeSelection(editor, doc.positionAt(fromOffs), doc.positionAt(toOffs))
-    else
-        changeSelection(editor, doc.positionAt(toOffs), doc.positionAt(fromOffs))
+        let cursorPos = selection.active
+        let anchorPos = selection.anchor
+        let [highPos, lowPos] = cursorPos.isAfterOrEqual(anchorPos) ?
+            [cursorPos, anchorPos] : [anchorPos, cursorPos]
+        let highOffs = doc.offsetAt(highPos)
+        let lowOffs = doc.offsetAt(lowPos)
+        /**
+         * Next we determine the search range. The `startOffs` marks the starting
+         * offset and `endOffs` the end. These are set to start/end of the current
+         * line(s) spanned by this selection.
+         */
+        let startPos = new vscode.Position(lowPos.line, 0)
+        let endPos = doc.lineAt(highPos.line).range.end
+        let startOffs = doc.offsetAt(startPos)
+        /**
+         * Convert `from` and `to` arguments to regexps, and then construct a
+         * combined regexp that matches either of them.
+         */
+        let [open, close] = args.regex ?
+            [ensureRegexp(args.from), ensureRegexp(args.to)] :
+            [escapeRegexp(args.from), escapeRegexp(args.to)]
+        let fromOffs = lowOffs
+        if (args.from) {
+            /**
+             * This branch searches for the `from` and `to` regexes in the range
+             * from `startPos` to `lowPos`. It finds the last occurrence of either
+             * delimiter, handling nesting if `nested` is true. If no match is
+             * found, `fromOffs` defaults to `lowOffs`, so the selection start is
+             * not changed.
+             */
+            let regexp = new RegExp(`(${open})|(${close})`,
+                buildRegexFlags(args.caseSensitive, args.unicode))
+            let text = doc.getText(new vscode.Range(startPos, lowPos))
+            let matches = Array.from(text.matchAll(regexp))
+            for (let i = matches.length - 1, openCnt = 1; i >= 0 && openCnt > 0;
+                --i) {
+                let match = matches[i]
+                fromOffs = startOffs + match.index +
+                    (args.inclusive ? 0 : match[0].length)
+                if (match[1])
+                    openCnt--
+                else if (args.nested && match[2])
+                    openCnt++
+            }
+        }
+        let toOffs = highOffs
+        if (args.to) {
+            /**
+             * This block finds the `to` regex (or string) in the range
+             * `[highPos, endPos]`. If `nested` is true, it handles nested
+             * delimiters by tracking open/close counts. The search proceeds
+             * forward, updating `toOffs` to the end (or start, if not inclusive)
+             * of the first matching delimiter at the correct nesting level.
+             */
+            let regexp = new RegExp(`(${close})|(${open})`,
+                buildRegexFlags(args.caseSensitive, args.unicode))
+            let text = doc.getText(new vscode.Range(highPos, endPos))
+            for (let match = regexp.exec(text), openCnt = 1;
+                match && openCnt > 0;
+                match = regexp.exec(text)) {
+                toOffs = highOffs + match.index +
+                    (args.inclusive ? match[0].length : 0)
+                if (match[1])
+                    openCnt--
+                else if (args.nested && match[2])
+                    openCnt++
+            }
+        }
+        /**
+         * Return a new selection for this cursor, preserving the direction.
+         */
+        if (cursorPos.isAfterOrEqual(anchorPos))
+            return new vscode.Selection(doc.positionAt(fromOffs), doc.positionAt(toOffs))
+        else
+            return new vscode.Selection(doc.positionAt(toOffs), doc.positionAt(fromOffs))
+    })
+
+    /**
+     * Reveal the primary selection to ensure it's visible.
+     */
+    editor.revealRange(editor.selection)
 }
 /**
  * ## Repeat Last Change Command

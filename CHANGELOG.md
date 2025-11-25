@@ -198,3 +198,19 @@ Two new commands (courtesy of [David Little](https://github.com/haberdashPI)):
 - Will later upload extension also to
   [Open VSIX Registry](https://open-vsx.org/) so that it can be used also with
   VSCodium and other open-source forks.
+
+## Version 2.2.1
+
+- Implement proper multi-cursor support for `modaledit.selectBetween` command.
+  Previously, when multiple cursors were active, the command would only process
+  the primary cursor and discard all other cursors. Now each cursor is processed
+  independently within its own line scope, and all cursors remain active after
+  the command executes. When `docScope` is set to `true`, the command falls back
+  to single-cursor mode for document-wide searches.
+
+- Added `unicode` flag to `modaledit.selectBetween` command. When enabled, this
+  flag activates full Unicode support in regular expressions, including Unicode
+  property escapes like `\p{L}` (letters), `\p{Emoji}`, etc. This allows for
+  proper matching of international characters and emoji. The flag is optional
+  and defaults to `false` for backward compatibility.
+  

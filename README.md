@@ -584,11 +584,15 @@ string. In addition to these parameters, the command has four flags:
   missing or false the search is case-insensitive.
 - By default the search scope is the current line. If you want search inside
   the whole document, set the `docScope` flag.
-- The `nested` makes sure that `from` and `to` are balanced. I.e. if there are 
-  nested `from` → `to` blocks, the command selects the block where the cursor 
+- The `nested` makes sure that `from` and `to` are balanced. I.e. if there are
+  nested `from` → `to` blocks, the command selects the block where the cursor
   currently resides. Deeper level blocks will be included in the selection.
+- The `unicode` flag enables full Unicode support in regular expressions,
+  including Unicode property escapes like `\p{L}` (letters), `\p{Emoji}`, etc.
+  This is useful for matching non-ASCII characters and emoji correctly. When
+  this flag is missing or false, standard JavaScript regex matching is used.
 
-Below is an example that selects all text inside matching parentheses. For more 
+Below is an example that selects all text inside matching parentheses. For more
 advanced examples check the [tutorial][9].
 ```js
 {
@@ -597,6 +601,66 @@ advanced examples check the [tutorial][9].
         "from": "(",
         "to": ")"
         "nested": true
+    }
+}
+```
+
+#### Multi-Cursor Support
+
+The `modaledit.selectBetween` command fully supports multiple cursors. When
+multiple cursors are active, the command processes each cursor independently:
+
+- Each cursor searches within its own line scope (when `docScope` is `false` or
+  omitted).
+- All cursors remain active after the command executes.
+- Each selection is computed independently based on its cursor position.
+
+For example, with multiple cursors on different lines, the following command
+will select the word at each cursor position:
+```js
+{
+    "command": "modaledit.selectBetween",
+    "args": {
+        "from": "\\W",
+        "to": "\\W",
+        "regex": true
+    }
+}
+```
+
+**Note:** When `docScope` is set to `true`, the command falls back to
+single-cursor mode and searches the entire document. In this case, only the
+primary cursor's selection is processed, and other cursors are removed. This
+behavior ensures that document-wide searches operate predictably.
+
+#### Unicode Support
+
+The `unicode` flag enables full Unicode regex support, allowing you to match
+characters beyond ASCII and use Unicode property escapes. This is particularly
+useful for internationalized text and emoji.
+
+Example using Unicode property escapes to select a word (any sequence of Unicode
+letters):
+```js
+{
+    "command": "modaledit.selectBetween",
+    "args": {
+        "from": "\\P{L}",
+        "to": "\\P{L}",
+        "regex": true,
+        "unicode": true
+    }
+}
+```
+
+Example selecting text between Unicode quotation marks:
+```js
+{
+    "command": "modaledit.selectBetween",
+    "args": {
+        "from": """,
+        "to": """,
+        "unicode": true
     }
 }
 ```
